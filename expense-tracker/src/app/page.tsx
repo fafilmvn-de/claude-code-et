@@ -9,13 +9,18 @@ import { Button } from '@/components/ui/Button';
 import { FloatingActionButton } from '@/components/ui/FloatingActionButton';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useExpenseAnalytics } from '@/hooks/useExpenseAnalytics';
-import { DollarSign, TrendingUp, Calendar, Target, Plus, Sparkles, Zap } from 'lucide-react';
+import { exportExpensesToCSV } from '@/lib/csvExport';
+import { DollarSign, TrendingUp, Calendar, Target, Plus, Sparkles, Zap, Download } from 'lucide-react';
 import { getCategoryIcon } from '@/lib/categoryIcons';
 import { ExpenseCategory } from '@/types/expense';
 
 export default function Home() {
   const { expenses, loading } = useExpenses();
   const analytics = useExpenseAnalytics(expenses);
+
+  const handleExportCSV = () => {
+    exportExpensesToCSV(expenses);
+  };
 
   if (loading) {
     return (
@@ -81,12 +86,22 @@ export default function Home() {
               Overview of your spending and financial activity
             </p>
           </div>
-          <Link href="/add-expense">
-            <Button variant="gradient" className="shadow-lg">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Expense
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button
+              onClick={handleExportCSV}
+              variant="outline"
+              className="shadow-lg"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export Data
             </Button>
-          </Link>
+            <Link href="/add-expense">
+              <Button variant="gradient" className="shadow-lg">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Expense
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
