@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { SummaryCard } from '@/components/dashboard/SummaryCard';
 import { ExpenseChart } from '@/components/dashboard/ExpenseChart';
@@ -7,15 +8,17 @@ import { RecentExpenses } from '@/components/dashboard/RecentExpenses';
 import { SpendingInsights } from '@/components/dashboard/SpendingInsights';
 import { Button } from '@/components/ui/Button';
 import { FloatingActionButton } from '@/components/ui/FloatingActionButton';
+import { CloudExportHub } from '@/components/cloud/CloudExportHub';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useExpenseAnalytics } from '@/hooks/useExpenseAnalytics';
-import { DollarSign, TrendingUp, Calendar, Target, Plus, Sparkles, Zap } from 'lucide-react';
+import { DollarSign, TrendingUp, Calendar, Target, Plus, Sparkles, Zap, Rocket } from 'lucide-react';
 import { getCategoryIcon } from '@/lib/categoryIcons';
 import { ExpenseCategory } from '@/types/expense';
 
 export default function Home() {
   const { expenses, loading } = useExpenses();
   const analytics = useExpenseAnalytics(expenses);
+  const [isCloudExportHubOpen, setIsCloudExportHubOpen] = useState(false);
 
   if (loading) {
     return (
@@ -81,12 +84,25 @@ export default function Home() {
               Overview of your spending and financial activity
             </p>
           </div>
-          <Link href="/add-expense">
-            <Button variant="gradient" className="shadow-lg">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Expense
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              variant="gradient"
+              className="shadow-lg bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 relative group overflow-hidden"
+              onClick={() => setIsCloudExportHubOpen(true)}
+              disabled={expenses.length === 0}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-pulse opacity-20" />
+              <Rocket className="h-4 w-4 mr-2 relative z-10" />
+              <span className="hidden sm:inline relative z-10">Cloud Export Hub</span>
+              <span className="sm:hidden relative z-10">Cloud Hub</span>
             </Button>
-          </Link>
+            <Link href="/add-expense">
+              <Button variant="gradient" className="shadow-lg">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Expense
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -150,6 +166,12 @@ export default function Home() {
           <Plus className="h-6 w-6" />
         </FloatingActionButton>
       </Link>
+
+      <CloudExportHub
+        isOpen={isCloudExportHubOpen}
+        onClose={() => setIsCloudExportHubOpen(false)}
+        expenses={expenses}
+      />
     </>
   );
 }
