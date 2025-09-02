@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { SummaryCard } from '@/components/dashboard/SummaryCard';
 import { ExpenseChart } from '@/components/dashboard/ExpenseChart';
@@ -7,15 +8,17 @@ import { RecentExpenses } from '@/components/dashboard/RecentExpenses';
 import { SpendingInsights } from '@/components/dashboard/SpendingInsights';
 import { Button } from '@/components/ui/Button';
 import { FloatingActionButton } from '@/components/ui/FloatingActionButton';
+import { ExportModal } from '@/components/export/ExportModal';
 import { useExpenses } from '@/hooks/useExpenses';
 import { useExpenseAnalytics } from '@/hooks/useExpenseAnalytics';
-import { DollarSign, TrendingUp, Calendar, Target, Plus, Sparkles, Zap } from 'lucide-react';
+import { DollarSign, TrendingUp, Calendar, Target, Plus, Sparkles, Zap, Database } from 'lucide-react';
 import { getCategoryIcon } from '@/lib/categoryIcons';
 import { ExpenseCategory } from '@/types/expense';
 
 export default function Home() {
   const { expenses, loading } = useExpenses();
   const analytics = useExpenseAnalytics(expenses);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   if (loading) {
     return (
@@ -81,12 +84,25 @@ export default function Home() {
               Overview of your spending and financial activity
             </p>
           </div>
-          <Link href="/add-expense">
-            <Button variant="gradient" className="shadow-lg">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Expense
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              variant="outline"
+              className="shadow-lg border-blue-200 text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/20 relative group"
+              onClick={() => setIsExportModalOpen(true)}
+              disabled={expenses.length === 0}
+            >
+              <Database className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Advanced Export</span>
+              <span className="sm:hidden">Export</span>
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg opacity-0 group-hover:opacity-30 transition-opacity -z-10" />
             </Button>
-          </Link>
+            <Link href="/add-expense">
+              <Button variant="gradient" className="shadow-lg">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Expense
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -150,6 +166,12 @@ export default function Home() {
           <Plus className="h-6 w-6" />
         </FloatingActionButton>
       </Link>
+
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        expenses={expenses}
+      />
     </>
   );
 }
