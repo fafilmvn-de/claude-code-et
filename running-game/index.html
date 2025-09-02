@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Runner - Adventure Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'game-bg': '#87CEEB',
+                        'game-ground': '#90EE90',
+                        'game-ui': '#FFB6C1',
+                        'coin-gold': '#FFD700'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&display=swap');
+        body {
+            font-family: 'Fredoka One', cursive;
+            user-select: none;
+        }
+        
+        .game-canvas {
+            border: 3px solid #4A90E2;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .bounce {
+            animation: bounce 0.3s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-blue-400 to-blue-600 min-h-screen flex items-center justify-center">
+    <!-- Main Menu -->
+    <div id="main-menu" class="slide-in">
+        <div class="text-center bg-white rounded-3xl p-12 shadow-2xl max-w-md mx-auto">
+            <div class="mb-8">
+                <h1 class="text-6xl text-blue-600 mb-4">🐱</h1>
+                <h1 class="text-4xl text-gray-800 mb-2">Cat Runner</h1>
+                <p class="text-gray-600 text-lg">Adventure Awaits!</p>
+            </div>
+            
+            <div class="space-y-4">
+                <button id="new-game-btn" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-green-600 hover:to-green-700 transition-all transform hover:scale-105 pulse">
+                    🎮 New Game
+                </button>
+                <button id="load-game-btn" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105">
+                    📂 Load Game
+                </button>
+                <button id="instructions-btn" class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-purple-600 hover:to-purple-700 transition-all transform hover:scale-105">
+                    📋 How to Play
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-lg mx-4 slide-in">
+            <h2 class="text-3xl text-gray-800 mb-6 text-center">How to Play</h2>
+            <div class="space-y-4 text-gray-700">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">⬅️</span>
+                    <span>Left Arrow - Move Left</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">➡️</span>
+                    <span>Right Arrow - Move Right</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">⬆️</span>
+                    <span>Space Bar - Jump</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">⏸️</span>
+                    <span>ESC - Pause Game</span>
+                </div>
+                <div class="mt-6 p-4 bg-yellow-100 rounded-2xl">
+                    <p class="text-sm"><strong>Goal:</strong> Collect coins 🪙 and avoid obstacles! Complete 3 exciting levels!</p>
+                </div>
+            </div>
+            <button id="close-instructions-btn" class="w-full mt-6 bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-6 rounded-2xl font-bold hover:from-gray-600 hover:to-gray-700 transition-all">
+                Got it!
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container" class="hidden">
+        <!-- Game UI -->
+        <div class="mb-4 flex justify-between items-center bg-white rounded-2xl p-4 shadow-lg">
+            <div class="flex items-center space-x-6">
+                <div class="text-center">
+                    <div class="text-2xl">🪙</div>
+                    <div class="text-xl font-bold text-yellow-600" id="coins-display">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl">⏱️</div>
+                    <div class="text-xl font-bold text-blue-600" id="time-display">0:00</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl">🎯</div>
+                    <div class="text-xl font-bold text-purple-600" id="level-display">Level 1</div>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <button id="pause-btn" class="bg-yellow-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-yellow-600 transition-all">
+                    ⏸️ Pause
+                </button>
+            </div>
+        </div>
+        
+        <!-- Game Canvas -->
+        <canvas id="game-canvas" class="game-canvas bg-gradient-to-b from-sky-300 to-game-ground" width="800" height="400"></canvas>
+        
+        <!-- Mobile Controls -->
+        <div id="mobile-controls" class="mt-4 flex justify-center space-x-4 md:hidden">
+            <button id="mobile-left" class="bg-blue-500 text-white px-6 py-4 rounded-2xl text-2xl font-bold hover:bg-blue-600 transition-all">⬅️</button>
+            <button id="mobile-jump" class="bg-green-500 text-white px-6 py-4 rounded-2xl text-2xl font-bold hover:bg-green-600 transition-all">⬆️</button>
+            <button id="mobile-right" class="bg-blue-500 text-white px-6 py-4 rounded-2xl text-2xl font-bold hover:bg-blue-600 transition-all">➡️</button>
+        </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="pause-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center slide-in">
+            <h2 class="text-4xl text-gray-800 mb-6">Game Paused</h2>
+            <div class="space-y-4">
+                <button id="resume-btn" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-green-600 hover:to-green-700 transition-all">
+                    ▶️ Resume
+                </button>
+                <button id="exit-game-btn" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-red-600 hover:to-red-700 transition-all">
+                    🚪 Exit to Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Complete Modal -->
+    <div id="level-complete-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center slide-in">
+            <h2 class="text-4xl text-green-600 mb-4">🎉 Level Complete!</h2>
+            <div id="level-stats" class="mb-6 space-y-2 text-xl text-gray-700">
+                <div>Coins Collected: <span id="level-coins" class="font-bold text-yellow-600">0</span></div>
+                <div>Time: <span id="level-time" class="font-bold text-blue-600">0:00</span></div>
+            </div>
+            <div class="space-y-4">
+                <button id="next-level-btn" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-blue-600 hover:to-blue-700 transition-all">
+                    ➡️ Next Level
+                </button>
+                <button id="back-to-menu-btn" class="w-full bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-gray-600 hover:to-gray-700 transition-all">
+                    🏠 Back to Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="game-over-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center slide-in">
+            <h2 class="text-4xl text-red-600 mb-4">💥 Game Over!</h2>
+            <div id="game-over-stats" class="mb-6 space-y-2 text-xl text-gray-700">
+                <div>Final Score: <span id="final-coins" class="font-bold text-yellow-600">0</span> coins</div>
+                <div>Level Reached: <span id="final-level" class="font-bold text-purple-600">1</span></div>
+            </div>
+            <div class="space-y-4">
+                <button id="try-again-btn" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-green-600 hover:to-green-700 transition-all">
+                    🔄 Try Again
+                </button>
+                <button id="menu-btn" class="w-full bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-gray-600 hover:to-gray-700 transition-all">
+                    🏠 Main Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="victory-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center slide-in">
+            <h2 class="text-5xl text-yellow-500 mb-4">🏆 Victory!</h2>
+            <p class="text-2xl text-gray-700 mb-6">You completed all levels!</p>
+            <div id="victory-stats" class="mb-6 space-y-2 text-xl text-gray-700">
+                <div>Total Coins: <span id="victory-coins" class="font-bold text-yellow-600">0</span></div>
+                <div>Total Time: <span id="victory-time" class="font-bold text-blue-600">0:00</span></div>
+            </div>
+            <button id="play-again-btn" class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-purple-600 hover:to-purple-700 transition-all">
+                🎮 Play Again
+            </button>
+        </div>
+    </div>
+
+    <script src="sounds.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

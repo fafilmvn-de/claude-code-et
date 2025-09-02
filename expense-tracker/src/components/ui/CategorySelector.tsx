@@ -57,7 +57,7 @@ export function CategorySelector({ value, onChange, error, className }: Category
             />
             
             {/* Options */}
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border border-gray-200 dark:border-slate-700 rounded-xl shadow-2xl z-20 animate-scale-in max-h-80 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 animate-scale-in max-h-80 overflow-y-auto">
               <div className="p-2">
                 {EXPENSE_CATEGORIES.map((category) => {
                   const config = getCategoryIcon(category);
