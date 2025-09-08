@@ -20,8 +20,9 @@ coverage/
 dist/
 build/
 
-# Screenshots and videos from tests
+# Screenshots and videos from tests (but allow game assets)
 *.png
+!src/img/*.png
 *.webm
 *.mp4
 
