@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Hero's Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'grass': '#7CB342',
+                        'dirt': '#8D6E63',
+                        'water': '#42A5F5',
+                        'flower': '#EC407A',
+                        'yarn': '#FF7043'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Nunito', cursive;
+            user-select: none;
+        }
+        
+        h1, h2, .game-title {
+            font-family: 'Fredoka One', cursive;
+        }
+        
+        .game-canvas {
+            border: 4px solid #4CAF50;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
+            background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%);
+        }
+        
+        .wiggle {
+            animation: wiggle 0.5s ease-in-out infinite;
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-2deg) scale(1); }
+            25% { transform: rotate(2deg) scale(1.05); }
+            50% { transform: rotate(-1deg) scale(1.02); }
+            75% { transform: rotate(1deg) scale(1.05); }
+        }
+        
+        .bounce-gentle {
+            animation: bounceGentle 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounceGentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .sparkle {
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .heart-beat {
+            animation: heartBeat 1s ease-in-out infinite;
+        }
+        
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-300 via-blue-200 to-purple-200 min-h-screen flex items-center justify-center">
+    <!-- Main Menu -->
+    <div id="main-menu" class="slide-in">
+        <div class="text-center bg-white rounded-3xl p-10 shadow-2xl max-w-lg mx-auto border-4 border-green-400">
+            <div class="mb-8">
+                <h1 class="text-7xl mb-4 wiggle">🐱</h1>
+                <h1 class="game-title text-4xl text-green-600 mb-2">Cat Hero's</h1>
+                <h2 class="game-title text-3xl text-purple-600 mb-3">Adventure!</h2>
+                <p class="text-gray-600 text-lg">Fight enemies and become a legend! ⚔️</p>
+            </div>
+            
+            <div class="space-y-4">
+                <button id="new-game-btn" class="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-green-500 hover:to-green-600 transition-all transform hover:scale-105 bounce-gentle shadow-lg">
+                    🎮 Start Adventure!
+                </button>
+                <button id="instructions-btn" class="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-purple-500 hover:to-purple-600 transition-all transform hover:scale-105 shadow-lg">
+                    📖 How to Play
+                </button>
+            </div>
+            
+            <div class="mt-6 flex justify-center space-x-4 text-3xl">
+                <span class="sparkle">🧶</span>
+                <span class="sparkle" style="animation-delay: 0.5s">🦋</span>
+                <span class="sparkle" style="animation-delay: 1s">🐟</span>
+                <span class="sparkle" style="animation-delay: 1.5s">🌸</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-2xl mx-4 slide-in border-4 border-purple-400">
+            <h2 class="game-title text-4xl text-purple-600 mb-6 text-center">How to Play! 🎮</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4 text-gray-700">
+                    <div class="bg-blue-50 p-4 rounded-2xl">
+                        <h3 class="font-bold text-lg mb-3 text-blue-600">⚔️ Your Mission</h3>
+                        <p>Defend the backyard from wild boars and wolves! Become the ultimate cat hero!</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-2xl">
+                        <h3 class="font-bold text-lg mb-3 text-green-600">🕹️ Controls</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">⬅️➡️⬆️⬇️</span>
+                                <span>Arrow keys to move around</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">⚔️</span>
+                                <span>Space or Click to attack!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4 text-gray-700">
+                    <div class="bg-yellow-50 p-4 rounded-2xl">
+                        <h3 class="font-bold text-lg mb-3 text-yellow-600">💪 Power-ups</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🧶</span>
+                                <span>Yarn balls - Increase attack range!</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🦋</span>
+                                <span>Butterflies - Generate shield!</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🐟</span>
+                                <span>Fish treats - Restore HP!</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-pink-50 p-4 rounded-2xl">
+                        <h3 class="font-bold text-lg mb-3 text-pink-600">⚡ Special Features</h3>
+                        <p>Get 10 consecutive kills for a SWORD BLAST that destroys all nearby enemies! ⚡</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="close-instructions-btn" class="w-full mt-6 bg-gradient-to-r from-purple-400 to-purple-500 text-white py-3 px-6 rounded-2xl font-bold hover:from-purple-500 hover:to-purple-600 transition-all shadow-lg">
+                Let's Play! 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container" class="hidden">
+        <!-- Game UI -->
+        <div class="mb-4 flex justify-between items-center bg-white rounded-2xl p-4 shadow-lg border-4 border-green-400">
+            <div class="flex items-center space-x-6">
+                <!-- HP Display -->
+                <div class="text-center bg-red-100 rounded-2xl p-3 border-2 border-red-300">
+                    <div class="text-2xl">❤️</div>
+                    <div class="text-sm text-red-600 font-bold">Health</div>
+                    <div class="hearts-display flex justify-center space-x-1 mt-1">
+                        <!-- Hearts will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="text-center bg-yellow-100 rounded-2xl p-3 border-2 border-yellow-300">
+                    <div class="text-3xl heart-beat">🧶</div>
+                    <div class="text-xl font-bold text-yellow-600" id="yarn-display">0</div>
+                    <div class="text-sm text-yellow-600">Attack Range</div>
+                </div>
+                <div class="text-center bg-purple-100 rounded-2xl p-3 border-2 border-purple-300">
+                    <div class="text-3xl heart-beat">🦋</div>
+                    <div class="text-xl font-bold text-purple-600" id="butterfly-display">0</div>
+                    <div class="text-sm text-purple-600">Shield</div>
+                </div>
+                <div class="text-center bg-blue-100 rounded-2xl p-3 border-2 border-blue-300">
+                    <div class="text-3xl heart-beat">🐟</div>
+                    <div class="text-xl font-bold text-blue-600" id="fish-display">0</div>
+                    <div class="text-sm text-blue-600">Health Items</div>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <div class="text-center bg-green-100 rounded-2xl p-3 border-2 border-green-300">
+                    <div class="text-2xl">⏱️</div>
+                    <div class="text-lg font-bold text-green-600" id="time-display">0:00</div>
+                    <div class="text-sm text-green-600">Time</div>
+                </div>
+                <button id="pause-btn" class="bg-orange-400 text-white px-4 py-2 rounded-xl font-bold hover:bg-orange-500 transition-all shadow-lg">
+                    ⏸️ Pause
+                </button>
+            </div>
+        </div>
+        
+        <!-- Game Canvas -->
+        <canvas id="game-canvas" class="game-canvas" width="800" height="600"></canvas>
+        
+        <!-- Mobile Controls -->
+        <div id="mobile-controls" class="mt-4 flex justify-center space-x-2 md:hidden">
+            <div class="bg-white rounded-2xl p-2 shadow-lg border-2 border-green-400">
+                <div class="grid grid-cols-3 gap-2">
+                    <div></div>
+                    <button id="mobile-up" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">⬆️</button>
+                    <div></div>
+                    <button id="mobile-left" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">⬅️</button>
+                    <div class="flex items-center justify-center text-2xl">🐱</div>
+                    <button id="mobile-right" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">➡️</button>
+                    <div></div>
+                    <button id="mobile-down" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">⬇️</button>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mt-4 bg-white rounded-2xl p-4 shadow-lg border-4 border-green-400">
+            <div class="text-center mb-2">
+                <span class="text-lg font-bold text-green-600">Battle Progress ⚔️</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-4 border-2 border-gray-300">
+                <div id="progress-bar" class="bg-gradient-to-r from-red-400 to-red-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+            </div>
+            <div class="text-center mt-2">
+                <span id="progress-text" class="text-sm text-gray-600">Defeat enemies to progress!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="pause-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center slide-in border-4 border-orange-400">
+            <h2 class="game-title text-4xl text-orange-600 mb-6">Game Paused 🐾</h2>
+            <div class="text-6xl mb-6">😴</div>
+            <div class="space-y-4">
+                <button id="resume-btn" class="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-green-500 hover:to-green-600 transition-all shadow-lg">
+                    ▶️ Continue Playing
+                </button>
+                <button id="exit-game-btn" class="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-gray-500 hover:to-gray-600 transition-all shadow-lg">
+                    🏠 Back to Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Complete Modal -->
+    <div id="level-complete-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center slide-in border-4 border-green-400">
+            <h2 class="game-title text-5xl text-green-600 mb-4">🎉 Amazing Job!</h2>
+            <div class="text-6xl mb-6 wiggle">🏆</div>
+            <div id="level-stats" class="mb-6 space-y-3 text-xl text-gray-700">
+                <div class="bg-yellow-100 p-3 rounded-2xl border-2 border-yellow-300">
+                    <span>🧶 Yarn balls: </span><span id="level-yarn" class="font-bold text-yellow-600">0</span>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-2xl border-2 border-purple-300">
+                    <span>🦋 Butterflies: </span><span id="level-butterflies" class="font-bold text-purple-600">0</span>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-2xl border-2 border-blue-300">
+                    <span>🐟 Fish treats: </span><span id="level-fish" class="font-bold text-blue-600">0</span>
+                </div>
+                <div class="bg-green-100 p-3 rounded-2xl border-2 border-green-300">
+                    <span>⏱️ Time: </span><span id="level-time" class="font-bold text-green-600">0:00</span>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <button id="next-level-btn" class="w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-blue-500 hover:to-blue-600 transition-all shadow-lg">
+                    🚀 Next Adventure!
+                </button>
+                <button id="back-to-menu-btn" class="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-gray-500 hover:to-gray-600 transition-all shadow-lg">
+                    🏠 Main Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="victory-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 text-center slide-in border-4 border-yellow-400">
+            <h2 class="game-title text-6xl text-yellow-500 mb-4">🎊 YOU DID IT! 🎊</h2>
+            <div class="text-8xl mb-6 wiggle">🏅</div>
+            <p class="text-2xl text-gray-700 mb-6">You're the best cat explorer ever!</p>
+            <div id="victory-stats" class="mb-6 grid grid-cols-2 gap-4 text-lg text-gray-700">
+                <div class="bg-yellow-100 p-4 rounded-2xl border-2 border-yellow-300">
+                    <div class="text-3xl mb-2">🧶</div>
+                    <div class="font-bold text-yellow-600" id="victory-yarn">0</div>
+                    <div class="text-sm">Total Yarn</div>
+                </div>
+                <div class="bg-purple-100 p-4 rounded-2xl border-2 border-purple-300">
+                    <div class="text-3xl mb-2">🦋</div>
+                    <div class="font-bold text-purple-600" id="victory-butterflies">0</div>
+                    <div class="text-sm">Total Butterflies</div>
+                </div>
+                <div class="bg-blue-100 p-4 rounded-2xl border-2 border-blue-300">
+                    <div class="text-3xl mb-2">🐟</div>
+                    <div class="font-bold text-blue-600" id="victory-fish">0</div>
+                    <div class="text-sm">Total Fish</div>
+                </div>
+                <div class="bg-green-100 p-4 rounded-2xl border-2 border-green-300">
+                    <div class="text-3xl mb-2">⏱️</div>
+                    <div class="font-bold text-green-600" id="victory-time">0:00</div>
+                    <div class="text-sm">Total Time</div>
+                </div>
+            </div>
+            <button id="play-again-btn" class="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-purple-500 hover:to-purple-600 transition-all shadow-lg">
+                🎮 Play Again!
+            </button>
+        </div>
+    </div>
+
+    <!-- Celebration Messages -->
+    <div id="celebration-message" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-400 text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-lg z-40 border-4 border-green-500">
+        🎉 Great job! 🎉
+    </div>
+
+    <script src="sounds.js"></script>
+    <script src="hero-adventure-game.js"></script>
+</body>
+</html>
