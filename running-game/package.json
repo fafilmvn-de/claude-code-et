@@ -1,0 +1,19 @@
+{
+  "name": "cat-runner-game",
+  "version": "1.0.0",
+  "description": "A fun and addictive running game featuring a cute cat character",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "start": "python3 -m http.server 8000",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui"
+  },
+  "keywords": ["game", "runner", "cat", "javascript", "canvas", "web-game"],
+  "author": "Cat Runner Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}
