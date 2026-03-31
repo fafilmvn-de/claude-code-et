@@ -1,0 +1,117 @@
+/* uPlot v1.6.32 — minimal CSS subset for stock-market-kids project */
+/* Full library: https://github.com/leeoniya/uPlot */
+
+.uplot,
+.uplot *,
+.uplot *::before,
+.uplot *::after {
+  box-sizing: border-box;
+}
+
+.uplot {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+  width: min-content;
+}
+
+.u-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.u-wrap {
+  position: relative;
+  user-select: none;
+}
+
+.u-over,
+.u-under {
+  position: absolute;
+}
+
+.u-under {
+  overflow: hidden;
+}
+
+.u-over {
+  overflow: hidden;
+}
+
+.u-select {
+  background: rgba(0, 0, 0, 0.07);
+  position: absolute;
+  pointer-events: none;
+}
+
+.u-cursor-x,
+.u-cursor-y {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.u-hz .u-cursor-x,
+.u-vt .u-cursor-y {
+  height: 100%;
+  border-right: 1px dashed #607D8B;
+}
+
+.u-hz .u-cursor-y,
+.u-vt .u-cursor-x {
+  width: 100%;
+  border-bottom: 1px dashed #607D8B;
+}
+
+.u-cursor-pt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  border: 0 solid;
+  pointer-events: none;
+  will-change: transform;
+  background-clip: padding-box !important;
+}
+
+.u-off {
+  display: none;
+}
+
+.u-legend {
+  font-size: 14px;
+  margin: auto;
+  text-align: center;
+}
+
+.u-inline {
+  display: block;
+}
+
+.u-inline .u-marker {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 4px;
+  background-clip: padding-box !important;
+  vertical-align: middle;
+}
+
+.u-series > * {
+  padding: 4px;
+}
+
+.u-series th {
+  cursor: pointer;
+}
+
+.u-legend .u-off > * {
+  opacity: 0.3;
+}
+
+.u-value {
+  min-width: 3em;
+  display: inline-block;
+}

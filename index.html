@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📈 Stock Market Learning Guide — For Young Explorers</title>
+  <meta name="description" content="A hands-on, beginner-friendly stock market learning guide for teenagers. Educational only — not financial advice.">
+  <!-- FUTURE: Vietnamese i18n — add <link> to localized CSS or JS bundle -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
+</head>
+<body>
+
+<!-- ═══════════ Profile Picker (shown on first visit or switch-user) ═══════════ -->
+<div class="profile-overlay" id="profileOverlay">
+  <div class="profile-picker">
+    <div class="profile-picker-header">
+      <span style="font-size:2.5rem;">📈</span>
+      <h2>Stock Market Learning Guide</h2>
+      <p style="color:var(--text-muted);margin-top:4px;">Who's learning today?</p>
+    </div>
+
+    <!-- Existing profiles -->
+    <div class="profile-list" id="profileList">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Create new profile -->
+    <div class="profile-create" id="profileCreate">
+      <h4>✨ Create a New Profile</h4>
+      <div class="profile-create-row">
+        <input type="text" id="profileNameInput" class="profile-name-input" placeholder="Enter your name..." maxlength="20" autocomplete="off">
+        <button class="btn-primary" id="profileCreateBtn" onclick="App.createProfile()">Start Learning! 🚀</button>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-top:8px;">Your progress is saved on this device. Up to 5 profiles.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ Welcome-back Banner (shown when returning user detected) ═══════════ -->
+<div class="welcome-back-banner" id="welcomeBanner" style="display:none;">
+  <div class="welcome-back-content">
+    <div class="welcome-back-text">
+      <span class="welcome-back-emoji">👋</span>
+      <div>
+        <strong id="welcomeName">Welcome back!</strong>
+        <span id="welcomeDetail" style="color:rgba(255,255,255,0.8);font-size:0.85rem;"></span>
+      </div>
+    </div>
+    <div class="welcome-back-actions">
+      <button class="btn-primary btn-sm" id="welcomeResume" onclick="App.dismissWelcome()">Continue ▶️</button>
+      <button class="btn-secondary btn-sm" id="welcomeRestart" onclick="App.restartProgress()">Start Fresh 🔄</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-layout">
+
+  <!-- ═══════════ Header ═══════════ -->
+  <header class="app-header">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+      <div class="app-title">
+        <span>📈</span>
+        <span>Stock Market Guide</span>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="user-indicator" id="userIndicator" onclick="App.showProfilePicker()" title="Switch user or manage profiles">
+        <span class="user-avatar" id="userAvatar">👤</span>
+        <span class="user-name" id="userName">Guest</span>
+      </button>
+      <div class="xp-container">
+        <span>⚡</span>
+        <div class="xp-bar"><div class="xp-bar-fill" id="xpBarFill"></div></div>
+        <span id="xpLabel">0 XP</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <span id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════════ Mobile overlay ═══════════ -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ═══════════ Sidebar Navigation ═══════════ -->
+  <nav class="app-sidebar" id="appSidebar">
+    <div class="nav-progress">
+      <span>Progress</span>
+      <div class="progress-dots" id="progressDots">
+        <div class="progress-dot" data-module="1"></div>
+        <div class="progress-dot" data-module="2"></div>
+        <div class="progress-dot" data-module="3"></div>
+        <div class="progress-dot" data-module="4"></div>
+        <div class="progress-dot" data-module="5"></div>
+        <div class="progress-dot" data-module="6"></div>
+      </div>
+    </div>
+    <ul class="nav-list" id="navList">
+      <li class="nav-item active" data-module="1">
+        <span class="nav-emoji">🍕</span> What Are Stocks?
+      </li>
+      <li class="nav-item" data-module="2">
+        <span class="nav-emoji">📈</span> The Stock Market
+      </li>
+      <li class="nav-item" data-module="3">
+        <span class="nav-emoji">🏪</span> Understanding Companies
+      </li>
+      <li class="nav-item" data-module="4">
+        <span class="nav-emoji">💡</span> Intro to Evaluation
+      </li>
+      <li class="nav-item" data-module="5">
+        <span class="nav-emoji">🛒</span> How Trading Works
+      </li>
+      <li class="nav-item" data-module="6">
+        <span class="nav-emoji">🎮</span> Practice Zone
+      </li>
+    </ul>
+    <div class="sidebar-badges">
+      <h4>🏅 Badges Earned</h4>
+      <div class="badge-list" id="badgeList">
+        <span class="badge-mini" data-badge="explorer" title="Market Explorer">🏅</span>
+        <span class="badge-mini" data-badge="floor_pro" title="Trading Floor Pro">📊</span>
+        <span class="badge-mini" data-badge="detective" title="Company Detective">🔍</span>
+        <span class="badge-mini" data-badge="thinker" title="Smart Thinker">🧠</span>
+        <span class="badge-mini" data-badge="first_trade" title="First Trade">🎉</span>
+        <span class="badge-mini" data-badge="rookie" title="Wall Street Rookie">🏆</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════ Main Content ═══════════ -->
+  <main class="app-main" id="appMain">
+
+    <!-- ─────── Module 1: What Are Stocks? ─────── -->
+    <section class="module-section active" id="module1">
+      <div class="module-header">
+        <span class="module-emoji">🍕</span>
+        <div class="module-meta">
+          <h2>What Are Stocks?</h2>
+          <p>Understanding ownership, shares, and why companies go public</p>
+        </div>
+      </div>
+
+      <div class="analogy-card">
+        <span class="analogy-emoji">🍕</span>
+        <h3>Imagine You Own a Pizza Shop...</h3>
+        <p>You start a pizza shop. It's doing great! But you need <strong>$10,000</strong> to open a second location. You don't have that much cash.</p>
+        <p>So you split your business into <strong>100 equal pieces</strong> called <strong>"shares"</strong>. Each share is worth <strong>$100</strong>. You sell 50 shares to friends and family, raising $5,000. Now they each own a tiny piece of your pizza shop! 🎉</p>
+        <p>That's exactly what a <strong>stock</strong> is — a small piece of ownership in a company.</p>
+      </div>
+
+      <div class="content-card">
+        <h3>📌 Key Concepts</h3>
+        <p><strong>Stock (or Share):</strong> A tiny piece of ownership in a company. When you buy a stock, you become a part-owner!</p>
+        <p><strong>Stockholder (or Shareholder):</strong> Someone who owns stock in a company. That could be you!</p>
+        <p><strong>Going Public:</strong> When a company sells its shares to the public for the first time. This is called an IPO (Initial Public Offering).</p>
+      </div>
+
+      <div class="content-card">
+        <h3>🤔 Why Do Companies Sell Stocks?</h3>
+        <p>Companies need money to grow — to build new factories, hire people, create new products, or expand to new countries. Instead of borrowing from a bank, they can sell pieces of themselves (stocks) to raise money.</p>
+        <p><strong>The trade-off:</strong> The company gets money to grow, but now has to share its future success with all the stockholders.</p>
+      </div>
+
+      <div class="content-card">
+        <h3>🏷️ Company vs. Stock Price</h3>
+        <p>Here's something important: <strong>the stock price is not the same as the company's value.</strong></p>
+        <p>Think about it: If a company has 1,000 shares at $10 each, the total value is $10,000. But if it has 100 shares at $100 each, the total value is also $10,000!</p>
+        <p>The <strong>price per share</strong> depends on how many pieces the company is split into. What matters more is the <strong>total value</strong> of all shares combined (called "market capitalization").</p>
+      </div>
+
+      <div class="dyk-card" onclick="this.classList.toggle('open')">
+        <div class="dyk-header">
+          <span>💡 Did You Know? — The oldest stock exchange</span>
+          <span class="dyk-arrow">▼</span>
+        </div>
+        <div class="dyk-content">
+          The Amsterdam Stock Exchange, founded in 1602, is considered the world's oldest stock exchange. The Dutch East India Company was the first to sell shares to the public!
+        </div>
+      </div>
+
+      <div class="dyk-card" onclick="this.classList.toggle('open')">
+        <div class="dyk-header">
+          <span>💡 Did You Know? — You can own a piece of Apple</span>
+          <span class="dyk-arrow">▼</span>
+        </div>
+        <div class="dyk-content">
+          Apple has about 15 billion shares. If you buy just 1 share, you technically own a tiny piece of the company that makes iPhones! (Though it's a really, really tiny piece 😄)
+        </div>
+      </div>
+
+      <div class="dyk-card" onclick="this.classList.toggle('open')">
+        <div class="dyk-header">
+          <span>💡 Did You Know? — Not all companies are public</span>
+          <span class="dyk-arrow">▼</span>
+        </div>
+        <div class="dyk-content">
+          Many huge companies like IKEA and LEGO are "private" — they choose not to sell stocks to the public. Only "public" companies have stocks you can buy on the stock market.
+        </div>
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz-container" id="quiz-module1">
+        <h3>🧪 Quick Quiz — Test Your Knowledge!</h3>
+        <div class="quiz-body"></div>
+      </div>
+
+      <div class="module-nav">
+        <div></div>
+        <button class="btn-primary" onclick="App.goToModule(2)">Next: The Stock Market 📈 →</button>
+      </div>
+    </section>
+
+    <!-- ─────── Module 2: The Stock Market ─────── -->
+    <section class="module-section" id="module2">
+      <div class="module-header">
+        <span class="module-emoji">📈</span>
+        <div class="module-meta">
+          <h2>The Stock Market</h2>
+          <p>How buyers and sellers meet, and why prices move</p>
+        </div>
+      </div>
+
+      <div class="analogy-card">
+        <span class="analogy-emoji">🏪</span>
+        <h3>Think of a Farmers' Market...</h3>
+        <p>At a farmers' market, sellers bring their produce and buyers come to shop. If everyone wants strawberries but only one farmer has them, the price goes UP. If no one wants kale, the price goes DOWN.</p>
+        <p>The stock market works the same way — but instead of food, people are buying and selling <strong>shares of companies</strong>. The price is set by <strong>supply and demand</strong>.</p>
+      </div>
+
+      <div class="content-card">
+        <h3>📌 What is a Stock Exchange?</h3>
+        <p>A stock exchange is a <strong>marketplace</strong> where stocks are bought and sold. Famous exchanges include:</p>
+        <p>🗽 <strong>NYSE</strong> (New York Stock Exchange) — the largest in the world<br>
+        💻 <strong>NASDAQ</strong> — known for tech companies<br>
+        🇯🇵 <strong>Tokyo Stock Exchange</strong> — largest in Asia</p>
+        <p>Today, most trading happens electronically — no shouting on a trading floor needed! 🖥️</p>
+      </div>
+
+      <!-- Interactive Supply & Demand Slider -->
+      <div class="slider-demo">
+        <h3>🎛️ Try It: Supply & Demand Simulator</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px;">Move the sliders to see how the number of buyers and sellers affects the stock price!</p>
+        <div class="slider-row">
+          <label>🟢 Buyers</label>
+          <input type="range" id="buyerSlider" min="1" max="100" value="50">
+          <span class="slider-val" id="buyerVal">50</span>
+        </div>
+        <div class="slider-row">
+          <label>🔴 Sellers</label>
+          <input type="range" id="sellerSlider" min="1" max="100" value="50">
+          <span class="slider-val" id="sellerVal">50</span>
+        </div>
+        <div class="price-display">
+          <div class="price-label">Current Stock Price</div>
+          <div class="price-value" id="sliderPrice">$50.00</div>
+          <div class="price-arrow" id="sliderArrow">⬌</div>
+          <div style="margin-top:8px;font-size:0.85rem;color:var(--text-muted)" id="sliderExplain">Balanced — equal buyers and sellers</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h3>📊 Why Do Prices Move?</h3>
+        <p>Stock prices change constantly because of <strong>supply and demand</strong>:</p>
+        <p>📈 <strong>Price goes UP</strong> when more people want to buy (high demand, low supply)</p>
+        <p>📉 <strong>Price goes DOWN</strong> when more people want to sell (low demand, high supply)</p>
+        <p>Things that affect demand include: company news, economic conditions, new products, and even public mood!</p>
+      </div>
+
+      <div class="dyk-card" onclick="this.classList.toggle('open')">
+        <div class="dyk-header">
+          <span>💡 Did You Know? — Billions traded daily</span>
+          <span class="dyk-arrow">▼</span>
+        </div>
+        <div class="dyk-content">
+          On a typical day, billions of dollars worth of stocks change hands on the NYSE alone. The computers that match buyers and sellers can process thousands of trades per second!
+        </div>
+      </div>
+
+      <div class="quiz-container" id="quiz-module2">
+        <h3>🧪 Quick Quiz — Test Your Knowledge!</h3>
+        <div class="quiz-body"></div>
+      </div>
+
+      <div class="module-nav">
+        <button class="btn-secondary" onclick="App.goToModule(1)">← Back</button>
+        <button class="btn-primary" onclick="App.goToModule(3)">Next: Understanding Companies 🏪 →</button>
+      </div>
+    </section>
+
+    <!-- ─────── Module 3: Understanding Companies ─────── -->
+    <section class="module-section" id="module3">
+      <div class="module-header">
+        <span class="module-emoji">🏪</span>
+        <div class="module-meta">
+          <h2>Understanding Companies</h2>
+          <p>What makes a company valuable — revenue, profit, and more</p>
+        </div>
+      </div>
+
+      <div class="analogy-card">
+        <span class="analogy-emoji">🍋</span>
+        <h3>The Lemonade Stand</h3>
+        <p>Imagine you run a lemonade stand. You sell $50 worth of lemonade in a day — that's your <strong>revenue</strong> (total money coming in).</p>
+        <p>But you spent $30 on lemons, sugar, and cups. So your <strong>profit</strong> is only $20 (what's left after expenses).</p>
+        <p><strong>Revenue ≠ Profit!</strong> A company can have huge revenue but tiny profit if it spends a lot. Smart investors look at both.</p>
+      </div>
+
+      <div class="content-card">
+        <h3>🏆 What Makes a Company "Good"?</h3>
+        <p>When evaluating a company, think about:</p>
+        <p>💰 <strong>Revenue Growth</strong> — Is the company earning more money each year?</p>
+        <p>📈 <strong>Profit</strong> — Is it actually keeping money after paying costs?</p>
+        <p>💝 <strong>Brand</strong> — Do people know and trust the company?</p>
+        <p>🛍️ <strong>Products</strong> — Do customers love what it sells?</p>
+        <p>🔄 <strong>Repeat Customers</strong> — Do people keep coming back?</p>
+      </div>
+
+      <!-- Company Cards for Ranking -->
+      <div class="content-card">
+        <h3>🏢 Meet Three Companies</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px;">Study these fictional companies, then rank them below!</p>
+        <div class="touch-hint" id="rankTouchHint">👆 Tap a company card to pick it up, then tap a slot to place it</div>
+        <div class="company-cards" id="companyCards">
+          <div class="company-card" draggable="true" data-company="snackco">
+            <div class="card-emoji">🍿</div>
+            <div class="card-name">SnackCo</div>
+            <div class="card-sector">Food & Beverage</div>
+            <div class="stat-label"><span>Revenue Growth</span><span>72%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:72%;background:#f59e0b"></div></div>
+            <div class="stat-label"><span>Profit Margin</span><span>25%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:25%;background:#f59e0b"></div></div>
+            <div class="stat-label"><span>Brand Strength</span><span>85%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:85%;background:#f59e0b"></div></div>
+          </div>
+          <div class="company-card" draggable="true" data-company="gameworld">
+            <div class="card-emoji">🎮</div>
+            <div class="card-name">GameWorld</div>
+            <div class="card-sector">Gaming & Entertainment</div>
+            <div class="stat-label"><span>Revenue Growth</span><span>90%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:90%;background:#8b5cf6"></div></div>
+            <div class="stat-label"><span>Profit Margin</span><span>15%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:15%;background:#8b5cf6"></div></div>
+            <div class="stat-label"><span>Brand Strength</span><span>70%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:70%;background:#8b5cf6"></div></div>
+          </div>
+          <div class="company-card" draggable="true" data-company="greenride">
+            <div class="card-emoji">🚲</div>
+            <div class="card-name">GreenRide</div>
+            <div class="card-sector">Green Transportation</div>
+            <div class="stat-label"><span>Revenue Growth</span><span>60%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:60%;background:#10b981"></div></div>
+            <div class="stat-label"><span>Profit Margin</span><span>35%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:35%;background:#10b981"></div></div>
+            <div class="stat-label"><span>Brand Strength</span><span>65%</span></div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:65%;background:#10b981"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ranking-zone" id="rankingZone">
+        <h4>🏆 Rank the companies — drag (or tap) your favorite to #1!</h4>
+        <div class="rank-slot" data-rank="1"><span class="rank-number">#1</span><span class="rank-content">Drop a company here</span></div>
+        <div class="rank-slot" data-rank="2"><span class="rank-number">#2</span><span class="rank-content">Drop a company here</span></div>
+        <div class="rank-slot" data-rank="3"><span class="rank-number">#3</span><span class="rank-content">Drop a company here</span></div>
+      </div>
+
+      <div class="content-card" id="rankFeedback" style="display:none;">
+        <h3>👏 Great job ranking the companies!</h3>
+        <p>There's <strong>no single right answer</strong> here — different investors look for different things:</p>
+        <p>🍿 <strong>SnackCo</strong> has a super strong brand and solid growth — a safe choice.</p>
+        <p>🎮 <strong>GameWorld</strong> is growing fast but has lower profits — higher risk, higher reward.</p>
+        <p>🚲 <strong>GreenRide</strong> has the best profit margin and is in a growing sector — efficient and trendy.</p>
+        <p>The important thing is that you <strong>thought about WHY</strong> you chose each position! 🧠</p>
+      </div>
+
+      <div class="quiz-container" id="quiz-module3">
+        <h3>🧪 Quick Quiz — Test Your Knowledge!</h3>
+        <div class="quiz-body"></div>
+      </div>
+
+      <div class="module-nav">
+        <button class="btn-secondary" onclick="App.goToModule(2)">← Back</button>
+        <button class="btn-primary" onclick="App.goToModule(4)">Next: Intro to Evaluation 💡 →</button>
+      </div>
+    </section>
+
+    <!-- ─────── Module 4: Intro to Evaluation ─────── -->
+    <section class="module-section" id="module4">
+      <div class="module-header">
+        <span class="module-emoji">💡</span>
+        <div class="module-meta">
+          <h2>Intro to Stock Evaluation</h2>
+          <p>Long-term thinking and what makes a stock worth buying</p>
+        </div>
+      </div>
+
+      <div class="analogy-card">
+        <span class="analogy-emoji">🌳</span>
+        <h3>Investing is Like Planting a Tree</h3>
+        <p>When you plant a tree, you don't dig it up every day to check the roots. You water it, give it sunlight, and <strong>wait patiently</strong>.</p>
+        <p>Long-term investing works the same way. You pick a good company, buy its stock, and let it grow over time. Checking the price every minute won't make it grow faster! 😄</p>
+      </div>
+
+      <div class="content-card">
+        <h3>⏰ Long-Term vs. Short-Term</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;">
+          <div style="padding:16px;border-radius:10px;background:var(--quiz-correct);border:1px solid var(--green);">
+            <h4 style="color:var(--green);margin-bottom:8px;">🌳 Long-Term Investor</h4>
+            <p style="font-size:0.85rem;">Buys good companies and holds for <strong>years</strong>. Focuses on company quality. Less stressful. Most successful investors do this!</p>
+          </div>
+          <div style="padding:16px;border-radius:10px;background:var(--quiz-wrong);border:1px solid var(--coral);">
+            <h4 style="color:var(--coral);margin-bottom:8px;">⚡ Short-Term Trader</h4>
+            <p style="font-size:0.85rem;">Buys and sells within days or hours. Tries to predict price changes. Very risky. Most short-term traders <strong>lose money</strong>.</p>
+          </div>
+        </div>
+        <p>📌 <strong>For beginners, long-term investing is the way to go.</strong> Even legendary investor Warren Buffett says his favorite holding period is "forever"!</p>
+      </div>
+
+      <div class="content-card">
+        <h3>🔍 Simple Things to Look For</h3>
+        <p>You don't need complicated math. Here are simple signs a company might be a good long-term investment:</p>
+        <p>✅ <strong>Growing revenue</strong> — The company is earning more each year</p>
+        <p>✅ <strong>Consistent profits</strong> — It's not just growing, it's also keeping money</p>
+        <p>✅ <strong>Strong brand</strong> — People know and trust the name</p>
+        <p>✅ <strong>Good products/services</strong> — Customers keep coming back</p>
+        <p>✅ <strong>Good leadership</strong> — Smart people running the company</p>
+        <p>⛔ <strong>Warning signs:</strong> Shrinking revenue, losing money every year, lots of debt, customers leaving</p>
+      </div>
+
+      <!-- Spot the Better Investment exercise -->
+      <div class="content-card">
+        <h3>🎯 Exercise: Spot the Better Long-Term Investment</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px;">Compare these two fictional companies. Which one would you pick for a 5-year investment?</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="investPick">
+          <button class="content-card" onclick="App.pickInvestment('A')" id="pickA" style="cursor:pointer;text-align:center;border:2px solid var(--border);transition:all 0.2s ease;">
+            <div style="font-size:2rem;">🏪</div>
+            <h4>SteadyMart</h4>
+            <p style="font-size:0.85rem;">Revenue: $500M → $550M → $600M (steady growth)</p>
+            <p style="font-size:0.85rem;">Profit: Positive every year for 10 years</p>
+            <p style="font-size:0.85rem;">Known brand, loyal customers</p>
+          </button>
+          <button class="content-card" onclick="App.pickInvestment('B')" id="pickB" style="cursor:pointer;text-align:center;border:2px solid var(--border);transition:all 0.2s ease;">
+            <div style="font-size:2rem;">🚀</div>
+            <h4>HypeTech</h4>
+            <p style="font-size:0.85rem;">Revenue: $50M → $200M → $180M (volatile)</p>
+            <p style="font-size:0.85rem;">Profit: Lost money 2 of last 3 years</p>
+            <p style="font-size:0.85rem;">Trending on social media this week</p>
+          </button>
+        </div>
+        <div id="investFeedback" style="display:none;margin-top:16px;padding:16px;border-radius:10px;animation:fadeIn 0.3s ease;"></div>
+      </div>
+
+      <div class="quiz-container" id="quiz-module4">
+        <h3>🧪 Quick Quiz — Test Your Knowledge!</h3>
+        <div class="quiz-body"></div>
+      </div>
+
+      <div class="module-nav">
+        <button class="btn-secondary" onclick="App.goToModule(3)">← Back</button>
+        <button class="btn-primary" onclick="App.goToModule(5)">Next: How Trading Works 🛒 →</button>
+      </div>
+    </section>
+
+    <!-- ─────── Module 5: How Trading Works ─────── -->
+    <section class="module-section" id="module5">
+      <div class="module-header">
+        <span class="module-emoji">🛒</span>
+        <div class="module-meta">
+          <h2>How Trading Works</h2>
+          <p>Buying, selling, gains, and losses — step by step</p>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h3>🛒 What Happens When You Buy a Stock?</h3>
+        <p>Here's the step-by-step process:</p>
+        <div id="tradeSteps">
+          <div class="trade-step" data-step="1" style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:1.5rem;">1️⃣</span>
+            <div>
+              <strong>You decide to buy</strong>
+              <p style="font-size:0.9rem;color:var(--text-muted);">You choose a company and decide how many shares you want.</p>
+            </div>
+          </div>
+          <div class="trade-step" data-step="2" style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:1.5rem;">2️⃣</span>
+            <div>
+              <strong>Your order goes to the exchange</strong>
+              <p style="font-size:0.9rem;color:var(--text-muted);">The stock exchange matches your buy order with someone who wants to sell.</p>
+            </div>
+          </div>
+          <div class="trade-step" data-step="3" style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:1.5rem;">3️⃣</span>
+            <div>
+              <strong>Money is exchanged for shares</strong>
+              <p style="font-size:0.9rem;color:var(--text-muted);">Your money goes to the seller, and the shares appear in your account. All electronic!</p>
+            </div>
+          </div>
+          <div class="trade-step" data-step="4" style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;">
+            <span style="font-size:1.5rem;">4️⃣</span>
+            <div>
+              <strong>You own part of the company!</strong>
+              <p style="font-size:0.9rem;color:var(--text-muted);">The shares are now yours. Their value will go up or down with the company's stock price.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h3>💰 Understanding Gains & Losses</h3>
+        <p><strong>Gain:</strong> If you buy at $20 and the stock goes to $30, you've gained $10 per share. That's a <strong>50% gain</strong>! 🎉</p>
+        <p><strong>Loss:</strong> If you buy at $20 and the stock drops to $15, you've lost $5 per share. That's a <strong>25% loss</strong>. 😢</p>
+        <p>Important: You only actually gain or lose money when you <strong>sell</strong>. If you don't sell, it's called an "unrealized" gain or loss — it's on paper only.</p>
+      </div>
+
+      <!-- Mini Trade Walkthrough -->
+      <div class="content-card">
+        <h3>🎮 Mini Trade Experience</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px;">Click "Buy" to experience your first (simulated) stock trade!</p>
+        <div id="miniTrade" style="text-align:center;">
+          <div style="margin-bottom:16px;">
+            <span style="font-size:2rem;">🍿</span>
+            <div style="font-weight:700;font-size:1.1rem;">SnackCo</div>
+            <div style="color:var(--text-muted);">Current Price: <strong id="miniPrice">$45.00</strong></div>
+          </div>
+          <div id="miniTradeState">
+            <button class="btn-primary" id="miniBuyBtn" onclick="App.miniTradeBuy()">🛒 Buy 1 Share for $45.00</button>
+          </div>
+          <div id="miniTradeResult" style="display:none;margin-top:16px;"></div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h3>📝 Key Vocabulary</h3>
+        <p><abbr title="An instruction to buy or sell a stock" style="border-bottom:1px dashed var(--text-muted);cursor:help;"><strong>Order</strong></abbr> — An instruction to buy or sell a stock</p>
+        <p><abbr title="A collection of all the stocks you own" style="border-bottom:1px dashed var(--text-muted);cursor:help;"><strong>Portfolio</strong></abbr> — A collection of all the stocks you own</p>
+        <p><abbr title="Spreading your money across different stocks" style="border-bottom:1px dashed var(--text-muted);cursor:help;"><strong>Diversification</strong></abbr> — Spreading your money across different stocks to reduce risk</p>
+        <p><abbr title="How easily a stock can be bought or sold" style="border-bottom:1px dashed var(--text-muted);cursor:help;"><strong>Liquidity</strong></abbr> — How easily a stock can be bought or sold</p>
+      </div>
+
+      <div class="quiz-container" id="quiz-module5">
+        <h3>🧪 Quick Quiz — Test Your Knowledge!</h3>
+        <div class="quiz-body"></div>
+      </div>
+
+      <div class="module-nav">
+        <button class="btn-secondary" onclick="App.goToModule(4)">← Back</button>
+        <button class="btn-primary" onclick="App.goToModule(6)">Next: Practice Zone 🎮 →</button>
+      </div>
+    </section>
+
+    <!-- ─────── Module 6: Practice Zone (Simulator) ─────── -->
+    <section class="module-section" id="module6">
+      <div class="module-header">
+        <span class="module-emoji">🎮</span>
+        <div class="module-meta">
+          <h2>Practice Zone — Paper Trading Simulator</h2>
+          <p>Trade with fake money. Learn without risk!</p>
+        </div>
+      </div>
+
+      <div class="content-card" style="background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border-color:var(--teal-light);">
+        <p style="font-size:0.9rem;">💡 <strong>Paper trading</strong> means trading with pretend money. It's how real investors practice before using real money. You'll start with <strong>$10,000</strong> of fake cash and trade over <strong>8 simulated weeks</strong>.</p>
+      </div>
+
+      <!-- Simulator UI — populated by simulator.js -->
+      <div id="simulatorContainer">
+        <div style="text-align:center;padding:32px;">
+          <button class="btn-primary" onclick="Simulator.init(false)" style="font-size:1.1rem;padding:16px 32px;">
+            🚀 Start Paper Trading Simulator
+          </button>
+          <button class="btn-secondary" onclick="Simulator.init(true)" style="font-size:0.9rem;padding:10px 20px;margin-top:8px;">
+            🔄 Start Fresh Simulation
+          </button>
+        </div>
+      </div>
+
+      <div class="module-nav">
+        <button class="btn-secondary" onclick="App.goToModule(5)">← Back to Lessons</button>
+        <div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════ Footer ═══════════ -->
+  <footer class="app-footer">
+    <div class="disclaimer-banner">
+      ⚠️ <strong>Educational purposes only.</strong> This is not financial advice. Never invest real money without adult supervision and proper research.
+    </div>
+    <p style="margin-top:8px;">Made with 💚 for curious young learners · 2026</p>
+  </footer>
+
+</div>
+
+<!-- Badge Pop-up (hidden, shown by JS) -->
+<div class="badge-overlay" id="badgeOverlay" style="display:none;" onclick="App.closeBadge()">
+  <div class="badge-popup" onclick="event.stopPropagation()">
+    <span class="badge-emoji" id="badgePopupEmoji">🏅</span>
+    <div class="badge-title" id="badgePopupTitle">Badge Earned!</div>
+    <div class="badge-desc" id="badgePopupDesc">Description</div>
+    <div class="badge-xp" id="badgePopupXp">+50 XP</div>
+    <button class="btn-primary" onclick="App.closeBadge()">Awesome! 🎉</button>
+  </div>
+</div>
+
+<!-- Scripts — load order matters: data → chart → app → simulator → touch -->
+<script src="js/data.js"></script>
+<script src="js/minichart.js"></script>
+<script src="js/app.js"></script>
+<script src="js/simulator.js"></script>
+<script src="js/touch-fallback.js"></script>
+
+</body>
+</html>
