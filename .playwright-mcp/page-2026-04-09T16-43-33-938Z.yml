@@ -1,0 +1,192 @@
+- generic [ref=e11]:
+  - banner [ref=e12]:
+    - generic [ref=e14]:
+      - generic [ref=e15]: 📈
+      - generic [ref=e16]: Stock Market Guide
+    - generic [ref=e17]:
+      - button "🐱 TestUser" [ref=e18] [cursor=pointer]:
+        - generic [ref=e19]: 🐱
+        - generic [ref=e20]: TestUser
+      - generic [ref=e21]:
+        - generic [ref=e22]: ⚡
+        - generic [ref=e25]: 225 XP
+      - button "Toggle dark/light mode" [ref=e26] [cursor=pointer]:
+        - generic [ref=e27]: 🌙
+  - navigation [ref=e28]:
+    - generic [ref=e30]: Progress
+    - list [ref=e38]:
+      - listitem [ref=e39] [cursor=pointer]:
+        - generic [ref=e40]: 🍕
+        - text: What Are Stocks? ✓
+      - listitem [ref=e41] [cursor=pointer]:
+        - generic [ref=e42]: 📈
+        - text: The Stock Market
+      - listitem [ref=e43] [cursor=pointer]:
+        - generic [ref=e44]: 🏪
+        - text: Understanding Companies
+      - listitem [ref=e45] [cursor=pointer]:
+        - generic [ref=e46]: 💡
+        - text: Intro to Evaluation
+      - listitem [ref=e47] [cursor=pointer]:
+        - generic [ref=e48]: 🛒
+        - text: How Trading Works
+      - listitem [ref=e49] [cursor=pointer]:
+        - generic [ref=e50]: 🎮
+        - text: Practice Zone
+    - generic [ref=e51]:
+      - heading "🏅 Badges Earned" [level=4] [ref=e52]
+      - generic [ref=e53]:
+        - generic "Market Explorer" [ref=e54]: 🏅
+        - generic "Trading Floor Pro" [ref=e55]: 📊
+        - generic "Company Detective" [ref=e56]: 🔍
+        - generic "Smart Thinker" [ref=e57]: 🧠
+        - generic "First Trade" [ref=e58]: 🎉
+        - generic "Wall Street Rookie" [ref=e59]: 🏆
+  - main [ref=e60]:
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - generic [ref=e63]: 🎮
+        - generic [ref=e64]:
+          - heading "Practice Zone — Paper Trading Simulator" [level=2] [ref=e65]
+          - paragraph [ref=e66]: Trade with fake money. Learn without risk!
+      - generic [ref=e67]:
+        - paragraph [ref=e68]:
+          - text: 💡
+          - strong [ref=e69]: Paper trading
+          - text: means trading with pretend money. It's how real investors practice before using real money. You'll start with
+          - strong [ref=e70]: $10,000
+          - text: of fake cash and trade over
+          - strong [ref=e71]: 8 simulated weeks
+          - text: .
+        - paragraph [ref=e72]: 📚 Complete quiz modules to unlock harder difficulties and earn more XP · Click any company row to see its price chart
+      - generic [ref=e73]:
+        - generic [ref=e399]:
+          - generic [ref=e400]:
+            - generic [ref=e401]: Week 3/8
+            - generic [ref=e402]: ⏰ Time
+          - generic [ref=e403]:
+            - generic [ref=e404]: $9,864.21
+            - generic [ref=e405]: 💵 Cash
+          - generic [ref=e406]:
+            - generic [ref=e407]: $10,002.26
+            - generic [ref=e408]: 📊 Portfolio
+          - generic [ref=e409]:
+            - generic [ref=e410]: +0.0%
+            - generic [ref=e411]: 📈 Return
+        - generic [ref=e98]: 🍿 SnackCo $38.79 ▲1.92%·🎮 GameWorld $66.74 ▲5.28%·🚲 GreenRide $32.52 ▲2.68%·📚 CloudLearn $51.42 ▼12.34%·🐾 PetPals $23.81 ▲1.88%
+        - generic [ref=e99]:
+          - table [ref=e101]:
+            - rowgroup [ref=e102]:
+              - row "Company Sector Price Wk% Shares Avg Cost P/L Trend Trade" [ref=e103] [cursor=pointer]:
+                - columnheader "Company" [ref=e104]
+                - columnheader "Sector" [ref=e105]
+                - columnheader "Price" [ref=e106]
+                - columnheader "Wk%" [ref=e107]
+                - columnheader "Shares" [ref=e108]
+                - columnheader "Avg Cost" [ref=e109]
+                - columnheader "P/L" [ref=e110]
+                - columnheader "Trend" [ref=e111]
+                - columnheader "Trade" [ref=e112]
+            - rowgroup [ref=e113]:
+              - row "🍿 SnackCo Food $38.79 ▲1.9% 1 $40.55 $-1.76 (-4.3%) + −" [ref=e412] [cursor=pointer]:
+                - cell "🍿 SnackCo" [ref=e413]:
+                  - strong [ref=e414]: 🍿 SnackCo
+                - cell "Food" [ref=e415]:
+                  - generic [ref=e416]: Food
+                - cell "$38.79" [ref=e417]
+                - cell "▲1.9%" [ref=e418]
+                - cell "1" [ref=e419]
+                - cell "$40.55" [ref=e420]
+                - cell "$-1.76 (-4.3%)" [ref=e421]
+                - cell [ref=e422]
+                - cell "+ −" [ref=e424]:
+                  - generic [ref=e425]:
+                    - button "+" [ref=e426]
+                    - button "−" [ref=e427]
+              - row "🎮 GameWorld Gaming $66.74 ▲5.3% 1 $63.61 +$3.13 (+4.9%) + −" [ref=e428] [cursor=pointer]:
+                - cell "🎮 GameWorld" [ref=e429]:
+                  - strong [ref=e430]: 🎮 GameWorld
+                - cell "Gaming" [ref=e431]:
+                  - generic [ref=e432]: Gaming
+                - cell "$66.74" [ref=e433]
+                - cell "▲5.3%" [ref=e434]
+                - cell "1" [ref=e435]
+                - cell "$63.61" [ref=e436]
+                - cell "+$3.13 (+4.9%)" [ref=e437]
+                - cell [ref=e438]
+                - cell "+ −" [ref=e440]:
+                  - generic [ref=e441]:
+                    - button "+" [ref=e442]
+                    - button "−" [ref=e443]
+              - row "🚲 GreenRide Green $32.52 ▲2.7% 1 $31.63 +$0.89 (+2.8%) + −" [ref=e444] [cursor=pointer]:
+                - cell "🚲 GreenRide" [ref=e445]:
+                  - strong [ref=e446]: 🚲 GreenRide
+                - cell "Green" [ref=e447]:
+                  - generic [ref=e448]: Green
+                - cell "$32.52" [ref=e449]
+                - cell "▲2.7%" [ref=e450]
+                - cell "1" [ref=e451]
+                - cell "$31.63" [ref=e452]
+                - cell "+$0.89 (+2.8%)" [ref=e453]
+                - cell [ref=e454]
+                - cell "+ −" [ref=e456]:
+                  - generic [ref=e457]:
+                    - button "+" [ref=e458]
+                    - button "−" [ref=e459]
+              - row "📚 CloudLearn Education $51.42 ▼12.3% 0 — — + −" [ref=e460] [cursor=pointer]:
+                - cell "📚 CloudLearn" [ref=e461]:
+                  - strong [ref=e462]: 📚 CloudLearn
+                - cell "Education" [ref=e463]:
+                  - generic [ref=e464]: Education
+                - cell "$51.42" [ref=e465]
+                - cell "▼12.3%" [ref=e466]
+                - cell "0" [ref=e467]
+                - cell "—" [ref=e468]
+                - cell "—" [ref=e469]
+                - cell [ref=e470]
+                - cell "+ −" [ref=e472]:
+                  - generic [ref=e473]:
+                    - button "+" [ref=e474]
+                    - button "−" [disabled] [ref=e475]
+              - row "🐾 PetPals Pet $23.81 ▲1.9% 0 — — + −" [ref=e476] [cursor=pointer]:
+                - cell "🐾 PetPals" [ref=e477]:
+                  - strong [ref=e478]: 🐾 PetPals
+                - cell "Pet" [ref=e479]:
+                  - generic [ref=e480]: Pet
+                - cell "$23.81" [ref=e481]
+                - cell "▲1.9%" [ref=e482]
+                - cell "0" [ref=e483]
+                - cell "—" [ref=e484]
+                - cell "—" [ref=e485]
+                - cell [ref=e486]
+                - cell "+ −" [ref=e488]:
+                  - generic [ref=e489]:
+                    - button "+" [ref=e490]
+                    - button "−" [disabled] [ref=e491]
+          - generic [ref=e194]:
+            - generic [ref=e195]: 🎮 GameWorld — Gaming & Entertainment
+            - button "📈 Line View" [active] [ref=e503] [cursor=pointer]
+        - generic [ref=e492]:
+          - generic [ref=e493]: 🐂
+          - generic [ref=e494]:
+            - strong [ref=e495]: Market Mood — Week 3
+            - text: Bull Market — Most stocks rising!
+          - generic [ref=e496]: 4/5 rising
+        - generic [ref=e394]:
+          - heading "📰 Market News" [level=4] [ref=e395]
+          - generic [ref=e396]:
+            - generic [ref=e497]: W3📚 CloudLearn experiences server outage during exam week 😰
+            - generic [ref=e498]: "W3🎮 Industry report: mobile gaming grows 15% year-over-year"
+            - generic [ref=e499]: W2🐾 Shipping costs increase, cutting into PetPals' profits
+            - generic [ref=e500]: W2🍿 Sugar prices rise, increasing SnackCo's production costs
+            - generic [ref=e501]: W1🐾 Big retailer starts its own pet food brand at lower prices
+        - generic [ref=e199]:
+          - button "⏭️ Advance to Week 4" [ref=e502] [cursor=pointer]
+          - paragraph [ref=e201]: Click a company row to see its chart · Buy and sell anytime
+      - button "← Back to Lessons" [ref=e78] [cursor=pointer]
+  - contentinfo [ref=e79]:
+    - generic [ref=e80]:
+      - text: ⚠️
+      - strong [ref=e81]: Educational purposes only.
+      - text: This is not financial advice. Never invest real money without adult supervision and proper research.
+    - paragraph [ref=e82]: Made with 💚 for curious young learners · 2026

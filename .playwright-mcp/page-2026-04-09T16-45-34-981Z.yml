@@ -1,0 +1,105 @@
+- generic [ref=e1]:
+  - generic [ref=e11]:
+    - banner [ref=e12]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: 📈
+        - generic [ref=e16]: Stock Market Guide
+      - generic [ref=e17]:
+        - button "🐱 TestUser" [ref=e18] [cursor=pointer]:
+          - generic [ref=e19]: 🐱
+          - generic [ref=e20]: TestUser
+        - generic [ref=e21]:
+          - generic [ref=e22]: ⚡
+          - generic [ref=e25]: 325 XP
+        - button "Toggle dark/light mode" [ref=e26] [cursor=pointer]:
+          - generic [ref=e27]: 🌙
+    - navigation [ref=e28]:
+      - generic [ref=e30]: Progress
+      - list [ref=e38]:
+        - listitem [ref=e39] [cursor=pointer]:
+          - generic [ref=e40]: 🍕
+          - text: What Are Stocks? ✓
+        - listitem [ref=e41] [cursor=pointer]:
+          - generic [ref=e42]: 📈
+          - text: The Stock Market
+        - listitem [ref=e43] [cursor=pointer]:
+          - generic [ref=e44]: 🏪
+          - text: Understanding Companies
+        - listitem [ref=e45] [cursor=pointer]:
+          - generic [ref=e46]: 💡
+          - text: Intro to Evaluation
+        - listitem [ref=e47] [cursor=pointer]:
+          - generic [ref=e48]: 🛒
+          - text: How Trading Works
+        - listitem [ref=e49] [cursor=pointer]:
+          - generic [ref=e50]: 🎮
+          - text: Practice Zone ✓
+      - generic [ref=e51]:
+        - heading "🏅 Badges Earned" [level=4] [ref=e52]
+        - generic [ref=e53]:
+          - generic "Market Explorer" [ref=e54]: 🏅
+          - generic "Trading Floor Pro" [ref=e55]: 📊
+          - generic "Company Detective" [ref=e56]: 🔍
+          - generic "Smart Thinker" [ref=e57]: 🧠
+          - generic "First Trade" [ref=e58]: 🎉
+          - generic "Wall Street Rookie" [ref=e59]: 🏆
+    - main [ref=e60]:
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63]: 🎮
+          - generic [ref=e64]:
+            - heading "Practice Zone — Paper Trading Simulator" [level=2] [ref=e65]
+            - paragraph [ref=e66]: Trade with fake money. Learn without risk!
+        - generic [ref=e67]:
+          - paragraph [ref=e68]:
+            - text: 💡
+            - strong [ref=e69]: Paper trading
+            - text: means trading with pretend money. It's how real investors practice before using real money. You'll start with
+            - strong [ref=e70]: $10,000
+            - text: of fake cash and trade over
+            - strong [ref=e71]: 8 simulated weeks
+            - text: .
+          - paragraph [ref=e72]: 📚 Complete quiz modules to unlock harder difficulties and earn more XP · Click any company row to see its price chart
+        - generic [ref=e1027]:
+          - heading "🎬 Simulation Complete!" [level=2] [ref=e1028]
+          - generic [ref=e1029]: $10,000.72
+          - generic [ref=e1030]: 📈 +0.0% Total Return
+          - generic [ref=e1031]:
+            - paragraph [ref=e1032]:
+              - text: 💵
+              - strong [ref=e1033]: "Started with:"
+              - text: $10,000
+            - paragraph [ref=e1034]:
+              - text: 💰
+              - strong [ref=e1035]: "Ended with:"
+              - text: $10,000.72
+            - paragraph [ref=e1036]:
+              - text: 🎉
+              - strong [ref=e1037]: You made a profit!
+            - paragraph [ref=e1038]:
+              - text: 🏆
+              - strong [ref=e1039]: "Best pick:"
+              - text: 🚲 GreenRide (+13.9%)
+            - paragraph [ref=e1040]:
+              - text: 📉
+              - strong [ref=e1041]: "Worst pick:"
+              - text: 🎮 GameWorld (-3.0%)
+          - heading "🤔 What Did You Learn?" [level=3] [ref=e1045]
+          - paragraph [ref=e1046]: "Take a moment to think about your experience:"
+          - textbox "What strategy worked? What would you do differently? What surprised you?" [ref=e1047]
+          - generic [ref=e1048]:
+            - button "🔄 Play Again" [ref=e1049] [cursor=pointer]
+            - button "🏆 Claim Badge & Finish" [active] [ref=e1050] [cursor=pointer]
+        - button "← Back to Lessons" [ref=e78] [cursor=pointer]
+    - contentinfo [ref=e79]:
+      - generic [ref=e80]:
+        - text: ⚠️
+        - strong [ref=e81]: Educational purposes only.
+        - text: This is not financial advice. Never invest real money without adult supervision and proper research.
+      - paragraph [ref=e82]: Made with 💚 for curious young learners · 2026
+  - generic [ref=e1052]:
+    - generic [ref=e1053]: 🏆
+    - generic [ref=e1054]: Wall Street Rookie
+    - generic [ref=e1055]: You completed the trading simulation!
+    - generic [ref=e1056]: +100 XP
+    - button "Awesome! 🎉" [ref=e1057] [cursor=pointer]

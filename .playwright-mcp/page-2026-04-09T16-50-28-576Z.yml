@@ -1,0 +1,141 @@
+- generic [ref=e1]:
+  - generic [ref=e11]:
+    - banner [ref=e12]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: 📈
+        - generic [ref=e16]: Stock Market Guide
+      - generic [ref=e17]:
+        - button "🐱 TestUser" [ref=e18] [cursor=pointer]:
+          - generic [ref=e19]: 🐱
+          - generic [ref=e20]: TestUser
+        - generic [ref=e21]:
+          - generic [ref=e22]: ⚡
+          - generic [ref=e24]: 400 XP
+        - button "Toggle dark/light mode" [active] [ref=e25] [cursor=pointer]:
+          - generic [ref=e26]: ☀️
+    - navigation [ref=e27]:
+      - generic [ref=e29]: Progress
+      - list [ref=e37]:
+        - listitem [ref=e38] [cursor=pointer]:
+          - generic [ref=e39]: 🍕
+          - text: What Are Stocks? ✓
+        - listitem [ref=e40] [cursor=pointer]:
+          - generic [ref=e41]: 📈
+          - text: The Stock Market ✓
+        - listitem [ref=e42] [cursor=pointer]:
+          - generic [ref=e43]: 🏪
+          - text: Understanding Companies
+        - listitem [ref=e44] [cursor=pointer]:
+          - generic [ref=e45]: 💡
+          - text: Intro to Evaluation
+        - listitem [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: 🛒
+          - text: How Trading Works
+        - listitem [ref=e48] [cursor=pointer]:
+          - generic [ref=e49]: 🎮
+          - text: Practice Zone ✓
+      - generic [ref=e50]:
+        - heading "🏅 Badges Earned" [level=4] [ref=e51]
+        - generic [ref=e52]:
+          - generic "Market Explorer" [ref=e81]: 🏅
+          - generic "Trading Floor Pro" [ref=e53]: 📊
+          - generic "Company Detective" [ref=e54]: 🔍
+          - generic "Smart Thinker" [ref=e55]: 🧠
+          - generic "First Trade" [ref=e56]: 🎉
+          - generic "Wall Street Rookie" [ref=e82]: 🏆
+    - main [ref=e57]:
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]: 📈
+          - generic [ref=e86]:
+            - heading "The Stock Market" [level=2] [ref=e87]
+            - paragraph [ref=e88]: How buyers and sellers meet, and why prices move
+        - generic [ref=e89]:
+          - generic [ref=e90]: 🏪
+          - heading "Think of a Farmers' Market..." [level=3] [ref=e91]
+          - paragraph [ref=e92]: At a farmers' market, sellers bring their produce and buyers come to shop. If everyone wants strawberries but only one farmer has them, the price goes UP. If no one wants kale, the price goes DOWN.
+          - paragraph [ref=e93]:
+            - text: The stock market works the same way — but instead of food, people are buying and selling
+            - strong [ref=e94]: shares of companies
+            - text: . The price is set by
+            - strong [ref=e95]: supply and demand
+            - text: .
+        - generic [ref=e96]:
+          - heading "📌 What is a Stock Exchange?" [level=3] [ref=e97]
+          - paragraph [ref=e98]:
+            - text: A stock exchange is a
+            - strong [ref=e99]: marketplace
+            - text: "where stocks are bought and sold. Famous exchanges include:"
+          - paragraph [ref=e100]:
+            - text: 🗽
+            - strong [ref=e101]: NYSE
+            - text: (New York Stock Exchange) — the largest in the world
+            - text: 💻
+            - strong [ref=e102]: NASDAQ
+            - text: — known for tech companies
+            - text: 🇯🇵
+            - strong [ref=e103]: Tokyo Stock Exchange
+            - text: — largest in Asia
+          - paragraph [ref=e104]: Today, most trading happens electronically — no shouting on a trading floor needed! 🖥️
+        - generic [ref=e105]:
+          - 'heading "🎛️ Try It: Supply & Demand Simulator" [level=3] [ref=e106]'
+          - paragraph [ref=e107]: Move the sliders to see how the number of buyers and sellers affects the stock price!
+          - generic [ref=e108]:
+            - generic [ref=e109]: 🟢 Buyers
+            - slider [ref=e110]: "50"
+            - generic [ref=e111]: "50"
+          - generic [ref=e112]:
+            - generic [ref=e113]: 🔴 Sellers
+            - slider [ref=e114]: "50"
+            - generic [ref=e115]: "50"
+          - generic [ref=e116]:
+            - generic [ref=e117]: Current Stock Price
+            - generic [ref=e118]: $50.00
+            - generic [ref=e119]: ⬌
+            - generic [ref=e120]: Balanced — roughly equal buyers and sellers
+        - generic [ref=e121]:
+          - heading "📊 Why Do Prices Move?" [level=3] [ref=e122]
+          - paragraph [ref=e123]:
+            - text: Stock prices change constantly because of
+            - strong [ref=e124]: supply and demand
+            - text: ":"
+          - paragraph [ref=e125]:
+            - text: 📈
+            - strong [ref=e126]: Price goes UP
+            - text: when more people want to buy (high demand, low supply)
+          - paragraph [ref=e127]:
+            - text: 📉
+            - strong [ref=e128]: Price goes DOWN
+            - text: when more people want to sell (low demand, high supply)
+          - paragraph [ref=e129]: "Things that affect demand include: company news, economic conditions, new products, and even public mood!"
+        - generic [ref=e130] [cursor=pointer]:
+          - generic [ref=e131]:
+            - generic [ref=e132]: 💡 Did You Know? — Billions traded daily
+            - generic [ref=e133]: ▼
+          - generic: On a typical day, billions of dollars worth of stocks change hands on the NYSE alone. The computers that match buyers and sellers can process thousands of trades per second!
+        - generic [ref=e134]:
+          - heading "🧪 Quick Quiz — Test Your Knowledge!" [level=3] [ref=e135]
+          - generic [ref=e136]:
+            - generic [ref=e205]: "Difficulty:"
+            - button "⭐ Easy ✓" [ref=e206] [cursor=pointer]
+            - button "⭐⭐ Medium" [ref=e207] [cursor=pointer]
+            - button "⭐⭐⭐ Hard 🔒" [disabled] [ref=e208]
+          - generic [ref=e141]:
+            - paragraph [ref=e209]: ✅ ⭐ Easy quiz complete!
+            - paragraph [ref=e210]: 🔓 ⭐⭐ Medium difficulty is now unlocked! Try it above.
+            - button "Try again 🔄" [ref=e212] [cursor=pointer]
+        - generic [ref=e151]:
+          - button "← Back" [ref=e152] [cursor=pointer]
+          - 'button "Next: Understanding Companies 🏪 →" [ref=e153] [cursor=pointer]'
+    - contentinfo [ref=e76]:
+      - generic [ref=e77]:
+        - text: ⚠️
+        - strong [ref=e78]: Educational purposes only.
+        - text: This is not financial advice. Never invest real money without adult supervision and proper research.
+      - paragraph [ref=e79]: Made with 💚 for curious young learners · 2026
+  - generic [ref=e214]:
+    - generic [ref=e215]: 📊
+    - generic [ref=e216]: Trading Floor Pro
+    - generic [ref=e217]: You know how the stock market works!
+    - generic [ref=e218]: +50 XP
+    - button "Awesome! 🎉" [ref=e219] [cursor=pointer]

@@ -1,0 +1,137 @@
+- generic [ref=e15]:
+  - banner [ref=e16]:
+    - generic [ref=e18]:
+      - generic [ref=e19]: 📈
+      - generic [ref=e20]: Stock Market Guide
+    - generic [ref=e21]:
+      - button "🐱 TestUser" [ref=e122] [cursor=pointer]:
+        - generic [ref=e23]: 🐱
+        - generic [ref=e24]: TestUser
+      - generic [ref=e25]:
+        - generic [ref=e26]: ⚡
+        - generic [ref=e28]: 0 XP
+      - button "Toggle dark/light mode" [ref=e29] [cursor=pointer]:
+        - generic [ref=e30]: 🌙
+  - navigation [ref=e31]:
+    - generic [ref=e33]: Progress
+    - list [ref=e41]:
+      - listitem [ref=e42] [cursor=pointer]:
+        - generic [ref=e43]: 🍕
+        - text: What Are Stocks?
+      - listitem [ref=e44] [cursor=pointer]:
+        - generic [ref=e45]: 📈
+        - text: The Stock Market
+      - listitem [ref=e46] [cursor=pointer]:
+        - generic [ref=e47]: 🏪
+        - text: Understanding Companies
+      - listitem [ref=e48] [cursor=pointer]:
+        - generic [ref=e49]: 💡
+        - text: Intro to Evaluation
+      - listitem [ref=e50] [cursor=pointer]:
+        - generic [ref=e51]: 🛒
+        - text: How Trading Works
+      - listitem [ref=e52] [cursor=pointer]:
+        - generic [ref=e53]: 🎮
+        - text: Practice Zone
+    - generic [ref=e54]:
+      - heading "🏅 Badges Earned" [level=4] [ref=e55]
+      - generic [ref=e56]:
+        - generic "Market Explorer" [ref=e57]: 🏅
+        - generic "Trading Floor Pro" [ref=e58]: 📊
+        - generic "Company Detective" [ref=e59]: 🔍
+        - generic "Smart Thinker" [ref=e60]: 🧠
+        - generic "First Trade" [ref=e61]: 🎉
+        - generic "Wall Street Rookie" [ref=e62]: 🏆
+  - main [ref=e63]:
+    - generic [ref=e64]:
+      - generic [ref=e65]:
+        - generic [ref=e66]: 🍕
+        - generic [ref=e67]:
+          - heading "What Are Stocks?" [level=2] [ref=e68]
+          - paragraph [ref=e69]: Understanding ownership, shares, and why companies go public
+      - generic [ref=e70]:
+        - generic [ref=e71]: 🍕
+        - heading "Imagine You Own a Pizza Shop..." [level=3] [ref=e72]
+        - paragraph [ref=e73]:
+          - text: You start a pizza shop. It's doing great! But you need
+          - strong [ref=e74]: $10,000
+          - text: to open a second location. You don't have that much cash.
+        - paragraph [ref=e75]:
+          - text: So you split your business into
+          - strong [ref=e76]: 100 equal pieces
+          - text: called
+          - strong [ref=e77]: "\"shares\""
+          - text: . Each share is worth
+          - strong [ref=e78]: $100
+          - text: . You sell 50 shares to friends and family, raising $5,000. Now they each own a tiny piece of your pizza shop! 🎉
+        - paragraph [ref=e79]:
+          - text: That's exactly what a
+          - strong [ref=e80]: stock
+          - text: is — a small piece of ownership in a company.
+      - generic [ref=e81]:
+        - heading "📌 Key Concepts" [level=3] [ref=e82]
+        - paragraph [ref=e83]:
+          - strong [ref=e84]: "Stock (or Share):"
+          - text: A tiny piece of ownership in a company. When you buy a stock, you become a part-owner!
+        - paragraph [ref=e85]:
+          - strong [ref=e86]: "Stockholder (or Shareholder):"
+          - text: Someone who owns stock in a company. That could be you!
+        - paragraph [ref=e87]:
+          - strong [ref=e88]: "Going Public:"
+          - text: When a company sells its shares to the public for the first time. This is called an IPO (Initial Public Offering).
+      - generic [ref=e89]:
+        - heading "🤔 Why Do Companies Sell Stocks?" [level=3] [ref=e90]
+        - paragraph [ref=e91]: Companies need money to grow — to build new factories, hire people, create new products, or expand to new countries. Instead of borrowing from a bank, they can sell pieces of themselves (stocks) to raise money.
+        - paragraph [ref=e92]:
+          - strong [ref=e93]: "The trade-off:"
+          - text: The company gets money to grow, but now has to share its future success with all the stockholders.
+      - generic [ref=e94]:
+        - heading "🏷️ Company vs. Stock Price" [level=3] [ref=e95]
+        - paragraph [ref=e96]:
+          - text: "Here's something important:"
+          - strong [ref=e97]: the stock price is not the same as the company's value.
+        - paragraph [ref=e98]: "Think about it: If a company has 1,000 shares at $10 each, the total value is $10,000. But if it has 100 shares at $100 each, the total value is also $10,000!"
+        - paragraph [ref=e99]:
+          - text: The
+          - strong [ref=e100]: price per share
+          - text: depends on how many pieces the company is split into. What matters more is the
+          - strong [ref=e101]: total value
+          - text: of all shares combined (called "market capitalization").
+      - generic [ref=e102] [cursor=pointer]:
+        - generic [ref=e103]:
+          - generic [ref=e104]: 💡 Did You Know? — The oldest stock exchange
+          - generic [ref=e105]: ▼
+        - generic: The Amsterdam Stock Exchange, founded in 1602, is considered the world's oldest stock exchange. The Dutch East India Company was the first to sell shares to the public!
+      - generic [ref=e106] [cursor=pointer]:
+        - generic [ref=e107]:
+          - generic [ref=e108]: 💡 Did You Know? — You can own a piece of Apple
+          - generic [ref=e109]: ▼
+        - generic: Apple has about 15 billion shares. If you buy just 1 share, you technically own a tiny piece of the company that makes iPhones! (Though it's a really, really tiny piece 😄)
+      - generic [ref=e110] [cursor=pointer]:
+        - generic [ref=e111]:
+          - generic [ref=e112]: 💡 Did You Know? — Not all companies are public
+          - generic [ref=e113]: ▼
+        - generic: Many huge companies like IKEA and LEGO are "private" — they choose not to sell stocks to the public. Only "public" companies have stocks you can buy on the stock market.
+      - generic [ref=e114]:
+        - heading "🧪 Quick Quiz — Test Your Knowledge!" [level=3] [ref=e115]
+        - generic [ref=e123]:
+          - generic [ref=e124]: "Difficulty:"
+          - button "⭐ Easy" [ref=e125] [cursor=pointer]
+          - button "⭐⭐ Medium 🔒" [disabled] [ref=e126]
+          - button "⭐⭐⭐ Hard 🔒" [disabled] [ref=e127]
+        - generic [ref=e128]:
+          - generic [ref=e129]: Question 1 of 3 · ⭐ Easy
+          - generic [ref=e130]: If you buy a stock in a company, what do you own?
+          - generic [ref=e131]:
+            - button "A product from the company" [ref=e132] [cursor=pointer]
+            - button "A tiny piece of the company" [ref=e133] [cursor=pointer]
+            - button "A job at the company" [ref=e134] [cursor=pointer]
+            - button "The company's building" [ref=e135] [cursor=pointer]
+          - generic [ref=e137]: "Score: 0/3"
+      - 'button "Next: The Stock Market 📈 →" [ref=e117] [cursor=pointer]'
+  - contentinfo [ref=e118]:
+    - generic [ref=e119]:
+      - text: ⚠️
+      - strong [ref=e120]: Educational purposes only.
+      - text: This is not financial advice. Never invest real money without adult supervision and proper research.
+    - paragraph [ref=e121]: Made with 💚 for curious young learners · 2026

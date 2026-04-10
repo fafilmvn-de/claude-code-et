@@ -1,0 +1,81 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: 👋
+      - generic [ref=e6]:
+        - strong [ref=e7]: Welcome back, TestUser! 👋
+        - text: 2/6 modules done · 325 XP · Continuing from "Practice Zone"
+    - generic [ref=e8]:
+      - button "Continue ▶️" [ref=e9] [cursor=pointer]
+      - button "Start Fresh 🔄" [ref=e10] [cursor=pointer]
+  - generic [ref=e11]:
+    - banner [ref=e12]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: 📈
+        - generic [ref=e16]: Stock Market Guide
+      - generic [ref=e17]:
+        - button "🐱 TestUser" [ref=e18] [cursor=pointer]:
+          - generic [ref=e19]: 🐱
+          - generic [ref=e20]: TestUser
+        - generic [ref=e21]:
+          - generic [ref=e22]: ⚡
+          - generic [ref=e24]: 325 XP
+        - button "Toggle dark/light mode" [ref=e25] [cursor=pointer]:
+          - generic [ref=e26]: ☀️
+    - navigation [ref=e27]:
+      - generic [ref=e29]: Progress
+      - list [ref=e37]:
+        - listitem [ref=e38] [cursor=pointer]:
+          - generic [ref=e39]: 🍕
+          - text: What Are Stocks? ✓
+        - listitem [ref=e40] [cursor=pointer]:
+          - generic [ref=e41]: 📈
+          - text: The Stock Market
+        - listitem [ref=e42] [cursor=pointer]:
+          - generic [ref=e43]: 🏪
+          - text: Understanding Companies
+        - listitem [ref=e44] [cursor=pointer]:
+          - generic [ref=e45]: 💡
+          - text: Intro to Evaluation
+        - listitem [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: 🛒
+          - text: How Trading Works
+        - listitem [ref=e48] [cursor=pointer]:
+          - generic [ref=e49]: 🎮
+          - text: Practice Zone ✓
+      - generic [ref=e50]:
+        - heading "🏅 Badges Earned" [level=4] [ref=e51]
+        - generic [ref=e52]:
+          - generic "Market Explorer" [ref=e81]: 🏅
+          - generic "Trading Floor Pro" [ref=e53]: 📊
+          - generic "Company Detective" [ref=e54]: 🔍
+          - generic "Smart Thinker" [ref=e55]: 🧠
+          - generic "First Trade" [ref=e56]: 🎉
+          - generic "Wall Street Rookie" [ref=e82]: 🏆
+    - main [ref=e57]:
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - generic [ref=e60]: 🎮
+          - generic [ref=e61]:
+            - heading "Practice Zone — Paper Trading Simulator" [level=2] [ref=e62]
+            - paragraph [ref=e63]: Trade with fake money. Learn without risk!
+        - generic [ref=e64]:
+          - paragraph [ref=e65]:
+            - text: 💡
+            - strong [ref=e66]: Paper trading
+            - text: means trading with pretend money. It's how real investors practice before using real money. You'll start with
+            - strong [ref=e67]: $10,000
+            - text: of fake cash and trade over
+            - strong [ref=e68]: 8 simulated weeks
+            - text: .
+          - paragraph [ref=e69]: 📚 Complete quiz modules to unlock harder difficulties and earn more XP · Click any company row to see its price chart
+        - generic [ref=e71]:
+          - button "🚀 Start Paper Trading Simulator" [ref=e72] [cursor=pointer]
+          - button "🔄 Start Fresh Simulation" [ref=e73] [cursor=pointer]
+        - button "← Back to Lessons" [ref=e75] [cursor=pointer]
+    - contentinfo [ref=e76]:
+      - generic [ref=e77]:
+        - text: ⚠️
+        - strong [ref=e78]: Educational purposes only.
+        - text: This is not financial advice. Never invest real money without adult supervision and proper research.
+      - paragraph [ref=e79]: Made with 💚 for curious young learners · 2026
