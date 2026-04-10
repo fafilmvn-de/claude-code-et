@@ -188,6 +188,22 @@ const TouchFallback = (() => {
       .touch-device .rank-slot:active {
         background: rgba(20,184,166,0.05);
       }
+      .touch-device .diff-btn {
+        padding: 10px 18px;
+        min-height: 44px;
+        font-size: 0.9rem;
+      }
+      .touch-device .sim-ticker-wrap {
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .touch-device .sim-ticker-inner {
+        animation: none;
+        padding-left: 0;
+      }
+      .touch-device .spark-canvas {
+        display: none;
+      }
     `;
     document.head.appendChild(style);
   }

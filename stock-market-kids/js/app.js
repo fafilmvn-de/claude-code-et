@@ -40,8 +40,10 @@ const App = (() => {
     completedModules: new Set(),
     earnedBadges: new Set(),
     xp: 0,
-    maxXp: CONFIG.xpPerQuiz * 5 + CONFIG.xpPerSimulation, // 350 total
-    quizState: {},     // { module1: { current: 0, answered: [], score: 0 } }
+    maxXp: 850, // (25+50+75) × 3 × 5 modules + 100 simulator = 850 total
+    quizState: {},          // { module1: { current: 0, answered: [], score: 0, difficulty, questions[] } }
+    difficultyProgress: {}, // { module1: { unlockedLevels: ['easy'], completedLevels: [] } }
+    currentDifficulty: {},  // { module1: 'easy', ... }
     theme: 'light',
     miniTradeStep: 0,  // for Module 5 mini trade
     rankingFilled: 0,  // how many rank slots are filled
@@ -342,6 +344,8 @@ const App = (() => {
     state.earnedBadges = new Set();
     state.xp = 0;
     state.quizState = {};
+    state.difficultyProgress = {};
+    state.currentDifficulty = {};
     state.theme = 'light';
     state.miniTradeStep = 0;
     state.rankingFilled = 0;
@@ -362,6 +366,8 @@ const App = (() => {
         if (d.quizState) {
           state.quizState = d.quizState;
         }
+        state.difficultyProgress = d.difficultyProgress || {};
+        state.currentDifficulty = d.currentDifficulty || {};
       }
     } catch { /* ignore corrupted storage */ }
   }
@@ -376,6 +382,8 @@ const App = (() => {
           current: qs.current,
           answered: [...qs.answered],
           score: qs.score,
+          difficulty: qs.difficulty || 'easy',
+          questions: qs.questions || [],
         };
       }
 
@@ -386,6 +394,8 @@ const App = (() => {
         theme: state.theme,
         currentModule: state.currentModule,
         quizState: serializedQuiz,
+        difficultyProgress: state.difficultyProgress,
+        currentDifficulty: state.currentDifficulty,
         lastSaved: new Date().toISOString(),
       }));
 
@@ -470,6 +480,14 @@ const App = (() => {
   }
 
   function goToModule(num, scroll = true) {
+    // Pause/resume chart animation when leaving/entering module 6
+    if (state.currentModule === 6 && num !== 6 && typeof Simulator !== 'undefined') {
+      Simulator.pauseChart();
+    }
+    if (num === 6 && state.currentModule !== 6 && typeof Simulator !== 'undefined') {
+      Simulator.resumeChart();
+    }
+
     state.currentModule = num;
     saveState();
 
@@ -495,15 +513,47 @@ const App = (() => {
   }
 
   function completeModule(moduleNum) {
-    if (state.completedModules.has(moduleNum)) return;
-    state.completedModules.add(moduleNum);
+    const moduleKey = 'module' + moduleNum;
+    const diff = (state.quizState[moduleKey] && state.quizState[moduleKey].difficulty) || 'easy';
 
-    // Award badge
-    const badge = BADGES.find(b => b.module === moduleNum);
-    if (badge && !state.earnedBadges.has(badge.id)) {
-      state.earnedBadges.add(badge.id);
-      state.xp += moduleNum === 6 ? CONFIG.xpPerSimulation : CONFIG.xpPerQuiz;
-      showBadge(badge);
+    // Unlock the next difficulty tier
+    if (moduleNum !== 6) {
+      unlockNextDifficulty(moduleKey, diff);
+    }
+
+    // Only award badge on first-ever completion (easy tier)
+    if (!state.completedModules.has(moduleNum) && diff === 'easy') {
+      state.completedModules.add(moduleNum);
+      const badge = BADGES.find(b => b.module === moduleNum);
+      if (badge && !state.earnedBadges.has(badge.id)) {
+        state.earnedBadges.add(badge.id);
+        // Module 6 (simulator) still uses xpPerSimulation for its badge label
+        if (moduleNum === 6) state.xp += CONFIG.xpPerSimulation;
+        showBadge(badge);
+      }
+    } else if (!state.completedModules.has(moduleNum) && diff !== 'easy') {
+      // Medium/hard completion: track but no badge popup
+      state.completedModules.add(moduleNum);
+    }
+
+    // Show "quiz complete" UI for this difficulty tier
+    if (moduleNum !== 6) {
+      const container = document.querySelector('#quiz-' + moduleKey + ' .quiz-body');
+      if (container) {
+        const diffLabels = { easy: '⭐ Easy', medium: '⭐⭐ Medium', hard: '⭐⭐⭐ Hard' };
+        const nextDiff = { easy: 'medium', medium: 'hard', hard: null };
+        const next = nextDiff[diff];
+        const nextHint = next
+          ? `<p style="margin-top:8px;font-size:0.85rem;color:var(--text-muted);">🔓 ${diffLabels[next]} difficulty is now unlocked! Try it above.</p>`
+          : '<p style="margin-top:8px;font-size:0.85rem;color:var(--amber);">🏆 All difficulty levels complete for this module!</p>';
+        container.innerHTML = `
+          <p style="text-align:center;color:var(--green);font-weight:600;">✅ ${diffLabels[diff]} quiz complete!</p>
+          ${nextHint}
+          <div style="text-align:center;margin-top:12px;">
+            <button class="btn-secondary" onclick="App._resetDifficultyQuiz('${moduleKey}', ${moduleNum})">Try again 🔄</button>
+          </div>
+        `;
+      }
     }
 
     updateProgressDots();
@@ -575,46 +625,131 @@ const App = (() => {
     }
   }
 
+  /* ──────────── Difficulty System ──────────── */
+
+  function getDifficultyState(moduleKey) {
+    if (!state.difficultyProgress[moduleKey]) {
+      state.difficultyProgress[moduleKey] = { unlockedLevels: ['easy'], completedLevels: [] };
+    }
+    return state.difficultyProgress[moduleKey];
+  }
+
+  function getQuestionsForDifficulty(moduleKey, difficulty) {
+    return (QUIZ_DATA[moduleKey] || []).filter(q => q.difficulty === difficulty);
+  }
+
+  function unlockNextDifficulty(moduleKey, completedLevel) {
+    const ds = getDifficultyState(moduleKey);
+    if (!ds.completedLevels.includes(completedLevel)) {
+      ds.completedLevels.push(completedLevel);
+    }
+    if (completedLevel === 'easy' && !ds.unlockedLevels.includes('medium')) {
+      ds.unlockedLevels.push('medium');
+    }
+    if (completedLevel === 'medium' && !ds.unlockedLevels.includes('hard')) {
+      ds.unlockedLevels.push('hard');
+    }
+    saveState();
+    // Re-render selector to reflect the unlock
+    const moduleNum = parseInt(moduleKey.replace('module', ''));
+    const quizContainer = document.querySelector('#quiz-' + moduleKey);
+    if (quizContainer) renderDifficultySelector(moduleKey, moduleNum, quizContainer);
+  }
+
+  function renderDifficultySelector(moduleKey, moduleNum, quizContainer) {
+    const ds = getDifficultyState(moduleKey);
+    const active = state.currentDifficulty[moduleKey] || 'easy';
+    const levels = [
+      { id: 'easy',   label: '⭐ Easy',         cls: 'easy' },
+      { id: 'medium', label: '⭐⭐ Medium',      cls: 'medium' },
+      { id: 'hard',   label: '⭐⭐⭐ Hard',      cls: 'hard' },
+    ];
+
+    const buttonsHtml = levels.map(lv => {
+      const unlocked = ds.unlockedLevels.includes(lv.id);
+      const completed = ds.completedLevels.includes(lv.id);
+      const isActive = active === lv.id;
+      let cls = `diff-btn ${lv.cls}`;
+      if (isActive) cls += ' active';
+      if (!unlocked) cls += ' locked';
+      const lockIcon = !unlocked ? ' 🔒' : (completed ? ' ✓' : '');
+      return `<button class="${cls}" data-level="${lv.id}" ${!unlocked ? 'disabled' : ''} onclick="App._selectDifficulty('${moduleKey}', ${moduleNum}, '${lv.id}')">${lv.label}${lockIcon}</button>`;
+    }).join('');
+
+    let selector = quizContainer.querySelector('.difficulty-selector');
+    if (!selector) {
+      selector = document.createElement('div');
+      selector.className = 'difficulty-selector';
+      const quizBody = quizContainer.querySelector('.quiz-body');
+      if (quizBody) quizContainer.insertBefore(selector, quizBody);
+      else quizContainer.prepend(selector);
+    }
+    selector.innerHTML = `<span class="diff-label">Difficulty:</span>${buttonsHtml}`;
+  }
+
+  function _selectDifficulty(moduleKey, moduleNum, level) {
+    const ds = getDifficultyState(moduleKey);
+    if (!ds.unlockedLevels.includes(level)) return;
+    state.currentDifficulty[moduleKey] = level;
+    saveState();
+    initQuiz(moduleKey, moduleNum);
+    renderDifficultySelector(moduleKey, moduleNum, document.querySelector('#quiz-' + moduleKey));
+  }
+
+  function _resetDifficultyQuiz(moduleKey, moduleNum) {
+    const diff = state.currentDifficulty[moduleKey] || 'easy';
+    const questions = getQuestionsForDifficulty(moduleKey, diff);
+    state.quizState[moduleKey] = { current: 0, answered: [], score: 0, difficulty: diff, questions };
+    saveState();
+    renderQuizQuestion(moduleKey, moduleNum);
+  }
+
   /* ──────────── Quiz Engine ──────────── */
   function initAllQuizzes() {
     for (const moduleKey of Object.keys(QUIZ_DATA)) {
       const moduleNum = parseInt(moduleKey.replace('module', ''));
-      if (!state.completedModules.has(moduleNum)) {
-        initQuiz(moduleKey, moduleNum);
-      } else {
-        // Show completion message if already completed
-        const container = document.querySelector('#quiz-' + moduleKey + ' .quiz-body');
-        if (container) {
-          container.innerHTML = '<p style="text-align:center;color:var(--green);font-weight:600;">✅ Quiz completed! Badge earned.</p>';
-        }
-      }
+      const quizContainer = document.querySelector('#quiz-' + moduleKey);
+      if (quizContainer) renderDifficultySelector(moduleKey, moduleNum, quizContainer);
+      initQuiz(moduleKey, moduleNum);
     }
   }
 
   function initQuiz(moduleKey, moduleNum) {
-    const questions = QUIZ_DATA[moduleKey];
+    const diff = state.currentDifficulty[moduleKey] || 'easy';
+    const questions = getQuestionsForDifficulty(moduleKey, diff);
     if (!questions || questions.length === 0) return;
 
-    // Restore saved quiz state if available (mid-quiz resume)
-    if (state.quizState[moduleKey] && state.quizState[moduleKey].answered) {
-      // Resume from saved state
+    const saved = state.quizState[moduleKey];
+    const isSameDiff = saved && saved.difficulty === diff;
+
+    if (isSameDiff && saved.answered && saved.answered.length > 0) {
+      // Resume mid-quiz for this difficulty; ensure questions array is populated
+      if (!saved.questions || saved.questions.length === 0) {
+        saved.questions = questions;
+      }
       renderQuizQuestion(moduleKey, moduleNum);
     } else {
-      // Fresh quiz
-      state.quizState[moduleKey] = { current: 0, answered: [], score: 0 };
+      // Fresh quiz for this difficulty
+      state.quizState[moduleKey] = { current: 0, answered: [], score: 0, difficulty: diff, questions };
       renderQuizQuestion(moduleKey, moduleNum);
     }
   }
 
   function renderQuizQuestion(moduleKey, moduleNum) {
     const qs = state.quizState[moduleKey];
-    const questions = QUIZ_DATA[moduleKey];
+    if (!qs) return;
+    const questions = qs.questions && qs.questions.length > 0
+      ? qs.questions
+      : getQuestionsForDifficulty(moduleKey, qs.difficulty || 'easy');
     const q = questions[qs.current];
     const container = document.querySelector('#quiz-' + moduleKey + ' .quiz-body');
-    if (!container) return;
+    if (!container || !q) return;
+
+    const diff = qs.difficulty || 'easy';
+    const diffLabels = { easy: '⭐ Easy', medium: '⭐⭐ Medium', hard: '⭐⭐⭐ Hard' };
 
     let html = `
-      <div class="quiz-progress">Question ${qs.current + 1} of ${questions.length}</div>
+      <div class="quiz-progress">Question ${qs.current + 1} of ${questions.length} · ${diffLabels[diff]}</div>
       <div class="quiz-question">${q.question}</div>
       <div class="quiz-options">
     `;
@@ -642,12 +777,13 @@ const App = (() => {
     }
 
     // Nav
+    const claimLabel = diff === 'easy' ? 'Claim Badge! 🏅' : `Complete ${diffLabels[diff]}! ✓`;
     html += '<div class="quiz-nav">';
     html += `<span class="quiz-progress">Score: ${qs.score}/${questions.length}</span>`;
     if (answered && qs.current < questions.length - 1) {
       html += `<button class="btn-primary" onclick="App._quizNext('${moduleKey}', ${moduleNum})">Next Question →</button>`;
     } else if (answered && qs.current === questions.length - 1) {
-      html += `<button class="btn-primary" onclick="App.completeModule(${moduleNum})">Claim Badge! 🏅</button>`;
+      html += `<button class="btn-primary" onclick="App.completeModule(${moduleNum})">${claimLabel}</button>`;
     }
     html += '</div>';
 
@@ -659,8 +795,12 @@ const App = (() => {
         btn.addEventListener('click', () => {
           const idx = parseInt(btn.dataset.idx);
           qs.answered[qs.current] = idx;
-          if (idx === q.correct) qs.score++;
-          saveState(); // Persist mid-quiz progress
+          if (idx === q.correct) {
+            qs.score++;
+            state.xp += CONFIG.xpPerCorrect[diff] || 25;
+            updateXpBar();
+          }
+          saveState();
           renderQuizQuestion(moduleKey, moduleNum);
         });
       });
@@ -669,7 +809,7 @@ const App = (() => {
 
   function _quizNext(moduleKey, moduleNum) {
     state.quizState[moduleKey].current++;
-    saveState(); // Persist quiz navigation
+    saveState();
     renderQuizQuestion(moduleKey, moduleNum);
   }
 
@@ -869,6 +1009,8 @@ const App = (() => {
     resetMiniTrade,
     placeCompanyInSlot,
     _quizNext,
+    _selectDifficulty,
+    _resetDifficultyQuiz,
     // Profile system
     createProfile,
     selectProfile,
