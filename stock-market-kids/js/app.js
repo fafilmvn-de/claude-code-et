@@ -756,6 +756,28 @@ const App = (() => {
     return (QUIZ_DATA[moduleKey] || []).filter(q => q.difficulty === difficulty);
   }
 
+  function sampleQuestions(pool, n) {
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, Math.min(n, shuffled.length));
+  }
+
+  function shuffleOptions(q) {
+    const indices = q.options.map((_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    return {
+      ...q,
+      options: indices.map(i => q.options[i]),
+      correct: indices.indexOf(q.correct),
+    };
+  }
+
   function unlockNextDifficulty(moduleKey, completedLevel) {
     const ds = getDifficultyState(moduleKey);
     if (!ds.completedLevels.includes(completedLevel)) {
@@ -847,7 +869,8 @@ const App = (() => {
 
   function _resetDifficultyQuiz(moduleKey, moduleNum) {
     const diff = state.currentDifficulty[moduleKey] || 'easy';
-    const questions = getQuestionsForDifficulty(moduleKey, diff);
+    const pool = getQuestionsForDifficulty(moduleKey, diff);
+    const questions = sampleQuestions(pool, 3).map(shuffleOptions);
     state.quizState[moduleKey] = { current: 0, answered: [], score: 0, difficulty: diff, questions };
     saveState();
     renderQuizQuestion(moduleKey, moduleNum);
@@ -878,8 +901,9 @@ const App = (() => {
       }
       renderQuizQuestion(moduleKey, moduleNum);
     } else {
-      // Fresh quiz for this difficulty
-      state.quizState[moduleKey] = { current: 0, answered: [], score: 0, difficulty: diff, questions };
+      // Fresh quiz for this difficulty — sample 3 random questions and shuffle their options
+      const sampledQuestions = sampleQuestions(questions, 3).map(shuffleOptions);
+      state.quizState[moduleKey] = { current: 0, answered: [], score: 0, difficulty: diff, questions: sampledQuestions };
       renderQuizQuestion(moduleKey, moduleNum);
     }
   }
