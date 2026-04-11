@@ -84,6 +84,26 @@ const App = (() => {
     document.getElementById('profileNameInput')?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') createProfile();
     });
+
+    // Single global quiz keyboard handler — registered once, always targets active module's quiz
+    document.addEventListener('keydown', (e) => {
+      if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+      const moduleKey = 'module' + state.currentModule;
+      const qs = state.quizState[moduleKey];
+      if (!qs) return;
+      const container = document.querySelector('#quiz-' + moduleKey + ' .quiz-body');
+      if (!container) return;
+      const isAnswered = qs.answered[qs.current] !== undefined;
+      if (!isAnswered && e.key >= '1' && e.key <= '4') {
+        e.preventDefault();
+        const idx = parseInt(e.key) - 1;
+        const opts = container.querySelectorAll('.quiz-option:not([disabled])');
+        if (idx < opts.length) opts[idx].click();
+      } else if (isAnswered && e.key === 'Enter') {
+        e.preventDefault();
+        container.querySelector('.quiz-nav .btn-primary')?.click();
+      }
+    });
   }
 
   /* ──────────── Profile CRUD ──────────── */
@@ -480,6 +500,12 @@ const App = (() => {
   }
 
   function goToModule(num, scroll = true) {
+    // Gate: forward navigation requires previous module to be completed
+    if (!isModuleAccessible(num)) {
+      const navItem = document.querySelector(`.nav-item[data-module="${num}"]`);
+      if (navItem) { navItem.classList.add('shake'); setTimeout(() => navItem.classList.remove('shake'), 500); }
+      return;
+    }
     // Pause/resume chart animation when leaving/entering module 6
     if (state.currentModule === 6 && num !== 6 && typeof Simulator !== 'undefined') {
       Simulator.pauseChart();
@@ -571,24 +597,80 @@ const App = (() => {
     if (label) label.textContent = state.xp + ' XP';
   }
 
+  function showXpToast(amount) {
+    const toast = document.createElement('div');
+    toast.className = 'xp-toast';
+    toast.textContent = '+' + amount + ' XP';
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('show')));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 400);
+    }, 1200);
+  }
+
   function updateProgressDots() {
     document.querySelectorAll('.progress-dot').forEach(dot => {
       const m = parseInt(dot.dataset.module);
       dot.classList.toggle('filled', state.completedModules.has(m));
     });
+    const count = state.completedModules.size;
+    const countEl = document.getElementById('progressCount');
+    if (countEl) countEl.textContent = count > 0 ? count + '/6' : '';
+    // Show course-complete panel when all 6 modules done
+    const panel = document.getElementById('courseCompletePanel');
+    if (panel) {
+      const allDone = count >= 6;
+      panel.style.display = allDone ? 'block' : 'none';
+      if (allDone) {
+        const statsEl = document.getElementById('courseCompleteStats');
+        if (statsEl) statsEl.innerHTML = `
+          <span class="ccs-item">⚡ ${state.xp} XP earned</span>
+          <span class="ccs-item">🏅 ${state.earnedBadges.size} badges</span>
+          <span class="ccs-item">✅ 6/6 modules</span>
+        `;
+      }
+    }
+  }
+
+  /* Returns true if module num can be entered (prev module done, or it's module 1) */
+  function isModuleAccessible(num) {
+    return num === 1 || state.completedModules.has(num - 1);
   }
 
   function updateNavCompletedStates() {
     document.querySelectorAll('.nav-item').forEach(n => {
       const m = parseInt(n.dataset.module);
       n.classList.toggle('completed', state.completedModules.has(m));
+      n.classList.toggle('nav-locked', !isModuleAccessible(m));
     });
+    // Enable / disable the "Next →" button in each module section
+    for (let m = 1; m <= 5; m++) {
+      const nextBtn = document.querySelector(`#module${m} .module-nav .btn-primary`);
+      if (!nextBtn) continue;
+      const done = state.completedModules.has(m);
+      nextBtn.disabled = !done;
+      if (!done) {
+        nextBtn.title = 'Complete the Easy quiz above to unlock the next lesson 🔒';
+      } else {
+        nextBtn.removeAttribute('title');
+      }
+    }
   }
 
   /* ──────────── Badge System ──────────── */
   function updateBadgeDisplay() {
     document.querySelectorAll('.badge-mini').forEach(b => {
-      b.classList.toggle('earned', state.earnedBadges.has(b.dataset.badge));
+      const earned = state.earnedBadges.has(b.dataset.badge);
+      b.classList.toggle('earned', earned);
+      // Reveal mastery badge emoji/title once earned
+      if (b.classList.contains('mastery-badge') && earned) {
+        const mb = MASTERY_BADGES.find(m => m.id === b.dataset.badge);
+        if (mb) {
+          b.textContent = mb.emoji;
+          b.title = mb.name;
+        }
+      }
     });
   }
 
@@ -607,6 +689,21 @@ const App = (() => {
     document.getElementById('badgeOverlay').style.display = 'none';
   }
 
+  function showMasteryBadge(badge, isUltimate = false) {
+    const overlay = document.getElementById('masteryOverlay');
+    document.getElementById('masteryPopupEmoji').textContent = badge.emoji;
+    document.getElementById('masteryPopupTitle').textContent = badge.name;
+    document.getElementById('masteryPopupDesc').textContent = badge.description;
+    document.getElementById('masteryPopupXp').textContent = '+' + CONFIG.xpPerMastery + ' XP';
+    overlay.classList.toggle('ultimate-overlay', isUltimate);
+    overlay.style.display = 'flex';
+    spawnGoldConfetti(isUltimate);
+  }
+
+  function closeMasteryBadge() {
+    document.getElementById('masteryOverlay').style.display = 'none';
+  }
+
   function spawnConfetti() {
     const colors = ['#f59e0b', '#14b8a6', '#8b5cf6', '#f43f5e', '#3b82f6', '#10b981', '#ec4899'];
     for (let i = 0; i < 40; i++) {
@@ -619,6 +716,27 @@ const App = (() => {
       piece.style.animationDuration = (2 + Math.random() * 1.5) + 's';
       piece.style.width = (6 + Math.random() * 8) + 'px';
       piece.style.height = (6 + Math.random() * 8) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 4000);
+    }
+  }
+
+  function spawnGoldConfetti(isUltimate = false) {
+    const colors = isUltimate
+      ? ['#f59e0b', '#fbbf24', '#fcd34d', '#fef08a', '#f97316', '#ef4444', '#ffffff']
+      : ['#f59e0b', '#fbbf24', '#fcd34d', '#d97706', '#92400e', '#fef3c7'];
+    const count = isUltimate ? 80 : 50;
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.top = '-10px';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDelay = (Math.random() * 0.8) + 's';
+      piece.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+      piece.style.width = (6 + Math.random() * 10) + 'px';
+      piece.style.height = (6 + Math.random() * 10) + 'px';
       piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
       document.body.appendChild(piece);
       setTimeout(() => piece.remove(), 4000);
@@ -649,6 +767,37 @@ const App = (() => {
     if (completedLevel === 'medium' && !ds.unlockedLevels.includes('hard')) {
       ds.unlockedLevels.push('hard');
     }
+
+    // Check for mastery: all 3 tiers complete
+    const allComplete = ['easy', 'medium', 'hard'].every(lv => ds.completedLevels.includes(lv));
+    if (allComplete) {
+      const moduleNum = parseInt(moduleKey.replace('module', ''));
+      const masteryBadge = MASTERY_BADGES.find(b => b.module === moduleNum);
+      if (masteryBadge && !state.earnedBadges.has(masteryBadge.id)) {
+        state.earnedBadges.add(masteryBadge.id);
+        state.xp += CONFIG.xpPerMastery;
+        updateBadgeDisplay();
+        showMasteryBadge(masteryBadge);
+        // Check if all 5 module mastery badges are now earned → Ultimate Investor
+        const moduleMasteryBadges = MASTERY_BADGES.filter(b => b.module !== 0);
+        if (moduleMasteryBadges.every(b => state.earnedBadges.has(b.id))) {
+          const ultimate = MASTERY_BADGES.find(b => b.id === 'ultimate');
+          if (ultimate && !state.earnedBadges.has('ultimate')) {
+            setTimeout(() => {
+              state.earnedBadges.add('ultimate');
+              state.xp += CONFIG.xpPerMastery;
+              updateBadgeDisplay();
+              updateXpBar();
+              showMasteryBadge(ultimate, true);
+              saveState();
+            }, 3200);
+          }
+        }
+        saveState();
+        updateXpBar();
+      }
+    }
+
     saveState();
     // Re-render selector to reflect the unlock
     const moduleNum = parseInt(moduleKey.replace('module', ''));
@@ -747,6 +896,11 @@ const App = (() => {
 
     const diff = qs.difficulty || 'easy';
     const diffLabels = { easy: '⭐ Easy', medium: '⭐⭐ Medium', hard: '⭐⭐⭐ Hard' };
+    const answered = qs.answered[qs.current] !== undefined;
+
+    const keyHint = answered
+      ? '<div class="quiz-hint">Press Enter to continue</div>'
+      : '<div class="quiz-hint">Press 1–4 to select</div>';
 
     let html = `
       <div class="quiz-progress">Question ${qs.current + 1} of ${questions.length} · ${diffLabels[diff]}</div>
@@ -754,7 +908,6 @@ const App = (() => {
       <div class="quiz-options">
     `;
     q.options.forEach((opt, i) => {
-      const answered = qs.answered[qs.current] !== undefined;
       const isCorrect = i === q.correct;
       const wasSelected = qs.answered[qs.current] === i;
       let cls = 'quiz-option';
@@ -768,7 +921,6 @@ const App = (() => {
     html += '</div>';
 
     // Feedback
-    const answered = qs.answered[qs.current] !== undefined;
     if (answered) {
       const isCorrect = qs.answered[qs.current] === q.correct;
       html += `<div class="quiz-feedback show ${isCorrect ? 'correct' : 'wrong'}">
@@ -776,10 +928,11 @@ const App = (() => {
       </div>`;
     }
 
-    // Nav
+    // Nav + keyboard hint
     const claimLabel = diff === 'easy' ? 'Claim Badge! 🏅' : `Complete ${diffLabels[diff]}! ✓`;
     html += '<div class="quiz-nav">';
     html += `<span class="quiz-progress">Score: ${qs.score}/${questions.length}</span>`;
+    html += keyHint;
     if (answered && qs.current < questions.length - 1) {
       html += `<button class="btn-primary" onclick="App._quizNext('${moduleKey}', ${moduleNum})">Next Question →</button>`;
     } else if (answered && qs.current === questions.length - 1) {
@@ -797,14 +950,17 @@ const App = (() => {
           qs.answered[qs.current] = idx;
           if (idx === q.correct) {
             qs.score++;
-            state.xp += CONFIG.xpPerCorrect[diff] || 25;
+            const xpGain = CONFIG.xpPerCorrect[diff] || 25;
+            state.xp += xpGain;
             updateXpBar();
+            showXpToast(xpGain);
           }
           saveState();
           renderQuizQuestion(moduleKey, moduleNum);
         });
       });
     }
+
   }
 
   function _quizNext(moduleKey, moduleNum) {
@@ -1004,6 +1160,7 @@ const App = (() => {
     goToModule,
     completeModule,
     closeBadge,
+    closeMasteryBadge,
     pickInvestment,
     miniTradeBuy,
     resetMiniTrade,

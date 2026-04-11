@@ -88,7 +88,7 @@
   <!-- ═══════════ Sidebar Navigation ═══════════ -->
   <nav class="app-sidebar" id="appSidebar">
     <div class="nav-progress">
-      <span>Progress</span>
+      <span>Progress <span id="progressCount" class="progress-count"></span></span>
       <div class="progress-dots" id="progressDots">
         <div class="progress-dot" data-module="1"></div>
         <div class="progress-dot" data-module="2"></div>
@@ -127,6 +127,17 @@
         <span class="badge-mini" data-badge="thinker" title="Smart Thinker">🧠</span>
         <span class="badge-mini" data-badge="first_trade" title="First Trade">🎉</span>
         <span class="badge-mini" data-badge="rookie" title="Wall Street Rookie">🏆</span>
+      </div>
+    </div>
+    <div class="sidebar-badges sidebar-mastery-badges">
+      <h4>🔐 Secret Badges</h4>
+      <div class="badge-list" id="masteryBadgeList">
+        <span class="badge-mini mastery-badge" data-badge="mastery_1" title="???">❓</span>
+        <span class="badge-mini mastery-badge" data-badge="mastery_2" title="???">❓</span>
+        <span class="badge-mini mastery-badge" data-badge="mastery_3" title="???">❓</span>
+        <span class="badge-mini mastery-badge" data-badge="mastery_4" title="???">❓</span>
+        <span class="badge-mini mastery-badge" data-badge="mastery_5" title="???">❓</span>
+        <span class="badge-mini mastery-badge ultimate-mastery-badge" data-badge="ultimate" title="???">❓</span>
       </div>
     </div>
   </nav>
@@ -563,7 +574,7 @@
         </div>
       </div>
 
-      <div class="content-card" style="background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border-color:var(--teal-light);">
+      <div class="content-card card-teal-intro">
         <p style="font-size:0.9rem;">💡 <strong>Paper trading</strong> means trading with pretend money. It's how real investors practice before using real money. You'll start with <strong>$10,000</strong> of fake cash and trade over <strong>8 simulated weeks</strong>.</p>
         <p style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">📚 Complete quiz modules to unlock harder difficulties and earn more XP · Click any company row to see its price chart</p>
       </div>
@@ -577,6 +588,20 @@
           <button class="btn-secondary" onclick="Simulator.init(true)" style="font-size:0.9rem;padding:10px 20px;margin-top:8px;">
             🔄 Start Fresh Simulation
           </button>
+        </div>
+      </div>
+
+      <!-- Course Complete panel — shown by JS when all 6 modules done -->
+      <div id="courseCompletePanel" class="course-complete-panel" style="display:none;">
+        <div class="course-complete-inner">
+          <div class="course-complete-emoji">🎓</div>
+          <h2>Course Complete!</h2>
+          <p>You've finished all 6 modules and the paper trading simulator. You're officially a Stock Market Explorer!</p>
+          <div id="courseCompleteStats" class="course-complete-stats"></div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+            <button class="btn-primary" onclick="App.goToModule(1)">📖 Review from the Start</button>
+            <button class="btn-secondary" onclick="Simulator.init(true)">🔄 New Simulation</button>
+          </div>
         </div>
       </div>
 
@@ -606,6 +631,17 @@
     <div class="badge-desc" id="badgePopupDesc">Description</div>
     <div class="badge-xp" id="badgePopupXp">+50 XP</div>
     <button class="btn-primary" onclick="App.closeBadge()">Awesome! 🎉</button>
+  </div>
+</div>
+
+<div class="badge-overlay mastery-overlay" id="masteryOverlay" style="display:none;" onclick="App.closeMasteryBadge()">
+  <div class="badge-popup mastery-popup" onclick="event.stopPropagation()">
+    <div class="mastery-secret-label">🔐 SECRET ACHIEVEMENT UNLOCKED</div>
+    <span class="badge-emoji" id="masteryPopupEmoji">⚡</span>
+    <div class="badge-title" id="masteryPopupTitle">Badge Earned!</div>
+    <div class="badge-desc" id="masteryPopupDesc">Description</div>
+    <div class="badge-xp mastery-xp" id="masteryPopupXp">+150 XP</div>
+    <button class="btn-primary mastery-btn" onclick="App.closeMasteryBadge()">Let's GO! 🔥</button>
   </div>
 </div>
 

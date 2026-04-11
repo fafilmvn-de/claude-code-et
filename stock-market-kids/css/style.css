@@ -57,6 +57,8 @@
   --quiz-wrong: #450a0a;
   --gain: #34d399;
   --loss: #f87171;
+  /* Tell browser this is a dark page — fixes form control colors, scrollbars, etc. */
+  color-scheme: dark;
 }
 
 /* ═══════════════════════ Reset & Base ═══════════════════════ */
@@ -236,6 +238,19 @@ button:active { transform: scale(0.97); }
 
 .nav-item.active.completed::after { color: #fff; }
 
+.nav-item.nav-locked {
+  opacity: 0.42;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.nav-item.nav-locked::before {
+  content: '🔒';
+  font-size: 0.75rem;
+  margin-right: 6px;
+  opacity: 0.7;
+}
+
 .nav-emoji { font-size: 1.3rem; }
 
 .nav-progress {
@@ -264,6 +279,13 @@ button:active { transform: scale(0.97); }
 }
 
 .progress-dot.filled { background: var(--teal); }
+
+.progress-count {
+  font-size: 0.75rem;
+  color: var(--teal);
+  font-weight: 600;
+  margin-left: 4px;
+}
 
 /* Earned badges sidebar */
 .sidebar-badges {
@@ -296,6 +318,26 @@ button:active { transform: scale(0.97); }
 .badge-mini.earned {
   opacity: 1;
   animation: badgeEarn 0.5s ease;
+}
+
+/* Mastery (hidden) badge slots */
+.mastery-badge:not(.earned) {
+  filter: grayscale(1) opacity(0.35);
+  font-size: 1.1rem;
+}
+
+.mastery-badge.earned {
+  animation: masteryPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ultimate-mastery-badge.earned {
+  filter: drop-shadow(0 0 6px #f59e0b);
+}
+
+@keyframes masteryPop {
+  0%   { transform: scale(0) rotate(-15deg); }
+  70%  { transform: scale(1.35) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 /* Main Content */
@@ -386,6 +428,17 @@ button:active { transform: scale(0.97); }
   border-color: #0d9488;
 }
 
+/* Module 6 intro card — teal gradient, theme-aware */
+.card-teal-intro {
+  background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
+  border-color: var(--teal-light);
+}
+
+[data-theme="dark"] .card-teal-intro {
+  background: linear-gradient(135deg, #042f2e, #052e1e);
+  border-color: var(--teal);
+}
+
 .analogy-card .analogy-emoji {
   font-size: 2rem;
   display: block;
@@ -469,6 +522,7 @@ button:active { transform: scale(0.97); }
   font-size: 0.95rem;
   text-align: left;
   background: var(--bg);
+  color: var(--text);
 }
 
 .quiz-option:hover:not(.disabled) {
@@ -479,11 +533,13 @@ button:active { transform: scale(0.97); }
 .quiz-option.correct {
   background: var(--quiz-correct);
   border-color: var(--green);
+  color: var(--text);
 }
 
 .quiz-option.wrong {
   background: var(--quiz-wrong);
   border-color: var(--coral);
+  color: var(--text);
 }
 
 .quiz-option.disabled { cursor: default; opacity: 0.6; }
@@ -513,7 +569,15 @@ button:active { transform: scale(0.97); }
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 12px;
+}
+
+.quiz-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 .quiz-progress {
@@ -911,6 +975,16 @@ button:active { transform: scale(0.97); }
 
 .btn-primary:hover { background: #0d9488; }
 
+.btn-primary:disabled,
+.btn-primary[disabled] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+  pointer-events: auto; /* keep hover cursor visible */
+}
+.btn-primary:disabled:hover,
+.btn-primary[disabled]:hover { background: var(--teal); }
+
 .btn-secondary {
   background: var(--hover-bg);
   color: var(--text);
@@ -981,6 +1055,67 @@ button:active { transform: scale(0.97); }
   margin-bottom: 16px;
 }
 
+/* Mastery / Secret Achievement Popup */
+.mastery-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.mastery-popup {
+  background: linear-gradient(135deg, #1c1500 0%, #2d2200 50%, #1c1500 100%);
+  border: 2px solid #f59e0b;
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.5), 0 20px 60px rgba(0, 0, 0, 0.6);
+  color: #fef3c7;
+}
+
+.mastery-secret-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: #f59e0b;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding: 4px 14px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 99px;
+  background: rgba(245, 158, 11, 0.08);
+  display: inline-block;
+}
+
+.mastery-popup .badge-title {
+  color: #fbbf24;
+}
+
+.mastery-popup .badge-desc {
+  color: #d4a017;
+}
+
+.mastery-xp {
+  font-weight: 700;
+  color: #fbbf24 !important;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+.mastery-btn {
+  background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+  color: #1c1500 !important;
+  font-weight: 800;
+}
+
+.mastery-btn:hover {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+}
+
+.ultimate-overlay .mastery-popup {
+  box-shadow: 0 0 60px rgba(245, 158, 11, 0.7), 0 0 120px rgba(245, 158, 11, 0.25), 0 20px 60px rgba(0, 0, 0, 0.6);
+  animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), ultimateGlow 2s ease-in-out 0.5s infinite alternate;
+}
+
+@keyframes ultimateGlow {
+  from { box-shadow: 0 0 40px rgba(245, 158, 11, 0.5), 0 0 80px rgba(245, 158, 11, 0.2); }
+  to   { box-shadow: 0 0 80px rgba(245, 158, 11, 0.9), 0 0 140px rgba(245, 158, 11, 0.4); }
+}
+
 /* Confetti */
 .confetti-piece {
   position: fixed;
@@ -990,6 +1125,88 @@ button:active { transform: scale(0.97); }
   z-index: 1001;
   pointer-events: none;
   animation: confettiFall 2.5s ease-out forwards;
+}
+
+/* ═══════════════════════ XP Toast ═══════════════════════ */
+
+.xp-toast {
+  position: fixed;
+  top: 64px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--teal), var(--blue));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 5px 14px;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  opacity: 0;
+  transform: translateY(0) scale(0.85);
+  transition: opacity 0.25s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 2000;
+}
+
+.xp-toast.show {
+  opacity: 1;
+  transform: translateY(-20px) scale(1);
+}
+
+/* ═══════════════════════ Course Complete ═══════════════════════ */
+
+.course-complete-panel {
+  margin: 24px 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 2px solid var(--teal);
+  overflow: hidden;
+}
+
+[data-theme="light"] .course-complete-panel {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ecfdf5 100%);
+}
+
+.course-complete-inner {
+  padding: 36px 28px;
+  text-align: center;
+}
+
+.course-complete-emoji {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 12px;
+  animation: bounce 1s ease 0.2s both;
+}
+
+.course-complete-inner h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.course-complete-inner p {
+  color: var(--text-muted);
+  max-width: 440px;
+  margin: 0 auto 20px;
+}
+
+.course-complete-stats {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.ccs-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 /* ═══════════════════════ Animations ═══════════════════════ */

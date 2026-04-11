@@ -16,6 +16,7 @@ const CONFIG = {
   xpPerQuiz: 50,
   xpPerSimulation: 100,
   xpPerCorrect: { easy: 25, medium: 50, hard: 75 },
+  xpPerMastery: 150,
   priceMinStart: 20,
   priceMaxStart: 80,
   priceChangeMin: 0.03,   // ±3%
@@ -511,4 +512,14 @@ const BADGES = [
   { id: 'thinker',    module: 4, name: 'Smart Thinker',      emoji: '🧠', description: 'You understand investing basics!' },
   { id: 'first_trade',module: 5, name: 'First Trade',        emoji: '🎉', description: 'You know how trading works!' },
   { id: 'rookie',     module: 6, name: 'Wall Street Rookie',  emoji: '🏆', description: 'You completed the trading simulation!' },
+];
+
+/* Hidden mastery badges — unlocked only by completing Easy + Medium + Hard on a module */
+const MASTERY_BADGES = [
+  { id: 'mastery_1', module: 1, name: 'Stock Whiz',        emoji: '⚡', description: 'Conquered all 3 difficulty levels of What Are Stocks?' },
+  { id: 'mastery_2', module: 2, name: 'Market Master',     emoji: '🔥', description: 'Conquered all 3 difficulty levels of How the Market Works!' },
+  { id: 'mastery_3', module: 3, name: 'Company Guru',      emoji: '💎', description: 'Conquered all 3 difficulty levels of Picking Good Companies!' },
+  { id: 'mastery_4', module: 4, name: 'Strategy Sage',     emoji: '🧙', description: 'Conquered all 3 difficulty levels of Smart Investing Strategies!' },
+  { id: 'mastery_5', module: 5, name: 'Trade Legend',      emoji: '👑', description: 'Conquered all 3 difficulty levels of Placing Trades!' },
+  { id: 'ultimate',  module: 0, name: 'Ultimate Investor', emoji: '🌟', description: 'Mastered every quiz at all difficulty levels. You are unstoppable!' },
 ];
