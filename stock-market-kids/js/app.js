@@ -895,7 +895,9 @@ const App = (() => {
     const isSameDiff = saved && saved.difficulty === diff;
 
     if (isSameDiff && saved.answered && saved.answered.length > 0) {
-      // Resume mid-quiz for this difficulty; ensure questions array is populated
+      // Resume mid-quiz for this difficulty.
+      // Migration guard: pre-randomisation saves had no questions array — restore unshuffled
+      // pool so the quiz can still render. Dead code path for any session started after this commit.
       if (!saved.questions || saved.questions.length === 0) {
         saved.questions = questions;
       }
