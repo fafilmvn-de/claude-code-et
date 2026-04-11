@@ -184,6 +184,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: '$100 ÷ 10 shares = $10 per share. That\'s exactly how stocks work! 🍕',
     },
+    {
+      difficulty: 'easy',
+      question: 'What does "IPO" stand for?',
+      options: ['International Price Offering', 'Initial Public Offering', 'Investor Profit Order', 'Internal Price Optimisation'],
+      correct: 1,
+      explanation: 'IPO = Initial Public Offering. It\'s when a company sells its shares to the general public for the very first time, often to raise money to grow. 🚀',
+    },
+    {
+      difficulty: 'easy',
+      question: 'Which of these best describes a "shareholder"?',
+      options: ['Someone who works at the company', 'Someone who lends money to the company', 'Someone who owns stock in the company', 'Someone who buys products from the company'],
+      correct: 2,
+      explanation: 'A shareholder (or stockholder) owns one or more shares of a company\'s stock. That makes them a part-owner of the business! 🎉',
+    },
     // ── Medium ──
     {
       difficulty: 'medium',
@@ -206,6 +220,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'Dividends are like a "thank you" payment — companies share some of their profits with shareholders. Not all companies pay them! 💵',
     },
+    {
+      difficulty: 'medium',
+      question: 'A company has 50 million shares outstanding and the share price is $20. What is its market cap?',
+      options: ['$20 million', '$50 million', '$1 billion', '$50 billion'],
+      correct: 2,
+      explanation: 'Market cap = share price × shares outstanding. $20 × 50,000,000 = $1,000,000,000 = $1 billion. That\'s how we measure the total value of a company! 💼',
+    },
+    {
+      difficulty: 'medium',
+      question: 'A company pays a quarterly dividend of $0.50 per share. You own 200 shares. How much do you receive in a full year?',
+      options: ['$50', '$100', '$200', '$400'],
+      correct: 3,
+      explanation: '$0.50 × 4 quarters × 200 shares = $400 per year. Dividends are paid regularly — a nice passive income stream for patient investors! 💵',
+    },
     // ── Hard ──
     {
       difficulty: 'hard',
@@ -227,6 +255,20 @@ const QUIZ_DATA = {
       options: ['A time when trading is paused for all investors', 'A period after an IPO when insiders cannot sell their shares', 'The first day a stock begins trading', 'A government rule stopping new IPOs'],
       correct: 1,
       explanation: 'After a company goes public, insiders (founders, early investors) must wait — typically 90–180 days — before selling. This prevents a flood of selling that could crash the new stock\'s price! 🔒',
+    },
+    {
+      difficulty: 'hard',
+      question: 'A company does a 2-for-1 stock split. You owned 100 shares at $80 each. What is true immediately after the split?',
+      options: ['You own 50 shares at $160 each', 'You own 200 shares at $40 each', 'You own 100 shares at $160 each', 'You own 200 shares at $80 each'],
+      correct: 1,
+      explanation: 'In a 2-for-1 split, each share becomes 2 shares at half the price. 100 × $80 = $8,000 before; 200 × $40 = $8,000 after. Your total value is unchanged — the company just cut the pizza into smaller slices! 🍕',
+    },
+    {
+      difficulty: 'hard',
+      question: 'A company\'s IPO is priced at $20/share. On the first day of trading it closes at $35. What most likely caused this?',
+      options: ['The company set the IPO price incorrectly and must refund investors', 'Strong investor demand — more buyers than sellers at the offering price pushed the price up', 'The stock exchange manually adjusted the price upward', 'The CEO bought large amounts of stock on the first day'],
+      correct: 1,
+      explanation: 'A first-day pop means demand far exceeded supply at the IPO price. Investment banks deliberately set IPO prices slightly below market value to create this excitement — though it means the company raised less money than it could have! 📈',
     },
   ],
   module2: [
@@ -252,6 +294,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'Stock prices are set by supply and demand. When lots of people want a stock, the price rises. When people want to sell, it drops. 🔄',
     },
+    {
+      difficulty: 'easy',
+      question: 'The Nasdaq stock exchange is well-known for listing many companies from which industry?',
+      options: ['Agriculture and farming', 'Technology', 'Oil and gas', 'Real estate'],
+      correct: 1,
+      explanation: 'The Nasdaq is famous for its concentration of technology companies — Apple, Microsoft, Google, Meta, and Amazon are all listed there. 💻',
+    },
+    {
+      difficulty: 'easy',
+      question: 'What does "bull market" mean?',
+      options: ['A market where most stock prices are falling', 'A market where most stock prices are rising over time', 'A market that only trades large companies', 'A market that opens at sunrise'],
+      correct: 1,
+      explanation: 'A bull market = rising prices and investor optimism. A bear market = falling prices and pessimism. Bulls attack by thrusting upward with their horns; bears swipe downward with their paws — that\'s how traders remember it! 🐂🐻',
+    },
     // ── Medium ──
     {
       difficulty: 'medium',
@@ -274,6 +330,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'Most exchanges are open during business hours. After-hours trading allows some investors to trade outside that window, though with less liquidity and higher spreads! 🌙',
     },
+    {
+      difficulty: 'medium',
+      question: 'Stock X has a bid price of $49.90 and an ask price of $50.10. What is the bid-ask spread?',
+      options: ['$0.10', '$0.20', '$0.50', '$49.90'],
+      correct: 1,
+      explanation: 'Bid-ask spread = ask − bid = $50.10 − $49.90 = $0.20. This small gap is how market makers earn a profit for providing liquidity. Tight spreads mean lower trading costs for you! 🤝',
+    },
+    {
+      difficulty: 'medium',
+      question: 'A company reports earnings that beat analyst expectations by 30%. What typically happens to its stock price?',
+      options: ['Nothing — stock prices don\'t react to earnings', 'The price usually rises as more investors want to own the stock', 'The price drops because the company set expectations too low', 'The exchange pauses trading for 24 hours to reassess'],
+      correct: 1,
+      explanation: 'Beating expectations signals a company is performing better than the market predicted. More investors want in → more buyers than sellers → price rises. But "beating by less than expected" can still cause a drop! 📰📈',
+    },
     // ── Hard ──
     {
       difficulty: 'hard',
@@ -295,6 +365,20 @@ const QUIZ_DATA = {
       options: ['A single, very expensive stock', 'A basket of many stocks used to measure overall market performance', 'A ranking of the 500 richest people', 'A type of government bond'],
       correct: 1,
       explanation: 'An index tracks a group of stocks (the S&P 500 tracks 500 big US companies). When people say "the market went up", they often mean an index like this went up! 📊',
+    },
+    {
+      difficulty: 'hard',
+      question: 'You short 100 shares of a stock at $50 each. The price rises to $80. What is your loss?',
+      options: ['$3,000', '$5,000', '$8,000', 'Unlimited — there is no maximum loss when short selling'],
+      correct: 0,
+      explanation: '($80 − $50) × 100 = $3,000 loss. You borrowed and sold at $50 but must buy back at $80. Short selling risk is theoretically unlimited because a stock price can keep rising forever. ⚠️',
+    },
+    {
+      difficulty: 'hard',
+      question: 'An investor believes a stock will fall but doesn\'t want unlimited loss risk. Which strategy is most appropriate?',
+      options: ['Buy a large position in the stock', 'Buy a put option instead of short selling — it limits the loss to the option premium paid', 'Short sell the stock and hope for the best', 'Sell all holdings and keep cash'],
+      correct: 1,
+      explanation: 'A put option gives the right (not obligation) to sell shares at a set price. If the stock rises instead of falls, you only lose the premium you paid for the option — not an unlimited amount. Options are a key tool for limiting short-side risk. 🎯',
     },
   ],
   module3: [
@@ -320,6 +404,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'Nope! If you spend more than you earn, you have a LOSS, not a profit. $1M - $1.2M = -$200K loss. Ouch! 📉',
     },
+    {
+      difficulty: 'easy',
+      question: 'A company earns $500,000 in revenue and spends $300,000 in expenses. What is its profit?',
+      options: ['$800,000', '$300,000', '$200,000', '$500,000'],
+      correct: 2,
+      explanation: 'Profit = Revenue − Expenses = $500,000 − $300,000 = $200,000. Simple but crucial — this is the foundation of all company financial analysis! 💰',
+    },
+    {
+      difficulty: 'easy',
+      question: 'Which of these is an example of a company\'s "liability"?',
+      options: ['Cash held in the company\'s bank account', 'A bank loan the company must repay', 'A factory the company owns', 'Patents the company holds'],
+      correct: 1,
+      explanation: 'A liability is something a company owes. A bank loan must be paid back — that\'s a liability. Cash, factories, and patents are all assets (things the company owns). 🏦',
+    },
     // ── Medium ──
     {
       difficulty: 'medium',
@@ -342,6 +440,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'A balance sheet is like a financial photo: it shows assets (what you own) and liabilities (what you owe). Assets − Liabilities = Equity (the owners\' share)! 📸',
     },
+    {
+      difficulty: 'medium',
+      question: 'A stock trades at $60 per share and the company earns $3 per share annually. What is its P/E ratio?',
+      options: ['3', '20', '57', '180'],
+      correct: 1,
+      explanation: 'P/E = Share Price ÷ Earnings Per Share = $60 ÷ $3 = 20. Investors are paying $20 for every $1 of annual earnings. Whether that\'s cheap or expensive depends on the company\'s growth rate and industry! 🔢',
+    },
+    {
+      difficulty: 'medium',
+      question: 'Company A has a 60% gross profit margin. Company B has 30% in the same industry. What does this suggest?',
+      options: ['Company B is more profitable overall', 'Company A keeps $0.60 of every revenue dollar after direct costs — likely a pricing or efficiency advantage', 'Company A must have higher total revenue', 'Gross margin tells us nothing useful about a company'],
+      correct: 1,
+      explanation: 'Gross margin measures how much of each revenue dollar survives after paying the direct cost of goods. A higher margin (60% vs 30%) means Company A either charges more or produces more cheaply — a real competitive advantage! 📐',
+    },
     // ── Hard ──
     {
       difficulty: 'hard',
@@ -363,6 +475,20 @@ const QUIZ_DATA = {
       options: ['A physical barrier around company headquarters', 'A sustainable advantage that protects the company from competitors', 'A legal patent on one product', 'The company\'s largest market'],
       correct: 1,
       explanation: 'A moat is anything that makes it hard for competitors to take your customers: a brand people love, switching costs, network effects, or cost advantages. Wide moat = durable business! 🏰',
+    },
+    {
+      difficulty: 'hard',
+      question: 'A company\'s net income is $5M and its shareholders\' equity is $25M. What is its Return on Equity (ROE)?',
+      options: ['5%', '10%', '20%', '125%'],
+      correct: 2,
+      explanation: 'ROE = Net Income ÷ Shareholders\' Equity = $5M ÷ $25M = 0.20 = 20%. For every $100 of shareholder capital, the company generates $20 of annual profit. Warren Buffett uses ROE as a key quality filter! 💡',
+    },
+    {
+      difficulty: 'hard',
+      question: 'What does "goodwill" represent on a company\'s balance sheet?',
+      options: ['Cash donations to charity made by the company', 'The strong reputation customers have about the brand', 'The excess price paid when acquiring another company above its book value', 'The total amount of shareholder equity'],
+      correct: 2,
+      explanation: 'Goodwill is an accounting entry created during acquisitions. If you pay $100M for a company whose assets minus liabilities = $70M, the $30M extra is goodwill — representing brand value, customer relationships, and synergies that aren\'t on the balance sheet. 📒',
     },
   ],
   module4: [
@@ -388,6 +514,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'Companies that are stable and grow steadily (like a grocery chain or water utility) can be great long-term investments, even if they\'re not exciting! 🐢💰',
     },
+    {
+      difficulty: 'easy',
+      question: 'What does "diversification" mean in investing?',
+      options: ['Putting all your money into one great stock', 'Spreading investments across many different stocks or assets to reduce risk', 'Only buying stocks from foreign countries', 'Investing only in companies you personally use'],
+      correct: 1,
+      explanation: 'Diversification = "don\'t put all your eggs in one basket." By spreading investments across many companies and sectors, a single bad outcome has less power to hurt your overall portfolio. 🧺',
+    },
+    {
+      difficulty: 'easy',
+      question: 'What is compound interest?',
+      options: ['Interest paid only on your original investment amount', 'A penalty fee charged by brokers for early selling', 'Earning returns on both your original investment AND on previously earned returns', 'Interest that is only calculated once per year'],
+      correct: 2,
+      explanation: 'Compound interest is growth on top of growth. Year 1 you earn interest on $1,000. Year 2 you earn interest on $1,000 PLUS last year\'s interest. It snowballs over time — the longer you wait, the bigger the snowball! ⛄',
+    },
     // ── Medium ──
     {
       difficulty: 'medium',
@@ -410,6 +550,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'Risk tolerance is personal. If a 20% drop would make you panic-sell, you have low risk tolerance. Knowing yourself helps you pick the right investments! 🧘',
     },
+    {
+      difficulty: 'medium',
+      question: 'You invest $200 every month for 12 months. Some months the stock price is high, some low. What is the key benefit of this approach?',
+      options: ['You always buy at the absolute lowest monthly price', 'You automatically diversify across many different companies', 'You buy more shares when prices are low and fewer when high, reducing your average cost over time', 'You avoid paying any capital gains tax'],
+      correct: 2,
+      explanation: 'This is dollar-cost averaging (DCA). When the price is low, $200 buys more shares. When high, it buys fewer. Over time your average cost per share is naturally smoothed — removing the anxiety of trying to time the market. 📅',
+    },
+    {
+      difficulty: 'medium',
+      question: 'You invest $500 at an 8% annual return. Approximately how much will it be worth after 5 years?',
+      options: ['$540', '$700', '$735', '$900'],
+      correct: 2,
+      explanation: '$500 × 1.08⁵ = $500 × 1.469 ≈ $735. The extra $235 came from compounding — earning returns on previously earned returns. Start earlier and the numbers get much bigger! 🌱',
+    },
     // ── Hard ──
     {
       difficulty: 'hard',
@@ -431,6 +585,20 @@ const QUIZ_DATA = {
       options: ['Never — a high P/E always means overvalued', 'If the company is expected to grow earnings very rapidly, making today\'s price reasonable for future profits', 'Only if the company pays large dividends', 'When the company is over 100 years old'],
       correct: 1,
       explanation: 'A high P/E can be justified if the company is growing fast. If earnings double each year, investors pay a premium today for tomorrow\'s profits. But if growth disappoints, the stock can crash! ⚡',
+    },
+    {
+      difficulty: 'hard',
+      question: 'You own an equally-weighted portfolio of 10 stocks. One company goes bankrupt and its stock reaches zero. What is your approximate portfolio loss?',
+      options: ['All your money is gone', 'Approximately 10% of your total portfolio value', 'Exactly 50%', 'Nothing — diversification fully protects against any single loss'],
+      correct: 1,
+      explanation: 'With 10 equally weighted positions, each represents ~10% of your portfolio. One going to zero costs you ~10%. The other 9 carry on. Diversification doesn\'t eliminate risk — it limits the damage any one disaster can do. 🎯',
+    },
+    {
+      difficulty: 'hard',
+      question: 'The stock market drops 35% during a severe recession. Which asset class historically holds its value best during such periods?',
+      options: ['High-growth technology stocks', 'Newly-listed IPO stocks', 'Long-term government bonds', 'Cryptocurrencies'],
+      correct: 2,
+      explanation: 'Government bonds (especially long-term treasury bonds) are considered "safe haven" assets. During crashes, investors flee to the safety of guaranteed government payments, pushing bond prices up even as stocks fall. This is why bonds are a classic diversifier against equity crashes. 🏛️',
     },
   ],
   module5: [
@@ -456,6 +624,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'Don\'t panic! Think about WHY the price dropped. If the company is still strong, it might recover. If something fundamental changed, that\'s different. Always think, don\'t react emotionally! 🧠',
     },
+    {
+      difficulty: 'easy',
+      question: 'What is a "broker" in stock trading?',
+      options: ['A government official who regulates the stock market', 'A person or service that executes buy and sell orders on your behalf', 'A company that creates new stocks for other companies', 'Someone who decides which companies can list on an exchange'],
+      correct: 1,
+      explanation: 'A broker is your intermediary to the stock market. You tell the broker what to buy or sell, and they execute the order on the exchange. Today most brokers are online platforms accessible from your phone or computer! 📱',
+    },
+    {
+      difficulty: 'easy',
+      question: 'If you sell a stock for less than you originally paid for it, what is the result called?',
+      options: ['A dividend payment', 'A capital gain', 'A capital loss', 'A transaction fee'],
+      correct: 2,
+      explanation: 'A capital loss happens when your selling price is lower than your purchase price. For example: buy at $50, sell at $35 → $15 capital loss per share. Capital losses can often be used to offset capital gains and reduce your tax bill! 📉',
+    },
     // ── Medium ──
     {
       difficulty: 'medium',
@@ -478,6 +660,20 @@ const QUIZ_DATA = {
       correct: 1,
       explanation: 'In most countries, investment profits (capital gains) are taxed. Holding for over a year often gets a lower tax rate than short-term gains. Always check the rules in your country! 🧾',
     },
+    {
+      difficulty: 'medium',
+      question: 'You place a limit buy order for Stock X at $45. The stock is currently trading at $48. What happens?',
+      options: ['Your order executes immediately at the current price of $48', 'Your order waits and only executes if the price drops to $45 or below', 'Your order is automatically rejected because the stock is above your limit', 'You automatically get the best available price, whatever it is'],
+      correct: 1,
+      explanation: 'A limit order is patient — it says "I\'ll only buy if the price comes down to my target." If the stock never reaches $45, your order never fills. This gives you price control but no guarantee of execution. 🎚️',
+    },
+    {
+      difficulty: 'medium',
+      question: 'You bought 50 shares at $30 each and sold them at $50 each after 18 months. With a 15% long-term capital gains tax rate, how much tax do you owe?',
+      options: ['$150', '$200', '$250', '$375'],
+      correct: 0,
+      explanation: 'Gain = ($50 − $30) × 50 shares = $1,000. Tax = $1,000 × 15% = $150. Because you held more than 12 months, you qualify for the lower long-term capital gains rate. Patience literally pays! 🧾',
+    },
     // ── Hard ──
     {
       difficulty: 'hard',
@@ -499,6 +695,20 @@ const QUIZ_DATA = {
       options: ['Never — always hold winners forever', 'When one stock has grown so large it makes up too much of your portfolio and increases your risk', 'Only when the company reports bad earnings', 'When the stock price ends in an odd number'],
       correct: 1,
       explanation: 'If one stock becomes 60% of your portfolio, a crash there would devastate you. Trimming (selling a portion) to rebalance is smart risk management — you keep upside but reduce concentration risk! ⚖️',
+    },
+    {
+      difficulty: 'hard',
+      question: 'You sell 100 shares of Company X at a $500 loss. Three weeks later you buy back 100 shares of the same company. What happens to your $500 loss under the wash-sale rule?',
+      options: ['You can claim the full $500 loss on your tax return immediately', 'The $500 loss is disallowed and instead added to your cost basis in the new shares', 'You must pay a penalty of 10% of the disallowed loss', 'The loss is split: $250 this year and $250 next year'],
+      correct: 1,
+      explanation: 'The IRS disallows the loss because you repurchased within 30 days. But the loss isn\'t gone forever — it\'s added to your cost basis in the new shares, so you\'ll eventually benefit when you sell those. Wait 31+ days to claim the loss in the current tax year. ♻️',
+    },
+    {
+      difficulty: 'hard',
+      question: 'You place a market sell order for a thinly-traded stock expecting to receive $10,000. Your order executes and you only receive $9,600. The $400 shortfall is an example of what?',
+      options: ['A broker commission fee', 'A capital loss on the trade', 'Slippage', 'Market manipulation by the exchange'],
+      correct: 2,
+      explanation: 'Slippage is the gap between expected and actual execution price. Your large sell order overwhelmed the available buyers at the expected price, so the remaining shares filled at lower prices. Thin markets and large orders = more slippage. ⚡',
     },
   ],
 };
