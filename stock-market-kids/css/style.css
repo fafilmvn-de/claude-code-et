@@ -1864,10 +1864,10 @@ button:active { transform: scale(0.97); }
   line-height: 1.6;
 }
 .diff-badge.medium {
-  background: #f59e0b;
+  background: var(--amber);
   color: #fff;
 }
 .diff-badge.hard {
-  background: #8b5cf6;
+  background: var(--purple);
   color: #fff;
 }
