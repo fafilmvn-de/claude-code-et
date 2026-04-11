@@ -588,10 +588,15 @@ const QUIZ_DATA = {
     },
     {
       difficulty: 'hard',
-      question: 'You own an equally-weighted portfolio of 10 stocks. One company goes bankrupt and its stock reaches zero. What is your approximate portfolio loss?',
-      options: ['All your money is gone', 'Approximately 10% of your total portfolio value', 'Exactly 50%', 'Nothing — diversification fully protects against any single loss'],
+      question: 'Your portfolio of 20 diversified stocks falls 32% during a severe market crash. A friend says "But I thought diversification was supposed to protect you!" What is the best response?',
+      options: [
+        'Your friend is right — proper diversification should prevent any loss',
+        'Diversification reduces company-specific risk but cannot protect against market-wide downturns that affect all stocks simultaneously',
+        'You must not be diversified enough — more stocks would have prevented this',
+        'The crash must have been caused by one of your 20 stocks failing',
+      ],
       correct: 1,
-      explanation: 'With 10 equally weighted positions, each represents ~10% of your portfolio. One going to zero costs you ~10%. The other 9 carry on. Diversification doesn\'t eliminate risk — it limits the damage any one disaster can do. 🎯',
+      explanation: 'Diversification eliminates "unsystematic risk" (one company failing) but cannot eliminate "systematic risk" (the whole market falling together). In a genuine crash, almost all stocks fall — even a 500-stock portfolio loses value. Diversification shields against company-specific disasters, not global market downturns. 🛡️',
     },
     {
       difficulty: 'hard',
