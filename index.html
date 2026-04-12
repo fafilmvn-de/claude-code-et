@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Johnny, Bobo & Siusiu's Playground — fun projects built by a dad and his kids.">
+  <title>Johnny, Bobo & Siusiu's Playground</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f4f0ff;
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 48px 24px 72px;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-photo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.2);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      overflow: hidden;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .hero h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      line-height: 1.25;
+    }
+
+    .hero .tagline {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-top: 10px;
+      font-weight: 300;
+    }
+
+    .lang-badge {
+      display: inline-block;
+      margin-top: 18px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Project Cards ── */
+    .projects {
+      max-width: 600px;
+      margin: -28px auto 0;
+      padding: 0 20px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 20px 24px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(102, 126, 234, 0.13);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.22);
+    }
+
+    .card-icon { font-size: 2.8rem; margin-bottom: 12px; }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #3d3d80;
+    }
+
+    .card .desc {
+      font-size: 0.78rem;
+      color: #888;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .cta {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 8px 22px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .cta-game  { background: linear-gradient(90deg, #667eea, #5a6fd6); }
+    .cta-learn { background: linear-gradient(90deg, #764ba2, #8e44ad); }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 24px 20px;
+      font-size: 0.72rem;
+      color: #aaa;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .hero h1    { font-size: 1.3rem; }
+      .hero       { padding-bottom: 60px; }
+      .projects   { grid-template-columns: 1fr; margin-top: -20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-photo">
+      <img src="assets/kids.jpg" alt="Johnny, Bobo and Siusiu"
+           onerror="this.parentElement.innerHTML='&#128106;'">
+    </div>
+    <h1>Johnny, Bobo &amp; Siusiu's<br>Playground</h1>
+    <p class="tagline">A dad and his kids — building things together, one project at a time 💜</p>
+    <div class="lang-badge">🌐 EN &nbsp;|&nbsp; VI</div>
+  </header>
+
+  <!-- PROJECT CARDS -->
+  <main class="projects">
+
+    <a class="card" href="running-game/index.html">
+      <div class="card-icon">🐱</div>
+      <h2>Cat Runner</h2>
+      <p class="desc">An adventure game with 3 worlds — Forest, Desert &amp; Ice Mountain. Jump, dodge, collect coins!</p>
+      <span class="cta cta-game">Play now →</span>
+    </a>
+
+    <a class="card" href="stock-market-kids/index.html">
+      <div class="card-icon">📈</div>
+      <h2>Stock Market Guide</h2>
+      <p class="desc">A hands-on learning guide for young explorers who want to understand how money &amp; markets work.</p>
+      <span class="cta cta-learn">Start learning →</span>
+    </a>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    Made with ❤️ by Johnny, Bobo &amp; Siusiu &nbsp;·&nbsp; jbsplayground.com
+  </footer>
+
+</body>
+</html>
