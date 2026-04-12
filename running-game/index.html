@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat Hero's Adventure</title>
+    <title>Cat Hero's Backyard Survival</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -26,60 +26,152 @@
             font-family: 'Nunito', cursive;
             user-select: none;
         }
-        
+
         h1, h2, .game-title {
             font-family: 'Fredoka One', cursive;
         }
-        
+
         .game-canvas {
             border: 4px solid #4CAF50;
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
             background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%);
         }
-        
+
+        #canvas-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        #game-canvas {
+            display: block;
+            touch-action: none;
+        }
+        /* Responsive: scale canvas via CSS, keep internal 800×600 resolution */
+        @media (max-width: 860px) {
+            #game-canvas {
+                width: 100vw;
+                height: calc(100vw * 0.75);
+            }
+        }
+        /* Combo overlay */
+        #combo-overlay {
+            position: absolute;
+            top: 8px; left: 8px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 10px;
+            padding: 6px 12px;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            min-width: 80px;
+            text-align: center;
+            pointer-events: none;
+        }
+        #combo-overlay.hidden { display: none; }
+        #combo-count { font-size: 2rem; line-height: 1; }
+        #combo-tier { font-size: 0.85rem; }
+        #combo-bar-bg { background:#374151; border-radius:4px; height:4px; margin-top:4px; }
+        #combo-bar { background:#f97316; height:4px; border-radius:4px; width:100%; transition: width 0.1s; }
+        /* Score overlay */
+        #score-overlay {
+            position: absolute;
+            top: 8px; right: 8px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 10px;
+            padding: 6px 12px;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            text-align: right;
+            pointer-events: none;
+        }
+        #score-value { font-size: 1.4rem; color: #e0e7ff; }
+        #score-best { font-size: 0.75rem; color: #818cf8; }
+        /* Boss HP bar */
+        #boss-bar-wrapper {
+            background: rgba(0,0,0,0.7);
+            padding: 6px 14px;
+            border-radius: 0 0 8px 8px;
+        }
+        #boss-bar-wrapper.hidden { display: none; }
+        #boss-bar-fill { background: linear-gradient(90deg,#ef4444,#f87171); height:8px; border-radius:4px; transition: width 0.3s; }
+        /* Wave banner */
+        #wave-banner {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            background: rgba(0,0,0,0.75);
+            color: #fbbf24;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2rem;
+            padding: 12px 32px;
+            border-radius: 16px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        #wave-banner.visible { opacity: 1; }
+        /* Screen shake */
+        @keyframes shake {
+            0%,100%{transform:translate(0,0)}
+            20%{transform:translate(-4px,2px)}
+            40%{transform:translate(4px,-2px)}
+            60%{transform:translate(-3px,3px)}
+            80%{transform:translate(3px,-1px)}
+        }
+        .shake { animation: shake 0.3s ease; }
+        /* Shop overlay */
+        #shop-overlay {
+            font-family: 'Nunito', sans-serif;
+        }
+        .shop-card { cursor:pointer; border:2px solid #374151; border-radius:12px; padding:12px; text-align:center; background:#1e293b; color:white; transition:border-color 0.2s; }
+        .shop-card:hover:not(.unaffordable) { border-color:#fbbf24; }
+        .shop-card.unaffordable { opacity:0.45; cursor:not-allowed; }
+        .shop-icon { font-size:2rem; }
+        .shop-name { font-weight:bold; margin:4px 0; }
+        .shop-cost { color:#fcd34d; }
+        .shop-count { font-size:0.75rem; color:#94a3b8; }
+
         .wiggle {
             animation: wiggle 0.5s ease-in-out infinite;
         }
-        
+
         @keyframes wiggle {
             0%, 100% { transform: rotate(-2deg) scale(1); }
             25% { transform: rotate(2deg) scale(1.05); }
             50% { transform: rotate(-1deg) scale(1.02); }
             75% { transform: rotate(1deg) scale(1.05); }
         }
-        
+
         .bounce-gentle {
             animation: bounceGentle 2s ease-in-out infinite;
         }
-        
+
         @keyframes bounceGentle {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-        
+
         .sparkle {
             animation: sparkle 1.5s ease-in-out infinite;
         }
-        
+
         @keyframes sparkle {
             0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
             50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
         }
-        
+
         .slide-in {
             animation: slideIn 0.6s ease-out;
         }
-        
+
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(-30px) scale(0.9); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        
+
         .heart-beat {
             animation: heartBeat 1s ease-in-out infinite;
         }
-        
+
         @keyframes heartBeat {
             0%, 100% { transform: scale(1); }
             25% { transform: scale(1.1); }
@@ -95,10 +187,10 @@
             <div class="mb-8">
                 <h1 class="text-7xl mb-4 wiggle">🐱</h1>
                 <h1 class="game-title text-4xl text-green-600 mb-2">Cat Hero's</h1>
-                <h2 class="game-title text-3xl text-purple-600 mb-3">Adventure!</h2>
-                <p class="text-gray-600 text-lg">Fight enemies and become a legend! ⚔️</p>
+                <h2 class="game-title text-3xl text-purple-600 mb-3">Backyard Survival!</h2>
+                <p class="text-gray-600 text-lg">Fight endless waves and become a legend! ⚔️</p>
             </div>
-            
+
             <div class="space-y-4">
                 <button id="new-game-btn" class="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-green-500 hover:to-green-600 transition-all transform hover:scale-105 bounce-gentle shadow-lg">
                     🎮 Start Adventure!
@@ -106,8 +198,11 @@
                 <button id="instructions-btn" class="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-purple-500 hover:to-purple-600 transition-all transform hover:scale-105 shadow-lg">
                     📖 How to Play
                 </button>
+                <button id="leaderboard-btn" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-yellow-500 hover:to-yellow-600 transition-all transform hover:scale-105 shadow-lg">
+                    🏆 Leaderboard
+                </button>
             </div>
-            
+
             <div class="mt-6 flex justify-center space-x-4 text-3xl">
                 <span class="sparkle">🧶</span>
                 <span class="sparkle" style="animation-delay: 0.5s">🦋</span>
@@ -121,14 +216,14 @@
     <div id="instructions-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-3xl p-8 max-w-2xl mx-4 slide-in border-4 border-purple-400">
             <h2 class="game-title text-4xl text-purple-600 mb-6 text-center">How to Play! 🎮</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4 text-gray-700">
                     <div class="bg-blue-50 p-4 rounded-2xl">
                         <h3 class="font-bold text-lg mb-3 text-blue-600">⚔️ Your Mission</h3>
-                        <p>Defend the backyard from wild boars and wolves! Become the ultimate cat hero!</p>
+                        <p>Survive endless waves of enemies in the backyard! Earn coins, upgrade in the shop, and beat your high score!</p>
                     </div>
-                    
+
                     <div class="bg-green-50 p-4 rounded-2xl">
                         <h3 class="font-bold text-lg mb-3 text-green-600">🕹️ Controls</h3>
                         <div class="space-y-2">
@@ -138,38 +233,34 @@
                             </div>
                             <div class="flex items-center space-x-3">
                                 <span class="text-2xl">⚔️</span>
-                                <span>Space or Click to attack!</span>
+                                <span>Space or Click/Tap to attack!</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="space-y-4 text-gray-700">
                     <div class="bg-yellow-50 p-4 rounded-2xl">
-                        <h3 class="font-bold text-lg mb-3 text-yellow-600">💪 Power-ups</h3>
+                        <h3 class="font-bold text-lg mb-3 text-yellow-600">🪙 Coins &amp; Shop</h3>
                         <div class="space-y-2">
                             <div class="flex items-center space-x-3">
-                                <span class="text-2xl">🧶</span>
-                                <span>Yarn balls - Increase attack range!</span>
+                                <span class="text-2xl">🪙</span>
+                                <span>Defeat enemies to earn coins!</span>
                             </div>
                             <div class="flex items-center space-x-3">
-                                <span class="text-2xl">🦋</span>
-                                <span>Butterflies - Generate shield!</span>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <span class="text-2xl">🐟</span>
-                                <span>Fish treats - Restore HP!</span>
+                                <span class="text-2xl">🛍️</span>
+                                <span>Shop opens between waves!</span>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="bg-pink-50 p-4 rounded-2xl">
                         <h3 class="font-bold text-lg mb-3 text-pink-600">⚡ Special Features</h3>
-                        <p>Get 10 consecutive kills for a SWORD BLAST that destroys all nearby enemies! ⚡</p>
+                        <p>Build up your combo multiplier for huge scores! Boss enemies appear on milestone waves! 🐻</p>
                     </div>
                 </div>
             </div>
-            
+
             <button id="close-instructions-btn" class="w-full mt-6 bg-gradient-to-r from-purple-400 to-purple-500 text-white py-3 px-6 rounded-2xl font-bold hover:from-purple-500 hover:to-purple-600 transition-all shadow-lg">
                 Let's Play! 🚀
             </button>
@@ -178,75 +269,56 @@
 
     <!-- Game Container -->
     <div id="game-container" class="hidden">
-        <!-- Game UI -->
-        <div class="mb-4 flex justify-between items-center bg-white rounded-2xl p-4 shadow-lg border-4 border-green-400">
-            <div class="flex items-center space-x-6">
-                <!-- HP Display -->
-                <div class="text-center bg-red-100 rounded-2xl p-3 border-2 border-red-300">
-                    <div class="text-2xl">❤️</div>
-                    <div class="text-sm text-red-600 font-bold">Health</div>
-                    <div class="hearts-display flex justify-center space-x-1 mt-1">
-                        <!-- Hearts will be populated by JavaScript -->
-                    </div>
-                </div>
-                <div class="text-center bg-yellow-100 rounded-2xl p-3 border-2 border-yellow-300">
-                    <div class="text-3xl heart-beat">🧶</div>
-                    <div class="text-xl font-bold text-yellow-600" id="yarn-display">0</div>
-                    <div class="text-sm text-yellow-600">Attack Range</div>
-                </div>
-                <div class="text-center bg-purple-100 rounded-2xl p-3 border-2 border-purple-300">
-                    <div class="text-3xl heart-beat">🦋</div>
-                    <div class="text-xl font-bold text-purple-600" id="butterfly-display">0</div>
-                    <div class="text-sm text-purple-600">Shield</div>
-                </div>
-                <div class="text-center bg-blue-100 rounded-2xl p-3 border-2 border-blue-300">
-                    <div class="text-3xl heart-beat">🐟</div>
-                    <div class="text-xl font-bold text-blue-600" id="fish-display">0</div>
-                    <div class="text-sm text-blue-600">Health Items</div>
+        <!-- Compact HUD bar -->
+        <div id="hud-bar" class="mb-2 flex justify-between items-center bg-white rounded-2xl px-4 py-2 shadow-lg border-4 border-green-400">
+            <!-- HP -->
+            <div class="flex items-center gap-2">
+                <div id="hp-hearts" class="flex gap-1 text-xl"></div>
+            </div>
+            <!-- Wave info -->
+            <div class="text-center">
+                <div id="wave-label" class="font-bold text-yellow-600 text-sm" style="font-family:'Fredoka One',cursive">WAVE 1</div>
+                <div class="bg-gray-200 rounded-full h-2 w-24 mt-1">
+                    <div id="wave-progress-bar" class="bg-yellow-400 h-full rounded-full transition-all duration-300" style="width:0%"></div>
                 </div>
             </div>
-            <div class="flex space-x-2">
-                <div class="text-center bg-green-100 rounded-2xl p-3 border-2 border-green-300">
-                    <div class="text-2xl">⏱️</div>
-                    <div class="text-lg font-bold text-green-600" id="time-display">0:00</div>
-                    <div class="text-sm text-green-600">Time</div>
+            <!-- Coins + pause -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1 text-yellow-600 font-bold">
+                    🪙 <span id="coin-display">0</span>
                 </div>
-                <button id="pause-btn" class="bg-orange-400 text-white px-4 py-2 rounded-xl font-bold hover:bg-orange-500 transition-all shadow-lg">
-                    ⏸️ Pause
-                </button>
+                <button id="pause-btn" class="bg-orange-400 text-white px-3 py-1 rounded-xl font-bold hover:bg-orange-500 text-sm">⏸</button>
             </div>
         </div>
-        
-        <!-- Game Canvas -->
-        <canvas id="game-canvas" class="game-canvas" width="800" height="600"></canvas>
-        
-        <!-- Mobile Controls -->
-        <div id="mobile-controls" class="mt-4 flex justify-center space-x-2 md:hidden">
-            <div class="bg-white rounded-2xl p-2 shadow-lg border-2 border-green-400">
-                <div class="grid grid-cols-3 gap-2">
-                    <div></div>
-                    <button id="mobile-up" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">⬆️</button>
-                    <div></div>
-                    <button id="mobile-left" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">⬅️</button>
-                    <div class="flex items-center justify-center text-2xl">🐱</div>
-                    <button id="mobile-right" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">➡️</button>
-                    <div></div>
-                    <button id="mobile-down" class="bg-blue-400 text-white p-3 rounded-xl text-2xl font-bold hover:bg-blue-500 transition-all">⬇️</button>
-                    <div></div>
+
+        <!-- Canvas + Overlays -->
+        <div id="canvas-wrapper" class="relative">
+            <!-- Combo overlay (top-left) -->
+            <div id="combo-overlay" class="hidden">
+                <div id="combo-tier" class="text-xs tracking-widest text-gray-400">COMBO</div>
+                <div id="combo-count">0</div>
+                <div id="combo-mult" class="text-sm">×1</div>
+                <div id="combo-bar-bg"><div id="combo-bar"></div></div>
+            </div>
+            <!-- Score overlay (top-right) -->
+            <div id="score-overlay">
+                <div class="text-xs tracking-widest text-gray-400">SCORE</div>
+                <div id="score-value">0</div>
+                <div id="score-best"></div>
+            </div>
+            <!-- Wave clear banner -->
+            <div id="wave-banner"></div>
+            <!-- Canvas -->
+            <canvas id="game-canvas" class="game-canvas" width="800" height="600"></canvas>
+            <!-- Boss HP bar (below canvas, inside wrapper) -->
+            <div id="boss-bar-wrapper" class="hidden">
+                <div class="flex justify-between text-sm mb-1">
+                    <span id="boss-name" class="text-red-300 font-bold" style="font-family:'Fredoka One',cursive">🐻 ANGRY BEAR</span>
+                    <span id="boss-hp-text" class="text-red-300">20 / 20</span>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Progress Bar -->
-        <div class="mt-4 bg-white rounded-2xl p-4 shadow-lg border-4 border-green-400">
-            <div class="text-center mb-2">
-                <span class="text-lg font-bold text-green-600">Battle Progress ⚔️</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-4 border-2 border-gray-300">
-                <div id="progress-bar" class="bg-gradient-to-r from-red-400 to-red-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
-            </div>
-            <div class="text-center mt-2">
-                <span id="progress-text" class="text-sm text-gray-600">Defeat enemies to progress!</span>
+                <div class="bg-gray-700 rounded-full h-3">
+                    <div id="boss-bar-fill" style="width:100%"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -267,73 +339,52 @@
         </div>
     </div>
 
-    <!-- Level Complete Modal -->
-    <div id="level-complete-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-        <div class="bg-white rounded-3xl p-8 text-center slide-in border-4 border-green-400">
-            <h2 class="game-title text-5xl text-green-600 mb-4">🎉 Amazing Job!</h2>
-            <div class="text-6xl mb-6 wiggle">🏆</div>
-            <div id="level-stats" class="mb-6 space-y-3 text-xl text-gray-700">
-                <div class="bg-yellow-100 p-3 rounded-2xl border-2 border-yellow-300">
-                    <span>🧶 Yarn balls: </span><span id="level-yarn" class="font-bold text-yellow-600">0</span>
-                </div>
-                <div class="bg-purple-100 p-3 rounded-2xl border-2 border-purple-300">
-                    <span>🦋 Butterflies: </span><span id="level-butterflies" class="font-bold text-purple-600">0</span>
-                </div>
-                <div class="bg-blue-100 p-3 rounded-2xl border-2 border-blue-300">
-                    <span>🐟 Fish treats: </span><span id="level-fish" class="font-bold text-blue-600">0</span>
-                </div>
-                <div class="bg-green-100 p-3 rounded-2xl border-2 border-green-300">
-                    <span>⏱️ Time: </span><span id="level-time" class="font-bold text-green-600">0:00</span>
-                </div>
-            </div>
-            <div class="space-y-4">
-                <button id="next-level-btn" class="w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-blue-500 hover:to-blue-600 transition-all shadow-lg">
-                    🚀 Next Adventure!
-                </button>
-                <button id="back-to-menu-btn" class="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-gray-500 hover:to-gray-600 transition-all shadow-lg">
-                    🏠 Main Menu
-                </button>
-            </div>
-        </div>
+    <!-- Celebration Messages -->
+    <div id="celebration-message" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-400 text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-lg z-40 border-4 border-green-500">
+        🎉 Great job! 🎉
     </div>
 
-    <!-- Victory Modal -->
-    <div id="victory-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-        <div class="bg-white rounded-3xl p-8 text-center slide-in border-4 border-yellow-400">
-            <h2 class="game-title text-6xl text-yellow-500 mb-4">🎊 YOU DID IT! 🎊</h2>
-            <div class="text-8xl mb-6 wiggle">🏅</div>
-            <p class="text-2xl text-gray-700 mb-6">You're the best cat explorer ever!</p>
-            <div id="victory-stats" class="mb-6 grid grid-cols-2 gap-4 text-lg text-gray-700">
-                <div class="bg-yellow-100 p-4 rounded-2xl border-2 border-yellow-300">
-                    <div class="text-3xl mb-2">🧶</div>
-                    <div class="font-bold text-yellow-600" id="victory-yarn">0</div>
-                    <div class="text-sm">Total Yarn</div>
-                </div>
-                <div class="bg-purple-100 p-4 rounded-2xl border-2 border-purple-300">
-                    <div class="text-3xl mb-2">🦋</div>
-                    <div class="font-bold text-purple-600" id="victory-butterflies">0</div>
-                    <div class="text-sm">Total Butterflies</div>
-                </div>
-                <div class="bg-blue-100 p-4 rounded-2xl border-2 border-blue-300">
-                    <div class="text-3xl mb-2">🐟</div>
-                    <div class="font-bold text-blue-600" id="victory-fish">0</div>
-                    <div class="text-sm">Total Fish</div>
-                </div>
-                <div class="bg-green-100 p-4 rounded-2xl border-2 border-green-300">
-                    <div class="text-3xl mb-2">⏱️</div>
-                    <div class="font-bold text-green-600" id="victory-time">0:00</div>
-                    <div class="text-sm">Total Time</div>
-                </div>
-            </div>
-            <button id="play-again-btn" class="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-purple-500 hover:to-purple-600 transition-all shadow-lg">
-                🎮 Play Again!
+    <!-- Shop Overlay -->
+    <div id="shop-overlay" class="hidden fixed inset-0 bg-black bg-opacity-85 flex items-center justify-center z-50">
+        <div class="bg-gray-900 rounded-3xl p-8 max-w-xl w-full mx-4 border-4 border-yellow-400">
+            <h2 class="text-3xl font-bold text-yellow-400 text-center mb-1" style="font-family:'Fredoka One',cursive">🛍️ Shop</h2>
+            <p class="text-center text-gray-400 mb-5">🪙 <span id="shop-coin-count" class="text-yellow-400 font-bold text-lg">0</span> coins</p>
+            <div id="shop-cards" class="grid grid-cols-2 gap-3"></div>
+            <button id="shop-close-btn" class="mt-6 w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3 rounded-2xl text-lg transition-all">
+                ⚔️ Back to Battle!
             </button>
         </div>
     </div>
 
-    <!-- Celebration Messages -->
-    <div id="celebration-message" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-400 text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-lg z-40 border-4 border-green-500">
-        🎉 Great job! 🎉
+    <!-- Name Entry Modal (shown on death) -->
+    <div id="name-entry-modal" class="hidden fixed inset-0 bg-black bg-opacity-85 flex items-center justify-center z-50">
+        <div class="bg-gray-900 rounded-3xl p-8 max-w-sm w-full mx-4 border-4 border-red-400 text-center">
+            <div class="text-6xl mb-3">💀</div>
+            <h2 class="text-3xl font-bold text-red-400 mb-1" style="font-family:'Fredoka One',cursive">Game Over!</h2>
+            <div class="text-gray-300 mb-1">Wave <span id="death-wave" class="text-yellow-400 font-bold">0</span></div>
+            <div class="text-2xl text-white font-bold mb-4">Score: <span id="death-score" class="text-yellow-400">0</span></div>
+            <input id="player-name-input" maxlength="12" placeholder="Your name"
+                class="w-full bg-gray-800 text-white text-center text-xl py-3 px-4 rounded-xl border-2 border-gray-600 mb-4 focus:border-yellow-400 outline-none" />
+            <button id="save-score-btn" class="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-3 rounded-2xl text-lg mb-3 transition-all">
+                🏆 Save Score
+            </button>
+            <button id="skip-save-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 rounded-xl text-sm transition-all">
+                Skip
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard-modal" class="hidden fixed inset-0 bg-black bg-opacity-85 flex items-center justify-center z-50">
+        <div class="bg-gray-900 rounded-3xl p-8 max-w-lg w-full mx-4 border-4 border-purple-400">
+            <h2 class="text-3xl font-bold text-purple-400 text-center mb-4" style="font-family:'Fredoka One',cursive">🏆 Leaderboard</h2>
+            <div id="leaderboard-table" class="space-y-2 mb-4"></div>
+            <div id="personal-best-line" class="text-center text-gray-400 text-sm mb-4"></div>
+            <div class="flex gap-3">
+                <button id="lb-play-again-btn" class="flex-1 bg-green-500 hover:bg-green-400 text-white font-bold py-3 rounded-2xl text-lg transition-all">🎮 Play Again!</button>
+                <button id="lb-menu-btn" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-2xl transition-all">🏠 Menu</button>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="js/main.js"></script>
