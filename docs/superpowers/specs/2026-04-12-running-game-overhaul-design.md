@@ -269,43 +269,40 @@ Single looping track via Web Audio API oscillators. Cheerful and upbeat for wave
 
 ## 10. Mobile & Tablet Touch Controls
 
-The existing on-screen directional buttons are kept but fully overhauled for touch-first play. The canvas resizes to fill the viewport on any screen size.
+No on-screen buttons. Players interact directly with the canvas — the same way Archero, Soul Knight, and Brawl Stars work. Desktop keyboard/mouse controls are unchanged.
 
-### 10.1 Layout
+### 10.1 Touch Scheme
 
-```
-┌──────────────────────────────────────┐
-│            HUD (top bar)             │
-├──────────────────────────────────────┤
-│                                      │
-│          [ game canvas ]             │
-│                                      │
-├──────────────────────────────────────┤
-│  ┌──────────┐          ┌──────────┐  │
-│  │  D-PAD   │          │  ATTACK  │  │
-│  │  (left)  │          │ (right)  │  │
-│  └──────────┘          └──────────┘  │
-└──────────────────────────────────────┘
-```
+| Gesture | Action |
+|---|---|
+| **Hold & drag** anywhere on canvas | Cat moves continuously in the direction of the drag, following the finger |
+| **Release** | Cat stops moving |
+| **Auto-attack** | Fires automatically at the nearest enemy within range — no tap required on mobile |
+| **Two-finger tap** | AOE Blast — only active when combo ×3+ (same condition as Space bar on desktop) |
 
-- **D-pad (bottom-left):** Virtual joystick — touch and drag in any direction for 8-directional movement. Larger hit area than current buttons (min 120px diameter).
-- **Attack button (bottom-right):** Large circular tap target (min 80px diameter). Triggers the same attack as Space / mouse click.
-- **Blast button:** Appears overlaid on the attack button (glowing ring) when combo ×3+ is active; a second tap fires the AOE blast.
-- **Shop cards:** Full tap targets — each upgrade card fills at least 44×44px per WCAG touch target guidelines.
-- **Pause:** Tap the wave indicator in the top bar to pause (no dedicated button needed on small screens).
+**Why auto-attack on mobile:** The original manual attack (tap nearest enemy) requires precise timing that's easy with a keyboard but frustrating on glass. Auto-attack removes that friction while the combo system still rewards aggressive play — the cat swings faster if the player keeps moving into enemies.
 
-### 10.2 Responsive Canvas
+### 10.2 Movement Detail
 
-- Canvas scales to `min(window.innerWidth, window.innerHeight * 4/3)` maintaining the 4:3 aspect ratio.
-- On portrait phones, the canvas occupies the top ~65% of the screen; controls occupy the bottom ~35%.
-- On landscape tablets, the canvas fills the full width with controls overlaid at the bottom corners (semi-transparent).
-- `viewport` meta tag set to `width=device-width, initial-scale=1, user-scalable=no` to prevent pinch-zoom during play.
+- Touch origin is where the finger first lands; drag direction and distance determine movement vector.
+- Movement is normalised — distance from origin doesn't affect speed, only direction matters. This prevents "stretching" the finger far from comfort.
+- If the finger lifts and re-touches (e.g. repositioning thumb), movement stops cleanly and resumes on next drag.
+- The existing `CatHero` movement system accepts a direction vector — touch input feeds the same vector as keyboard input, no separate movement path.
 
-### 10.3 Touch Event Handling
+### 10.3 Responsive Canvas
 
-- All existing `mousedown` / `click` listeners get companion `touchstart` / `touchend` listeners.
-- Multi-touch: movement and attack can be held simultaneously (left thumb moves, right thumb attacks).
-- Touch inputs on the canvas are translated to the same world-space coordinates as mouse clicks for attack targeting.
+- Canvas scales to fill the full viewport, maintaining the 4:3 aspect ratio.
+- On portrait phones: canvas fills the full width; HUD compresses to single-line icons.
+- On landscape tablets: canvas fills the full height, centred horizontally.
+- `viewport` meta tag: `width=device-width, initial-scale=1, user-scalable=no` to block pinch-zoom during play.
+- All HUD tap targets (shop cards, pause) meet a minimum 44×44px touch area.
+
+### 10.4 Event Handling
+
+- `touchstart`, `touchmove`, `touchend` listeners on the canvas — no virtual button elements in the DOM.
+- Multi-touch tracked by `touch.identifier`: the first touch drives movement; a simultaneous second touch triggers Blast.
+- `preventDefault()` called on touch events to suppress browser scroll and double-tap zoom.
+- Touch world coordinates translated via the same canvas-to-world transform used for mouse clicks.
 
 ---
 
