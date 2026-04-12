@@ -2,6 +2,10 @@
 import { CatHero } from '../entities/CatHero.js';
 import { WildBoar } from '../entities/WildBoar.js';
 import { DireWolf } from '../entities/DireWolf.js';
+import { Raccoon } from '../entities/Raccoon.js';
+import { Fox } from '../entities/Fox.js';
+import { GiantBug } from '../entities/GiantBug.js';
+import { AngryBear } from '../entities/AngryBear.js';
 import { Collectible } from '../entities/Collectible.js';
 import { EnvironmentItem } from '../entities/EnvironmentItem.js';
 import { Particle } from '../effects/Particle.js';
@@ -60,6 +64,7 @@ export class GameEngine {
         this.totalKills = 0;
         this.usedFreeRevive = false;
         this.waveInProgress = false;
+        this.bossBear = null;
 
         this.waveManager = new WaveManager({
             onWaveCleared: (waveNum) => this.#onWaveCleared(waveNum),
@@ -236,6 +241,7 @@ export class GameEngine {
         this.currentHP = 6; // 6 HP per spec
         this.maxHP = 6;
         this.usedFreeRevive = false;
+        this.bossBear = null;
         this.waveManager = new WaveManager({
             onWaveCleared: (waveNum) => this.#onWaveCleared(waveNum),
             onSpawnEnemy: (type, count) => this.#spawnEnemiesOfType(type, count),
@@ -264,6 +270,7 @@ export class GameEngine {
         this.environment = [];
         this.particles = [];
         this.weaponEffects = [];
+        this.bossBear = null;
         this.createEnvironment('garden');
         this.updateCamera();
     }
@@ -696,22 +703,45 @@ export class GameEngine {
         // Update enemies
         this.enemies.forEach(enemy => {
             enemy.update(this.player);
-            
+
             // Check collision with player - only damage if enemy can attack and player is not invulnerable
-            if (!enemy.isDead && enemy.canAttackPlayer() && !this.playerInvulnerable) {
+            if (!enemy.isDead && enemy.canAttackPlayer && enemy.canAttackPlayer() && !this.playerInvulnerable) {
                 const dx = enemy.x - this.player.x;
                 const dy = enemy.y - this.player.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 35) {
-                    this.takeDamage(1);
-                    enemy.onPlayerContact(); // Add damage cooldown
+                if (Math.sqrt(dx*dx + dy*dy) < 35) {
+                    const dmg = enemy.damage ?? 1;
+                    this.takeDamage(dmg);
+                    enemy.onPlayerContact();
+                }
+            }
+
+            // Raccoon coin steal
+            if (enemy instanceof Raccoon && !enemy.isDead) {
+                const dx = enemy.x - this.player.x;
+                const dy = enemy.y - this.player.y;
+                if (Math.sqrt(dx*dx + dy*dy) < 40 && enemy.trySteaCoins()) {
+                    this.coins = Math.max(0, this.coins - 2);
+                    this.updateHUD();
+                    // coin-stolen particle (text pop) wired in Task 9
                 }
             }
         });
         
         // Remove dead enemies after death animation
         this.enemies = this.enemies.filter(enemy => !enemy.shouldRemove);
+
+        // Update boss HP bar
+        if (this.bossBear && !this.bossBear.isDead) {
+            const pct = (this.bossBear.hp / this.bossBear.maxHp) * 100;
+            const fill = document.getElementById('boss-bar-fill');
+            if (fill) fill.style.width = pct + '%';
+            const hpText = document.getElementById('boss-hp-text');
+            if (hpText) hpText.textContent = `${this.bossBear.hp} / ${this.bossBear.maxHp}`;
+        } else if (this.bossBear && this.bossBear.isDead) {
+            const wrapper = document.getElementById('boss-bar-wrapper');
+            if (wrapper) wrapper.classList.add('hidden');
+            this.bossBear = null;
+        }
         
         // Update collectibles
         this.collectibles.forEach(collectible => {
@@ -927,22 +957,37 @@ export class GameEngine {
     #onBossWaveStart(waveNum) {
         const bossBar = document.getElementById('boss-bar-wrapper');
         if (bossBar) bossBar.classList.remove('hidden');
-        const bossName = document.getElementById('boss-name');
-        if (bossName) bossName.textContent = '🐻 ANGRY BEAR';
-        const bossHpText = document.getElementById('boss-hp-text');
-        if (bossHpText) bossHpText.textContent = '20 / 20';
-        const bossFill = document.getElementById('boss-bar-fill');
-        if (bossFill) bossFill.style.width = '100%';
+        this.bossBear = null; // will be set in #spawnEnemiesOfType
     }
 
     #spawnEnemiesOfType(type, count) {
         for (let i = 0; i < count; i++) {
             const { x, y } = this.#randomEdgePosition();
+            let enemy;
             switch (type) {
-                case 'boar': this.enemies.push(new WildBoar(x, y, this.images)); break;
-                case 'wolf': this.enemies.push(new DireWolf(x, y, this.images)); break;
-                // raccoon/fox/bug/bear added in Task 5
+                case 'boar':    enemy = new WildBoar(x, y, this.images); break;
+                case 'wolf':    enemy = new DireWolf(x, y, this.images); break;
+                case 'raccoon': enemy = new Raccoon(x, y); break;
+                case 'fox':     enemy = new Fox(x, y); break;
+                case 'bug': {
+                    // GiantBug spawns in pairs — spawn partner offset
+                    const bug = new GiantBug(x, y);
+                    this.enemies.push(bug);
+                    const bug2 = new GiantBug(x + 60, y + 60);
+                    this.enemies.push(bug2);
+                    // Already pushed both; skip the push below
+                    continue;
+                }
+                case 'bear': {
+                    const bear = new AngryBear(x, y);
+                    bear.onScreenEdgeFlash = (color) => this.#flashScreenEdge(color);
+                    this.bossBear = bear;
+                    this.enemies.push(bear);
+                    continue;
+                }
+                default: enemy = new WildBoar(x, y, this.images);
             }
+            this.enemies.push(enemy);
         }
     }
 
@@ -990,6 +1035,20 @@ export class GameEngine {
             barEl.style.width = (fraction * 100) + '%';
             barEl.style.background = tierColors[tier];
         }
+    }
+
+    #flashScreenEdge(color) {
+        const wrapper = document.getElementById('canvas-wrapper');
+        if (!wrapper) return;
+        if (!color) {
+            wrapper.style.boxShadow = '';
+            return;
+        }
+        wrapper.style.boxShadow = `0 0 0 8px ${color}`;
+        setTimeout(() => {
+            const el = document.getElementById('canvas-wrapper');
+            if (el) el.style.boxShadow = '';
+        }, 600);
     }
 
     gameLoop() {
