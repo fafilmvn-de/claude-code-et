@@ -87,6 +87,8 @@ export class GameEngine {
             onPurchase: (upgrade) => this.#applyUpgrade(upgrade)
         });
         this.leaderboard = new LeaderboardManager();
+        this.screenShake = 0;
+        this.floatingTexts = [];
         // Expose purchase handler for shop HTML onclick
         window.__shopPurchase = (id) => {
             const bought = this.shopManager.purchase(id);
@@ -112,6 +114,21 @@ export class GameEngine {
         this.setupUI();
     }
     
+    #shake(intensity) {
+        this.screenShake = Math.max(this.screenShake, intensity);
+    }
+
+    #spawnCoinPopText(x, y, amount) {
+        const tierColors = { 1: '#94a3b8', 2: '#60a5fa', 3: '#f97316', 4: '#a855f7' };
+        this.floatingTexts.push({
+            x, y,
+            text: `+${amount}\u{1FA99}`,
+            color: tierColors[amount] || '#ffffff',
+            life: 1.0,
+            vy: -1.5
+        });
+    }
+
     async loadImages() {
         const imageFiles = [
             'avt_act_1.png', 'avt_act_2.png', 'avt_act_3.png', 'avt_die_1.png',
@@ -551,12 +568,13 @@ export class GameEngine {
         // Attack ONLY the single closest enemy
         if (closestEnemy && !closestEnemy.isDead) {
             closestEnemy.takeDamage(1);
+            if (closestEnemy instanceof AngryBear) this.#shake(3);
             this.createHitEffect(closestEnemy.x, closestEnemy.y);
-            
+
             if (closestEnemy.isDead) {
                 this.onEnemyKilled();
             }
-            
+
             this.showCelebrationMessage("Hit enemy! ⚔️");
         }
         
@@ -594,6 +612,8 @@ export class GameEngine {
         this.maxCombo = Math.max(this.maxCombo, this.comboSystem.getCount());
         const coinDrop = this.comboSystem.getMultiplier(); // ×1 to ×4
         this.shopManager.addCoins(coinDrop);
+        const deadEnemy = this.enemies.find(e => e.isDead && !e.shouldRemove);
+        if (deadEnemy) this.#spawnCoinPopText(deadEnemy.x, deadEnemy.y - 20, coinDrop);
         this.coins = this.shopManager.getCoins();
         this.sound.playHit(this.comboSystem.getTier());
         this.sound.playCoinCollect();
@@ -704,6 +724,7 @@ export class GameEngine {
     }
     
     takeDamage(amount) {
+        this.#shake(8);
         // Add invulnerability frames
         this.playerInvulnerable = true;
         this.invulnerabilityTimer = 2000; // 2 seconds of invulnerability
@@ -765,10 +786,12 @@ export class GameEngine {
     
     update() {
         if (this.gameState !== 'playing') return;
-        
+
+        if (this.screenShake > 0) this.screenShake = Math.max(0, this.screenShake - 0.5);
+
         // Update game time
         this.gameTime = Date.now() - this.levelStartTime;
-        
+
         // Update attack cooldown
         if (this.attackCooldown > 0) {
             this.attackCooldown -= 16; // Assuming 60fps
@@ -827,6 +850,7 @@ export class GameEngine {
             if (hpText) hpText.textContent = `${this.bossBear.hp} / ${this.bossBear.maxHp}`;
         } else if (this.bossBear && this.bossBear.isDead) {
             this.sound.playBossDeath();
+            this.#shake(18);
             const wrapper = document.getElementById('boss-bar-wrapper');
             if (wrapper) wrapper.classList.add('hidden');
             this.bossBear = null;
@@ -857,7 +881,10 @@ export class GameEngine {
         
         this.weaponEffects.forEach(effect => effect.update());
         this.weaponEffects = this.weaponEffects.filter(effect => effect.life > 0);
-        
+
+        this.floatingTexts.forEach(t => { t.y += t.vy; t.life -= 0.02; });
+        this.floatingTexts = this.floatingTexts.filter(t => t.life > 0);
+
         // Update camera
         this.updateCamera();
 
@@ -940,6 +967,18 @@ export class GameEngine {
         const pct = total > 0 ? Math.min(100, ((total - remaining) / total) * 100) : 0;
         const bar = document.getElementById('wave-progress-bar');
         if (bar) bar.style.width = pct + '%';
+
+        const score = this.leaderboard.calculateScore({
+            wavesSurvived: this.waveManager.getCurrentWave(),
+            totalKills: this.totalKills,
+            coinsSpent: this.shopManager.getCoinsSpent(),
+            maxCombo: this.maxCombo
+        });
+        const scoreEl = document.getElementById('score-value');
+        if (scoreEl) scoreEl.textContent = score.toLocaleString();
+        const pb = this.leaderboard.getPersonalBest();
+        const bestEl = document.getElementById('score-best');
+        if (bestEl && pb) bestEl.textContent = `BEST ${pb.score.toLocaleString()}`;
     }
     
     formatTime(ms) {
@@ -978,13 +1017,13 @@ export class GameEngine {
     }
     
     render() {
-        // Clear canvas
+        const shakeX = this.screenShake > 0 ? (Math.random() - 0.5) * this.screenShake : 0;
+        const shakeY = this.screenShake > 0 ? (Math.random() - 0.5) * this.screenShake : 0;
+
         this.ctx.fillStyle = '#7CB342';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Save context for camera transform
         this.ctx.save();
-        this.ctx.translate(-this.camera.x, -this.camera.y);
+        this.ctx.translate(-this.camera.x + shakeX, -this.camera.y + shakeY);
         
         // Render environment
         this.environment.forEach(item => item.render(this.ctx));
@@ -1000,7 +1039,18 @@ export class GameEngine {
         
         // Render particles
         this.particles.forEach(particle => particle.render(this.ctx));
-        
+
+        // Render floating coin pop texts
+        this.floatingTexts.forEach(t => {
+            this.ctx.save();
+            this.ctx.globalAlpha = t.life;
+            this.ctx.fillStyle = t.color;
+            this.ctx.font = 'bold 18px Nunito, sans-serif';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(t.text, t.x, t.y);
+            this.ctx.restore();
+        });
+
         // Render player with invulnerability effect
         if (this.player) {
             if (this.playerInvulnerable && Math.floor(Date.now() / 200) % 2) {
