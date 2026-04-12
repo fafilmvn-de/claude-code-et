@@ -15,6 +15,7 @@ import { SpriteProcessor } from '../utils/SpriteProcessor.js';
 import { WaveManager } from './WaveManager.js';
 import { ComboSystem } from './ComboSystem.js';
 import { ShopManager } from './ShopManager.js';
+import { LeaderboardManager } from './LeaderboardManager.js';
 
 export class GameEngine {
     constructor() {
@@ -84,6 +85,7 @@ export class GameEngine {
         this.shopManager = new ShopManager({
             onPurchase: (upgrade) => this.#applyUpgrade(upgrade)
         });
+        this.leaderboard = new LeaderboardManager();
         // Expose purchase handler for shop HTML onclick
         window.__shopPurchase = (id) => {
             const bought = this.shopManager.purchase(id);
@@ -241,6 +243,56 @@ export class GameEngine {
         const playAgainBtn = document.getElementById('play-again-btn');
         if (playAgainBtn) playAgainBtn.addEventListener('click', () => {
             this.startNewGame();
+        });
+
+        // Leaderboard button on main menu
+        const lbBtn = document.getElementById('leaderboard-btn');
+        if (lbBtn) lbBtn.addEventListener('click', () => {
+            this.leaderboard.renderLeaderboard(0);
+            const modal = document.getElementById('leaderboard-modal');
+            if (modal) modal.classList.remove('hidden');
+        });
+
+        // Close leaderboard (back to menu)
+        const lbMenuBtn = document.getElementById('lb-menu-btn');
+        if (lbMenuBtn) lbMenuBtn.addEventListener('click', () => {
+            const modal = document.getElementById('leaderboard-modal');
+            if (modal) modal.classList.add('hidden');
+        });
+
+        // Play again from leaderboard
+        const lbPlayBtn = document.getElementById('lb-play-again-btn');
+        if (lbPlayBtn) lbPlayBtn.addEventListener('click', () => {
+            const modal = document.getElementById('leaderboard-modal');
+            if (modal) modal.classList.add('hidden');
+            this.startNewGame();
+        });
+
+        // Save score button
+        const saveBtn = document.getElementById('save-score-btn');
+        if (saveBtn) saveBtn.addEventListener('click', () => {
+            const name = document.getElementById('player-name-input')?.value || 'Anonymous';
+            this.leaderboard.saveScore({
+                name,
+                score: this._finalScore,
+                wavesSurvived: this.waveManager.getCurrentWave(),
+                maxCombo: this.maxCombo
+            });
+            const nameModal = document.getElementById('name-entry-modal');
+            if (nameModal) nameModal.classList.add('hidden');
+            this.leaderboard.renderLeaderboard(this._finalScore);
+            const lbModal = document.getElementById('leaderboard-modal');
+            if (lbModal) lbModal.classList.remove('hidden');
+        });
+
+        // Skip save button
+        const skipBtn = document.getElementById('skip-save-btn');
+        if (skipBtn) skipBtn.addEventListener('click', () => {
+            const nameModal = document.getElementById('name-entry-modal');
+            if (nameModal) nameModal.classList.add('hidden');
+            this.leaderboard.renderLeaderboard(0);
+            const lbModal = document.getElementById('leaderboard-modal');
+            if (lbModal) lbModal.classList.remove('hidden');
         });
     }
     
@@ -621,14 +673,28 @@ export class GameEngine {
                 celebMsg.classList.remove('hidden');
                 setTimeout(() => celebMsg.classList.add('hidden'), 2000);
             }
-            return; // don't actually end the run
+            return;
         }
+
         this.gameState = 'gameOver';
-        // Show game over modal (you'll need to add this to HTML)
-        this.showCelebrationMessage("Game Over! Try Again 💔");
-        setTimeout(() => {
-            this.exitToMenu();
-        }, 3000);
+        if (this.comboSystem) this.comboSystem.reset();
+
+        const score = this.leaderboard.calculateScore({
+            wavesSurvived: this.waveManager.getCurrentWave(),
+            totalKills: this.totalKills,
+            coinsSpent: this.shopManager.getCoinsSpent(),
+            maxCombo: this.maxCombo
+        });
+        this._finalScore = score;
+
+        const deathWave = document.getElementById('death-wave');
+        if (deathWave) deathWave.textContent = this.waveManager.getCurrentWave();
+        const deathScore = document.getElementById('death-score');
+        if (deathScore) deathScore.textContent = score.toLocaleString();
+        const nameInput = document.getElementById('player-name-input');
+        if (nameInput) nameInput.value = this.leaderboard.getLastName();
+        const nameModal = document.getElementById('name-entry-modal');
+        if (nameModal) nameModal.classList.remove('hidden');
     }
     
     takeDamage(amount) {
