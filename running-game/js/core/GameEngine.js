@@ -225,17 +225,20 @@ export class GameEngine {
             this.exitToMenu();
         });
         
-        // Level complete
-        document.getElementById('next-level-btn').addEventListener('click', () => {
+        // Level complete (elements may be removed in HTML restructure)
+        const nextLevelBtn = document.getElementById('next-level-btn');
+        if (nextLevelBtn) nextLevelBtn.addEventListener('click', () => {
             this.nextLevel();
         });
-        
-        document.getElementById('back-to-menu-btn').addEventListener('click', () => {
+
+        const backToMenuBtn = document.getElementById('back-to-menu-btn');
+        if (backToMenuBtn) backToMenuBtn.addEventListener('click', () => {
             this.exitToMenu();
         });
-        
-        // Victory/Game Over
-        document.getElementById('play-again-btn').addEventListener('click', () => {
+
+        // Victory/Game Over (elements may be removed in HTML restructure)
+        const playAgainBtn = document.getElementById('play-again-btn');
+        if (playAgainBtn) playAgainBtn.addEventListener('click', () => {
             this.startNewGame();
         });
     }
@@ -529,19 +532,25 @@ export class GameEngine {
     
     completeLevel() {
         this.gameState = 'levelComplete';
-        
-        // Update level complete UI
-        document.getElementById('level-yarn').textContent = this.yarnBalls;
-        document.getElementById('level-butterflies').textContent = this.butterflies;
-        document.getElementById('level-fish').textContent = this.fishTreats;
-        document.getElementById('level-time').textContent = this.formatTime(this.gameTime);
-        
-        // Show modal
-        document.getElementById('level-complete-modal').classList.remove('hidden');
+
+        // Update level complete UI (elements may be removed in HTML restructure)
+        const levelYarn = document.getElementById('level-yarn');
+        if (levelYarn) levelYarn.textContent = this.yarnBalls;
+        const levelButterflies = document.getElementById('level-butterflies');
+        if (levelButterflies) levelButterflies.textContent = this.butterflies;
+        const levelFish = document.getElementById('level-fish');
+        if (levelFish) levelFish.textContent = this.fishTreats;
+        const levelTime = document.getElementById('level-time');
+        if (levelTime) levelTime.textContent = this.formatTime(this.gameTime);
+
+        // Show modal if present
+        const levelCompleteModal = document.getElementById('level-complete-modal');
+        if (levelCompleteModal) levelCompleteModal.classList.remove('hidden');
     }
     
     nextLevel() {
-        document.getElementById('level-complete-modal').classList.add('hidden');
+        const levelCompleteModal = document.getElementById('level-complete-modal');
+        if (levelCompleteModal) levelCompleteModal.classList.add('hidden');
         
         if (this.currentLevel < this.levels.length) {
             this.currentLevel++;
@@ -553,15 +562,20 @@ export class GameEngine {
     
     showVictory() {
         this.gameState = 'victory';
-        
-        // Update victory UI
-        document.getElementById('victory-yarn').textContent = this.yarnBalls;
-        document.getElementById('victory-butterflies').textContent = this.butterflies;
-        document.getElementById('victory-fish').textContent = this.fishTreats;
-        document.getElementById('victory-time').textContent = this.formatTime(this.gameTime);
-        
-        // Show modal
-        document.getElementById('victory-modal').classList.remove('hidden');
+
+        // Update victory UI (elements may be removed in HTML restructure)
+        const victoryYarn = document.getElementById('victory-yarn');
+        if (victoryYarn) victoryYarn.textContent = this.yarnBalls;
+        const victoryButterflies = document.getElementById('victory-butterflies');
+        if (victoryButterflies) victoryButterflies.textContent = this.butterflies;
+        const victoryFish = document.getElementById('victory-fish');
+        if (victoryFish) victoryFish.textContent = this.fishTreats;
+        const victoryTime = document.getElementById('victory-time');
+        if (victoryTime) victoryTime.textContent = this.formatTime(this.gameTime);
+
+        // Show modal if present
+        const victoryModal = document.getElementById('victory-modal');
+        if (victoryModal) victoryModal.classList.remove('hidden');
     }
     
     gameOver() {
@@ -743,28 +757,35 @@ export class GameEngine {
             heartsContainer.appendChild(shield);
         }
         
-        // Update collections
-        document.getElementById('yarn-display').textContent = this.yarnBalls;
-        document.getElementById('butterfly-display').textContent = this.butterflies;
-        document.getElementById('fish-display').textContent = this.fishTreats;
-        document.getElementById('time-display').textContent = this.formatTime(this.gameTime);
-        
-        // Update progress bar
+        // Update collections (elements may be removed in HTML restructure)
+        const yarnDisplay = document.getElementById('yarn-display');
+        if (yarnDisplay) yarnDisplay.textContent = this.yarnBalls;
+        const butterflyDisplay = document.getElementById('butterfly-display');
+        if (butterflyDisplay) butterflyDisplay.textContent = this.butterflies;
+        const fishDisplay = document.getElementById('fish-display');
+        if (fishDisplay) fishDisplay.textContent = this.fishTreats;
+        const timeDisplay = document.getElementById('time-display');
+        if (timeDisplay) timeDisplay.textContent = this.formatTime(this.gameTime);
+
+        // Update progress bar (elements may be removed in HTML restructure)
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
         if (this.currentLevel <= this.levels.length) {
             const level = this.levels[this.currentLevel - 1];
             const progress = Math.min(100, (this.enemiesKilled / level.targetKills) * 100);
-            
-            document.getElementById('progress-bar').style.width = progress + '%';
-            document.getElementById('progress-text').textContent = 
+
+            if (progressBar) progressBar.style.width = progress + '%';
+            if (progressText) progressText.textContent =
                 `${this.enemiesKilled}/${level.targetKills} enemies defeated - ${level.name}`;
         }
-        
+
         // Update weapon blast indicator
-        const progressText = document.getElementById('progress-text');
-        if (this.weaponBlastReady) {
-            progressText.innerHTML += ' | <span style="color: gold; font-weight: bold;">⚡ SWORD BLAST READY! ⚡</span>';
-        } else if (this.killStreak > 0) {
-            progressText.innerHTML += ` | Kill Streak: ${this.killStreak}/10`;
+        if (progressText) {
+            if (this.weaponBlastReady) {
+                progressText.innerHTML += ' | <span style="color: gold; font-weight: bold;">⚡ SWORD BLAST READY! ⚡</span>';
+            } else if (this.killStreak > 0) {
+                progressText.innerHTML += ` | Kill Streak: ${this.killStreak}/10`;
+            }
         }
     }
     
@@ -796,11 +817,16 @@ export class GameEngine {
     
     exitToMenu() {
         this.gameState = 'menu';
-        document.getElementById('game-container').classList.add('hidden');
-        document.getElementById('pause-modal').classList.add('hidden');
-        document.getElementById('level-complete-modal').classList.add('hidden');
-        document.getElementById('victory-modal').classList.add('hidden');
-        document.getElementById('main-menu').classList.remove('hidden');
+        const gameContainer = document.getElementById('game-container');
+        if (gameContainer) gameContainer.classList.add('hidden');
+        const pauseModal = document.getElementById('pause-modal');
+        if (pauseModal) pauseModal.classList.add('hidden');
+        const levelCompleteModal = document.getElementById('level-complete-modal');
+        if (levelCompleteModal) levelCompleteModal.classList.add('hidden');
+        const victoryModal = document.getElementById('victory-modal');
+        if (victoryModal) victoryModal.classList.add('hidden');
+        const mainMenu = document.getElementById('main-menu');
+        if (mainMenu) mainMenu.classList.remove('hidden');
     }
     
     render() {
