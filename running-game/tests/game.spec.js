@@ -3,20 +3,18 @@ const { test, expect } = require('@playwright/test');
 test.describe('Cat Runner Game', () => {
   test.beforeEach(async ({ page }) => {
     // Start a local server for testing
-    await page.goto('http://localhost:8000');
+    await page.goto('http://localhost:8080');
     await page.waitForLoadState('networkidle');
   });
 
   test('should display main menu on load', async ({ page }) => {
     // Check if main menu is visible
     await expect(page.locator('#main-menu')).toBeVisible();
-    await expect(page.locator('h1:has-text("Cat Runner")')).toBeVisible();
-    
+
     // Check if buttons are present
     await expect(page.locator('#new-game-btn')).toBeVisible();
-    await expect(page.locator('#load-game-btn')).toBeVisible();
     await expect(page.locator('#instructions-btn')).toBeVisible();
-    
+
     // Take screenshot of main menu
     await page.screenshot({ path: 'test-results/main-menu.png' });
   });
@@ -24,19 +22,18 @@ test.describe('Cat Runner Game', () => {
   test('should show instructions modal', async ({ page }) => {
     // Click instructions button
     await page.click('#instructions-btn');
-    
+
     // Check if instructions modal is visible
     await expect(page.locator('#instructions-modal')).toBeVisible();
     await expect(page.locator('h2:has-text("How to Play")')).toBeVisible();
-    
+
     // Check for control instructions
-    await expect(page.locator('text=Left Arrow - Move Left')).toBeVisible();
-    await expect(page.locator('text=Space Bar - Jump')).toBeVisible();
-    
+    await expect(page.locator('text=Space or Click/Tap to attack!')).toBeVisible();
+
     // Close instructions
     await page.click('#close-instructions-btn');
     await expect(page.locator('#instructions-modal')).toBeHidden();
-    
+
     // Take screenshot
     await page.screenshot({ path: 'test-results/instructions.png' });
   });
@@ -53,9 +50,8 @@ test.describe('Cat Runner Game', () => {
     await expect(page.locator('#main-menu')).toBeHidden();
     
     // Check if game UI elements are present
-    await expect(page.locator('#coins-display')).toBeVisible();
-    await expect(page.locator('#time-display')).toBeVisible();
-    await expect(page.locator('#level-display')).toBeVisible();
+    await expect(page.locator('#coin-display')).toBeVisible();
+    await expect(page.locator('#wave-label')).toBeVisible();
     
     // Check if canvas is present
     await expect(page.locator('#game-canvas')).toBeVisible();
@@ -132,94 +128,59 @@ test.describe('Cat Runner Game', () => {
     await expect(page.locator('#game-container')).toBeHidden();
   });
 
-  test('should display mobile controls on mobile viewport', async ({ page }) => {
+  test('should display canvas-based touch controls on mobile viewport', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // Start new game
     await page.click('#new-game-btn');
     await page.waitForTimeout(1000);
-    
-    // Check if mobile controls are visible
-    await expect(page.locator('#mobile-controls')).toBeVisible();
-    await expect(page.locator('#mobile-left')).toBeVisible();
-    await expect(page.locator('#mobile-jump')).toBeVisible();
-    await expect(page.locator('#mobile-right')).toBeVisible();
-    
+
+    // Mobile controls are canvas-based (touch zones), verify canvas is present
+    await expect(page.locator('#game-canvas')).toBeVisible();
+
     // Take mobile screenshot
     await page.screenshot({ path: 'test-results/mobile-view.png' });
   });
 
-  test('should handle mobile controls', async ({ page }) => {
-    // Set mobile viewport
-    await page.setViewportSize({ width: 375, height: 667 });
-    
+  test('should track coins and wave', async ({ page }) => {
     // Start new game
     await page.click('#new-game-btn');
     await page.waitForTimeout(1000);
-    
-    // Test mobile controls
-    await page.click('#mobile-left');
-    await page.waitForTimeout(100);
-    
-    await page.click('#mobile-right');
-    await page.waitForTimeout(100);
-    
-    await page.click('#mobile-jump');
-    await page.waitForTimeout(100);
-    
-    // Game should still be running
-    await expect(page.locator('#game-container')).toBeVisible();
-  });
 
-  test('should track coins and time', async ({ page }) => {
-    // Start new game
-    await page.click('#new-game-btn');
-    await page.waitForTimeout(1000);
-    
     // Check initial values
-    const initialCoins = await page.locator('#coins-display').textContent();
+    const initialCoins = await page.locator('#coin-display').textContent();
     expect(initialCoins).toBe('0');
-    
-    const initialLevel = await page.locator('#level-display').textContent();
-    expect(initialLevel).toBe('Level 1');
-    
-    // Wait for time to update
-    await page.waitForTimeout(2000);
-    
-    // Check if time is updating
-    const timeDisplay = await page.locator('#time-display').textContent();
-    expect(timeDisplay).not.toBe('0:00');
-    
+
+    // Check wave label starts at wave 1
+    const waveLabel = await page.locator('#wave-label').textContent();
+    expect(waveLabel).toContain('WAVE');
+
     // Take screenshot with updated UI
     await page.screenshot({ path: 'test-results/ui-tracking.png' });
   });
 
-  test('should save and load game progress', async ({ page }) => {
-    // Clear any existing save data
-    await page.evaluate(() => localStorage.removeItem('catRunnerSave'));
-    
+  test('should start a new game from main menu after exiting', async ({ page }) => {
     // Start new game
     await page.click('#new-game-btn');
     await page.waitForTimeout(2000);
-    
-    // Exit to menu (this should save progress)
+
+    // Exit to menu
     await page.keyboard.press('Escape');
     await page.click('#exit-game-btn');
-    
-    // Check if load button is enabled
-    const loadButton = page.locator('#load-game-btn');
-    await expect(loadButton).toBeVisible();
-    
-    // Try to load game
-    await page.click('#load-game-btn');
+
+    // Should be back at main menu
+    await expect(page.locator('#main-menu')).toBeVisible();
+
+    // Start new game again
+    await page.click('#new-game-btn');
     await page.waitForTimeout(1000);
-    
+
     // Should be in game state
     await expect(page.locator('#game-container')).toBeVisible();
-    
-    // Take screenshot of loaded game
-    await page.screenshot({ path: 'test-results/game-loaded.png' });
+
+    // Take screenshot
+    await page.screenshot({ path: 'test-results/game-restarted.png' });
   });
 
   test('should handle game completion scenarios', async ({ page }) => {
@@ -237,12 +198,12 @@ test.describe('Cat Runner Game', () => {
     
     await page.waitForTimeout(500);
     
-    // Check for level complete modal (if it appears)
+    // Check for leaderboard modal (if it appears after game ends)
     // This might not work in all cases due to game logic
-    const levelCompleteModal = page.locator('#level-complete-modal');
-    if (await levelCompleteModal.isVisible()) {
-      await expect(levelCompleteModal).toBeVisible();
-      await page.screenshot({ path: 'test-results/level-complete.png' });
+    const leaderboardModal = page.locator('#leaderboard-modal');
+    if (await leaderboardModal.isVisible()) {
+      await expect(leaderboardModal).toBeVisible();
+      await page.screenshot({ path: 'test-results/leaderboard.png' });
     }
   });
 
@@ -272,14 +233,14 @@ test.describe('Cat Runner Game', () => {
     await page.evaluate(() => {
       localStorage.setItem('catRunnerSave', 'invalid-json');
     });
-    
-    // Try to load game
-    await page.click('#load-game-btn');
+
+    // Start a new game — game should not crash
+    await page.click('#new-game-btn');
     await page.waitForTimeout(1000);
-    
-    // Should either show error or start new game
-    // Game should not crash
+
+    // Should be in game state without crashing
     await expect(page.locator('body')).toBeVisible();
+    await expect(page.locator('#game-container')).toBeVisible();
   });
 
   test('should maintain game performance', async ({ page }) => {

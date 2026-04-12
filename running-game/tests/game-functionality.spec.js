@@ -30,10 +30,9 @@ test.describe('Cat Hero Adventure Game', () => {
     await expect(page.locator('#game-canvas')).toBeVisible();
     
     // Check if UI elements are visible
-    await expect(page.locator('.hearts-display')).toBeVisible();
-    await expect(page.locator('#yarn-display')).toBeVisible();
-    await expect(page.locator('#butterfly-display')).toBeVisible();
-    await expect(page.locator('#fish-display')).toBeVisible();
+    await expect(page.locator('#hp-hearts')).toBeVisible();
+    await expect(page.locator('#coin-display')).toBeVisible();
+    await expect(page.locator('#wave-label')).toBeVisible();
   });
 
   test('should show instructions modal', async ({ page }) => {
@@ -178,42 +177,21 @@ test.describe('Cat Hero Adventure Game', () => {
     await page.waitForTimeout(1000);
     
     // Check initial values
-    const initialYarn = await page.textContent('#yarn-display');
-    const initialButterfly = await page.textContent('#butterfly-display');
-    const initialFish = await page.textContent('#fish-display');
-    
-    expect(initialYarn).toBe('0');
-    expect(initialButterfly).toBe('0');
-    expect(initialFish).toBe('0');
-    
-    // Check that time display updates
-    await page.waitForTimeout(2000);
-    const timeDisplay = await page.textContent('#time-display');
-    expect(timeDisplay).toMatch(/\d+:\d+/);
+    const initialCoins = await page.textContent('#coin-display');
+    expect(initialCoins).toBe('0');
+
+    // Check that wave label is visible
+    const waveLabel = await page.textContent('#wave-label');
+    expect(waveLabel).toContain('WAVE');
   });
 
-  test('should handle mobile controls', async ({ page }) => {
+  test('should handle touch controls on canvas', async ({ page }) => {
     // Start game
     await page.click('#new-game-btn');
     await page.waitForTimeout(1000);
-    
-    // Test mobile controls (if visible)
-    const mobileUp = page.locator('#mobile-up');
-    const mobileDown = page.locator('#mobile-down');
-    const mobileLeft = page.locator('#mobile-left');
-    const mobileRight = page.locator('#mobile-right');
-    
-    // Check if mobile controls exist (might be hidden on desktop)
-    if (await mobileUp.isVisible()) {
-      await mobileUp.click();
-      await page.waitForTimeout(100);
-      await mobileDown.click();
-      await page.waitForTimeout(100);
-      await mobileLeft.click();
-      await page.waitForTimeout(100);
-      await mobileRight.click();
-      await page.waitForTimeout(100);
-    }
+
+    // Touch controls are canvas-based (no D-pad buttons); verify canvas is present
+    await expect(page.locator('#game-canvas')).toBeVisible();
   });
 
   test('should verify sprite processing and loading', async ({ page }) => {

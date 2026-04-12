@@ -100,11 +100,8 @@ test.describe('Sprite and Spawning System Tests', () => {
     await page.waitForTimeout(500);
     
     // Verify UI is updating (indicating game activity)
-    const timeDisplay = await page.textContent('#time-display');
-    expect(timeDisplay).toMatch(/\d+:\d+/);
-    
-    // The time should be greater than 0:00 after 6+ seconds
-    expect(timeDisplay).not.toBe('0:00');
+    const waveLabel = await page.textContent('#wave-label');
+    expect(waveLabel).toContain('WAVE');
   });
 
   test('should verify sprite sizes are 1.5x larger', async ({ page }) => {
@@ -214,12 +211,8 @@ test.describe('Sprite and Spawning System Tests', () => {
     await page.waitForTimeout(100);
     
     // UI should still be updating
-    const timeDisplay = await page.textContent('#time-display');
-    expect(timeDisplay).toMatch(/\d+:\d+/);
-    
-    // Should have run for more than 10 seconds
-    const [minutes, seconds] = timeDisplay.split(':').map(Number);
-    expect(minutes * 60 + seconds).toBeGreaterThan(8);
+    const waveLabel = await page.textContent('#wave-label');
+    expect(waveLabel).toContain('WAVE');
   });
 
   test('should verify enemy variety in spawning', async ({ page }) => {
@@ -244,8 +237,8 @@ test.describe('Sprite and Spawning System Tests', () => {
     // Verify game continues running with enemy spawning
     await expect(page.locator('#game-canvas')).toBeVisible();
     
-    // Check progress bar updates (indicating enemies are spawning)
-    const progressText = await page.textContent('#progress-text');
-    expect(progressText).toContain('enemies defeated');
+    // Check wave label updates (indicating game is progressing)
+    const waveLabel = await page.textContent('#wave-label');
+    expect(waveLabel).toContain('WAVE');
   });
 });

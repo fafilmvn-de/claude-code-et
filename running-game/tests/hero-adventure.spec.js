@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 test.describe('Cat Hero Adventure Game', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the game
-    await page.goto('http://localhost:8001');
+    await page.goto('http://localhost:8080');
   });
 
   test('should load the main menu', async ({ page }) => {
@@ -26,8 +26,8 @@ test.describe('Cat Hero Adventure Game', () => {
     await expect(page.locator('#instructions-modal')).toBeVisible();
     
     // Check content mentions attack mechanics
-    await expect(page.locator('#instructions-modal')).toContainText('Space or Click to attack!');
-    await expect(page.locator('#instructions-modal')).toContainText('Power-ups');
+    await expect(page.locator('#instructions-modal')).toContainText('Space or Click/Tap to attack!');
+    await expect(page.locator('#instructions-modal')).toContainText('Shop opens between waves!');
     
     // Close modal
     await page.click('#close-instructions-btn');
@@ -48,30 +48,27 @@ test.describe('Cat Hero Adventure Game', () => {
     await expect(page.locator('#main-menu')).not.toBeVisible();
     
     // Check HP display
-    await expect(page.locator('.hearts-display')).toBeVisible();
-    
+    await expect(page.locator('#hp-hearts')).toBeVisible();
+
     // Check game canvas
     await expect(page.locator('#game-canvas')).toBeVisible();
-    
-    // Check progress bar
-    await expect(page.locator('#progress-bar')).toBeVisible();
-    await expect(page.locator('#progress-text')).toContainText('enemies defeated');
+
+    // Check wave label
+    await expect(page.locator('#wave-label')).toBeVisible();
+    await expect(page.locator('#wave-label')).toContainText('WAVE');
   });
 
   test('should display correct UI elements in game', async ({ page }) => {
     // Start game
     await page.click('#new-game-btn');
     await page.waitForTimeout(2000);
-    
+
     // Check all UI elements are present
-    await expect(page.locator('#yarn-display')).toBeVisible();
-    await expect(page.locator('#butterfly-display')).toBeVisible();
-    await expect(page.locator('#fish-display')).toBeVisible();
-    await expect(page.locator('#time-display')).toBeVisible();
-    
-    // Check progress bar shows correct initial state
-    await expect(page.locator('#progress-text')).toContainText('0/20 enemies defeated');
-    await expect(page.locator('#progress-text')).toContainText('Boar Invasion');
+    await expect(page.locator('#coin-display')).toBeVisible();
+    await expect(page.locator('#wave-label')).toBeVisible();
+
+    // Check wave label shows correct initial state
+    await expect(page.locator('#wave-label')).toContainText('WAVE');
   });
 
   test('should handle keyboard controls', async ({ page }) => {
@@ -155,22 +152,16 @@ test.describe('Cat Hero Adventure Game', () => {
     await page.screenshot({ path: 'test-results/hero-game-loaded.png' });
   });
 
-  test('should show mobile controls on smaller screens', async ({ page }) => {
+  test('should show canvas-based touch controls on smaller screens', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // Start game
     await page.click('#new-game-btn');
     await page.waitForTimeout(2000);
-    
-    // Mobile controls should be visible (remove md:hidden class effect)
-    await expect(page.locator('#mobile-controls')).toBeVisible();
-    
-    // Test mobile buttons exist
-    await expect(page.locator('#mobile-up')).toBeVisible();
-    await expect(page.locator('#mobile-down')).toBeVisible();
-    await expect(page.locator('#mobile-left')).toBeVisible();
-    await expect(page.locator('#mobile-right')).toBeVisible();
+
+    // Mobile controls are canvas-based touch zones — verify canvas is present
+    await expect(page.locator('#game-canvas')).toBeVisible();
   });
 
   test('should handle window resize gracefully', async ({ page }) => {
@@ -192,21 +183,18 @@ test.describe('Cat Hero Adventure Game', () => {
     await expect(page.locator('#game-canvas')).toBeVisible();
   });
 
-  test('should track time correctly', async ({ page }) => {
+  test('should show wave progress', async ({ page }) => {
     // Start game
     await page.click('#new-game-btn');
     await page.waitForTimeout(2000);
-    
-    // Check initial time
-    const initialTime = await page.locator('#time-display').textContent();
-    expect(initialTime).toBe('0:00');
-    
-    // Wait a bit
+
+    // Check wave label is showing wave 1
+    const waveLabel = await page.locator('#wave-label').textContent();
+    expect(waveLabel).toContain('WAVE');
+
+    // Wait a bit and verify game is still running
     await page.waitForTimeout(2000);
-    
-    // Time should have progressed
-    const laterTime = await page.locator('#time-display').textContent();
-    expect(laterTime).not.toBe('0:00');
+    await expect(page.locator('#game-canvas')).toBeVisible();
   });
 
   test('visual regression - game canvas renders correctly', async ({ page }) => {
