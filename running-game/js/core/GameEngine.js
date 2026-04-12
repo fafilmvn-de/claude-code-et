@@ -108,10 +108,18 @@ export class GameEngine {
         this.mousePos = { x: 0, y: 0 };
         this.isAttacking = false;
         this.attackCooldown = 0;
-        
+
+        // Mobile touch state
+        this.isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        this.touchDir = { x: 0, y: 0 };
+        this.isTouching = false;
+        this.touchOriginX = 0;
+        this.touchOriginY = 0;
+
         this.loadImages();
         this.setupEventListeners();
         this.setupUI();
+        this.#setupResponsiveCanvas();
     }
     
     #shake(intensity) {
@@ -201,25 +209,52 @@ export class GameEngine {
             }
         });
         
-        // Mobile controls
-        const setupMobileButton = (id, key) => {
-            const button = document.getElementById(id);
-            if (button) {
-                button.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    this.keys[key] = true;
-                });
-                button.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    this.keys[key] = false;
-                });
+        // Canvas touch — hold/drag for movement, two-finger for blast
+        const canvas = this.canvas;
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (this.gameState !== 'playing') return;
+            if (e.touches.length >= 2 && this.comboSystem.isBlastReady()) {
+                this.performWeaponBlast();
+                return;
             }
-        };
-        
-        setupMobileButton('mobile-up', 'ArrowUp');
-        setupMobileButton('mobile-down', 'ArrowDown');
-        setupMobileButton('mobile-left', 'ArrowLeft');
-        setupMobileButton('mobile-right', 'ArrowRight');
+            const t = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            this.touchOriginX = (t.clientX - rect.left) * scaleX;
+            this.touchOriginY = (t.clientY - rect.top) * scaleY;
+            this.isTouching = true;
+            this.touchDir = { x: 0, y: 0 };
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!this.isTouching || this.gameState !== 'playing') return;
+            const t = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const cx = (t.clientX - rect.left) * scaleX;
+            const cy = (t.clientY - rect.top) * scaleY;
+            const dx = cx - this.touchOriginX;
+            const dy = cy - this.touchOriginY;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            if (len > 12) { // 12px dead zone
+                this.touchDir = { x: dx / len, y: dy / len };
+            } else {
+                this.touchDir = { x: 0, y: 0 };
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (e.touches.length === 0) {
+                this.isTouching = false;
+                this.touchDir = { x: 0, y: 0 };
+            }
+        }, { passive: false });
     }
     
     setupUI() {
@@ -808,8 +843,21 @@ export class GameEngine {
         // Update combo system
         this.comboSystem.update(16); // ~16ms per frame at 60fps
 
+        // Merge touch direction into keys for mobile movement
+        if (this.isMobile && this.isTouching) {
+            this.keys['ArrowLeft']  = this.touchDir.x < -0.3;
+            this.keys['ArrowRight'] = this.touchDir.x > 0.3;
+            this.keys['ArrowUp']    = this.touchDir.y < -0.3;
+            this.keys['ArrowDown']  = this.touchDir.y > 0.3;
+        }
+
         // Update player
         this.player.update(this.keys, this.worldWidth, this.worldHeight);
+
+        // Mobile auto-attack: fires when in range, no button needed
+        if (this.isMobile && this.isTouching && this.attackCooldown <= 0 && !this.isAttacking) {
+            this.performAttack();
+        }
         
         // Update enemies
         this.enemies.forEach(enemy => {
@@ -1236,5 +1284,23 @@ export class GameEngine {
         this.update();
         this.render();
         requestAnimationFrame(() => this.gameLoop());
+    }
+
+    #setupResponsiveCanvas() {
+        const resize = () => {
+            const aspectRatio = 4 / 3;
+            const maxW = window.innerWidth;
+            const maxH = window.innerHeight;
+            let w = maxW;
+            let h = w / aspectRatio;
+            if (h > maxH * 0.85) {
+                h = maxH * 0.85;
+                w = h * aspectRatio;
+            }
+            this.canvas.style.width = Math.floor(w) + 'px';
+            this.canvas.style.height = Math.floor(h) + 'px';
+        };
+        window.addEventListener('resize', resize);
+        resize();
     }
 }
