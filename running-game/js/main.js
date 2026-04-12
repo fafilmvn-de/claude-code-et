@@ -2,10 +2,12 @@
 import { GameEngine } from './core/GameEngine.js';
 import { WaveManager } from './core/WaveManager.js';
 import { ComboSystem } from './core/ComboSystem.js';
+import { ShopManager } from './core/ShopManager.js';
 
 // Expose for Playwright tests
 window.__WaveManager = WaveManager;
 window.__ComboSystem = ComboSystem;
+window.__ShopManager = ShopManager;
 
 // Initialize game when page loads
 window.addEventListener('load', () => {

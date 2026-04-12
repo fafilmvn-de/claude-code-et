@@ -14,6 +14,7 @@ import { ImageLoader } from '../utils/ImageLoader.js';
 import { SpriteProcessor } from '../utils/SpriteProcessor.js';
 import { WaveManager } from './WaveManager.js';
 import { ComboSystem } from './ComboSystem.js';
+import { ShopManager } from './ShopManager.js';
 
 export class GameEngine {
     constructor() {
@@ -80,6 +81,14 @@ export class GameEngine {
             onMilestone: (mult, tier) => { /* SoundManager wired in Task 8 */ }
         });
         this.maxCombo = 0; // track for leaderboard
+        this.shopManager = new ShopManager({
+            onPurchase: (upgrade) => this.#applyUpgrade(upgrade)
+        });
+        // Expose purchase handler for shop HTML onclick
+        window.__shopPurchase = (id) => {
+            const bought = this.shopManager.purchase(id);
+            if (bought) this.shopManager.renderShop();
+        };
 
         // Image loading and processing
         this.images = {};
@@ -253,6 +262,10 @@ export class GameEngine {
             onMilestone: (mult, tier) => { /* SoundManager wired in Task 8 */ }
         });
         this.maxCombo = 0;
+        this.shopManager = new ShopManager({
+            onPurchase: (upgrade) => this.#applyUpgrade(upgrade)
+        });
+        this.coins = 0;
         this.gameState = 'playing';
         const mainMenu = document.getElementById('main-menu');
         if (mainMenu) mainMenu.classList.add('hidden');
@@ -523,7 +536,9 @@ export class GameEngine {
         this.waveManager.enemyKilled();
         this.comboSystem.hit();
         this.maxCombo = Math.max(this.maxCombo, this.comboSystem.getCount());
-        // coin drop wired in Task 6
+        const coinDrop = this.comboSystem.getMultiplier(); // ×1 to ×4
+        this.shopManager.addCoins(coinDrop);
+        this.coins = this.shopManager.getCoins();
         this.updateHUD();
     }
     
@@ -931,18 +946,57 @@ export class GameEngine {
     
     #onWaveCleared(waveNum) {
         this.waveInProgress = false;
-        // Show wave banner
         this.#showWaveBanner(`Wave ${waveNum} — Survived! 🎉`);
-
-        // Delay before next wave / shop
         setTimeout(() => {
             if (this.waveManager.shouldOpenShop(waveNum)) {
-                // Task 6 will wire shopManager here
-                this.#startNextWave();
+                this.#openShop();
             } else {
                 this.#startNextWave();
             }
         }, 2000);
+    }
+
+    #openShop() {
+        this.gameState = 'shop';
+        this.shopManager.renderShop();
+        const overlay = document.getElementById('shop-overlay');
+        if (overlay) overlay.classList.remove('hidden');
+        const closeBtn = document.getElementById('shop-close-btn');
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                if (overlay) overlay.classList.add('hidden');
+                this.gameState = 'playing';
+                this.#startNextWave();
+            };
+        }
+    }
+
+    #applyUpgrade(upgrade) {
+        switch (upgrade.effect) {
+            case 'attackCooldown':
+                this.attackCooldownBase = Math.floor((this.attackCooldownBase ?? 500) * upgrade.value);
+                break;
+            case 'attackRange':
+                this.attackRange = (this.attackRange ?? 50) * upgrade.value;
+                break;
+            case 'restoreHp':
+                this.currentHP = Math.min(this.maxHP, this.currentHP + upgrade.value);
+                break;
+            case 'maxHp':
+                this.maxHP += upgrade.value;
+                this.currentHP += upgrade.value;
+                break;
+            case 'speed':
+                if (this.player) this.player.speed = (this.player.speed ?? 3) * upgrade.value;
+                break;
+            case 'comboWindow':
+                if (this.comboSystem) this.comboSystem.extendWindow(upgrade.value);
+                break;
+            case 'invulnerability':
+                this.invulnerabilityDuration = (this.invulnerabilityDuration ?? 2500) + upgrade.value;
+                break;
+        }
+        this.updateHUD();
     }
 
     #startNextWave() {
