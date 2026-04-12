@@ -267,10 +267,51 @@ Single looping track via Web Audio API oscillators. Cheerful and upbeat for wave
 
 ---
 
-## 10. Out of Scope
+## 10. Mobile & Tablet Touch Controls
+
+The existing on-screen directional buttons are kept but fully overhauled for touch-first play. The canvas resizes to fill the viewport on any screen size.
+
+### 10.1 Layout
+
+```
+┌──────────────────────────────────────┐
+│            HUD (top bar)             │
+├──────────────────────────────────────┤
+│                                      │
+│          [ game canvas ]             │
+│                                      │
+├──────────────────────────────────────┤
+│  ┌──────────┐          ┌──────────┐  │
+│  │  D-PAD   │          │  ATTACK  │  │
+│  │  (left)  │          │ (right)  │  │
+│  └──────────┘          └──────────┘  │
+└──────────────────────────────────────┘
+```
+
+- **D-pad (bottom-left):** Virtual joystick — touch and drag in any direction for 8-directional movement. Larger hit area than current buttons (min 120px diameter).
+- **Attack button (bottom-right):** Large circular tap target (min 80px diameter). Triggers the same attack as Space / mouse click.
+- **Blast button:** Appears overlaid on the attack button (glowing ring) when combo ×3+ is active; a second tap fires the AOE blast.
+- **Shop cards:** Full tap targets — each upgrade card fills at least 44×44px per WCAG touch target guidelines.
+- **Pause:** Tap the wave indicator in the top bar to pause (no dedicated button needed on small screens).
+
+### 10.2 Responsive Canvas
+
+- Canvas scales to `min(window.innerWidth, window.innerHeight * 4/3)` maintaining the 4:3 aspect ratio.
+- On portrait phones, the canvas occupies the top ~65% of the screen; controls occupy the bottom ~35%.
+- On landscape tablets, the canvas fills the full width with controls overlaid at the bottom corners (semi-transparent).
+- `viewport` meta tag set to `width=device-width, initial-scale=1, user-scalable=no` to prevent pinch-zoom during play.
+
+### 10.3 Touch Event Handling
+
+- All existing `mousedown` / `click` listeners get companion `touchstart` / `touchend` listeners.
+- Multi-touch: movement and attack can be held simultaneously (left thumb moves, right thumb attacks).
+- Touch inputs on the canvas are translated to the same world-space coordinates as mouse clicks for attack targeting.
+
+---
+
+## 11. Out of Scope
 
 - Multiplayer / online leaderboard
 - New sprite art (emoji fallbacks used for all new entities)
-- Mobile touch controls (existing mobile buttons kept as-is)
 - Save/resume mid-run
 - Difficulty settings menu
