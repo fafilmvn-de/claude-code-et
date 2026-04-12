@@ -7,8 +7,8 @@ export class Fox {
         this.vy = 0;
         this.speed = 2.8;
         this.size = 30;
-        this.maxHP = 2;
-        this.currentHP = 2;
+        this.maxHp = 2;
+        this.hp = 2;
         this.isDead = false;
         this.shouldRemove = false;
         this.emoji = '🦊';
@@ -33,9 +33,9 @@ export class Fox {
 
     takeDamage(amount) {
         if (this.isDead) return;
-        this.currentHP -= amount;
+        this.hp -= amount;
         this.hitFlash = 6;
-        if (this.currentHP <= 0) {
+        if (this.hp <= 0) {
             this.die();
         }
     }

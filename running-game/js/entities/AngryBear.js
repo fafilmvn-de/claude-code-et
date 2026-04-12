@@ -7,8 +7,8 @@ export class AngryBear {
         this.vy = 0;
         this.speed = 1.0;
         this.size = 72;
-        this.maxHP = 20;
-        this.currentHP = 20;
+        this.maxHp = 20;
+        this.hp = 20;
         this.isDead = false;
         this.shouldRemove = false;
         this.emoji = '🐻';
@@ -34,16 +34,16 @@ export class AngryBear {
 
     takeDamage(amount) {
         if (this.isDead) return;
-        this.currentHP -= amount;
+        this.hp -= amount;
         this.hitFlash = 8;
 
         // Phase transition at 10 HP
-        if (this.currentHP <= 10 && this.phase === 1) {
+        if (this.hp <= 10 && this.phase === 1) {
             this.phase = 2;
             this.speed = 2.0;
         }
 
-        if (this.currentHP <= 0) {
+        if (this.hp <= 0) {
             this.die();
         }
     }
@@ -145,7 +145,7 @@ export class AngryBear {
             ctx.fillStyle = '#dc2626';
             ctx.fillRect(bx, by, bw, bh);
             ctx.fillStyle = '#16a34a';
-            ctx.fillRect(bx, by, bw * (this.currentHP / this.maxHP), bh);
+            ctx.fillRect(bx, by, bw * (this.hp / this.maxHp), bh);
 
             // Phase indicator text
             ctx.fillStyle = '#ffffff';

@@ -7,8 +7,8 @@ export class GiantBug {
         this.vy = 0;
         this.speed = 1.2;
         this.size = 40;
-        this.maxHP = 3;
-        this.currentHP = 3;
+        this.maxHp = 3;
+        this.hp = 3;
         this.isDead = false;
         this.shouldRemove = false;
         this.emoji = '🐛';
@@ -28,9 +28,9 @@ export class GiantBug {
 
     takeDamage(amount) {
         if (this.isDead) return;
-        this.currentHP -= amount;
+        this.hp -= amount;
         this.hitFlash = 8;
-        if (this.currentHP <= 0) {
+        if (this.hp <= 0) {
             this.die();
         }
     }
@@ -101,7 +101,7 @@ export class GiantBug {
             ctx.fillStyle = '#dc2626';
             ctx.fillRect(bx, by, bw, bh);
             ctx.fillStyle = '#16a34a';
-            ctx.fillRect(bx, by, bw * (this.currentHP / this.maxHP), bh);
+            ctx.fillRect(bx, by, bw * (this.hp / this.maxHp), bh);
         }
     }
 }

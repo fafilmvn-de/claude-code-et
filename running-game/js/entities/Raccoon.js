@@ -7,8 +7,8 @@ export class Raccoon {
         this.vy = 0;
         this.speed = 2.2;
         this.size = 28;
-        this.maxHP = 1;
-        this.currentHP = 1;
+        this.maxHp = 1;
+        this.hp = 1;
         this.isDead = false;
         this.shouldRemove = false;
         this.emoji = '🦝';
@@ -39,9 +39,9 @@ export class Raccoon {
 
     takeDamage(amount) {
         if (this.isDead) return;
-        this.currentHP -= amount;
+        this.hp -= amount;
         this.hitFlash = 6;
-        if (this.currentHP <= 0) {
+        if (this.hp <= 0) {
             this.die();
         }
     }
