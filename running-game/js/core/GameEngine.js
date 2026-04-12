@@ -9,6 +9,7 @@ import { WeaponBlast } from '../effects/WeaponBlast.js';
 import { ImageLoader } from '../utils/ImageLoader.js';
 import { SpriteProcessor } from '../utils/SpriteProcessor.js';
 import { WaveManager } from './WaveManager.js';
+import { ComboSystem } from './ComboSystem.js';
 
 export class GameEngine {
     constructor() {
@@ -29,8 +30,6 @@ export class GameEngine {
         this.maxHP = 6; // 6 HP per spec
         this.currentHP = 6;
         this.attackRange = 4; // Increased from 2 to make game easier
-        this.killStreak = 0;
-        this.weaponBlastReady = false;
 
         // Collections and power-ups
         this.yarnBalls = 0;
@@ -67,7 +66,16 @@ export class GameEngine {
             onSpawnEnemy: (type, count) => this.#spawnEnemiesOfType(type, count),
             onBossWaveStart: (waveNum) => this.#onBossWaveStart(waveNum)
         });
-        
+        this.comboSystem = new ComboSystem({
+            onChanged: (count, mult, tier, fraction) => this.#updateComboHUD(count, mult, tier, fraction),
+            onBreak: () => {
+                this.#updateComboHUD(0, 1, 'grey', 0);
+                // SoundManager wired in Task 8: this.sound.playComboBreak();
+            },
+            onMilestone: (mult, tier) => { /* SoundManager wired in Task 8 */ }
+        });
+        this.maxCombo = 0; // track for leaderboard
+
         // Image loading and processing
         this.images = {};
         this.imageLoader = new ImageLoader();
@@ -228,12 +236,17 @@ export class GameEngine {
         this.currentHP = 6; // 6 HP per spec
         this.maxHP = 6;
         this.usedFreeRevive = false;
-        this.killStreak = 0;
         this.waveManager = new WaveManager({
             onWaveCleared: (waveNum) => this.#onWaveCleared(waveNum),
             onSpawnEnemy: (type, count) => this.#spawnEnemiesOfType(type, count),
             onBossWaveStart: (waveNum) => this.#onBossWaveStart(waveNum)
         });
+        this.comboSystem = new ComboSystem({
+            onChanged: (count, mult, tier, fraction) => this.#updateComboHUD(count, mult, tier, fraction),
+            onBreak: () => { this.#updateComboHUD(0, 1, 'grey', 0); },
+            onMilestone: (mult, tier) => { /* SoundManager wired in Task 8 */ }
+        });
+        this.maxCombo = 0;
         this.gameState = 'playing';
         const mainMenu = document.getElementById('main-menu');
         if (mainMenu) mainMenu.classList.add('hidden');
@@ -261,9 +274,7 @@ export class GameEngine {
         
         // Reset player stats
         this.currentHP = this.maxHP;
-        this.killStreak = 0;
         this.enemiesKilled = 0;
-        this.weaponBlastReady = false;
         this.attackRange = 4; // Base sword range (increased for better gameplay)
         this.shieldHP = 0;
         
@@ -431,7 +442,7 @@ export class GameEngine {
         this.player.startAttack();
         
         // Check for weapon blast (AOE attack)
-        if (this.weaponBlastReady) {
+        if (this.comboSystem.isBlastReady()) {
             this.performWeaponBlast();
             setTimeout(() => {
                 this.isAttacking = false;
@@ -479,34 +490,32 @@ export class GameEngine {
     }
     
     performWeaponBlast() {
-        this.weaponBlastReady = false;
-        this.killStreak = 0;
-        
         // Create blast effect
         this.weaponEffects.push(new WeaponBlast(this.player.x, this.player.y));
-        
+
         // Kill all enemies within blast radius
         const blastRadius = 200; // Half screen approximately
         this.enemies.forEach(enemy => {
             if (enemy.isDead) return;
-            
+
             const dx = enemy.x - this.player.x;
             const dy = enemy.y - this.player.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            
+
             if (distance <= blastRadius) {
                 enemy.takeDamage(999); // Instant kill
                 this.onEnemyKilled();
             }
         });
-        
+
         this.showCelebrationMessage("SWORD BLAST! 💥");
     }
     
     onEnemyKilled() {
         this.totalKills++;
         this.waveManager.enemyKilled();
-        // ComboSystem.hit() wired in Task 3
+        this.comboSystem.hit();
+        this.maxCombo = Math.max(this.maxCombo, this.comboSystem.getCount());
         // coin drop wired in Task 6
         this.updateHUD();
     }
@@ -678,6 +687,9 @@ export class GameEngine {
             }
         }
         
+        // Update combo system
+        this.comboSystem.update(16); // ~16ms per frame at 60fps
+
         // Update player
         this.player.update(this.keys, this.worldWidth, this.worldHeight);
         
@@ -952,6 +964,32 @@ export class GameEngine {
         el.textContent = text;
         el.classList.add('visible');
         setTimeout(() => el.classList.remove('visible'), 2000);
+    }
+
+    #updateComboHUD(count, mult, tier, fraction) {
+        const overlay = document.getElementById('combo-overlay');
+        if (!overlay) return;
+        const tierColors = { grey: '#94a3b8', blue: '#60a5fa', orange: '#f97316', purple: '#a855f7' };
+        const tierEmojis = { grey: '', blue: '💙', orange: '🔥', purple: '⚡' };
+
+        if (count === 0) {
+            overlay.classList.add('hidden');
+            return;
+        }
+        overlay.classList.remove('hidden');
+        overlay.style.borderColor = tierColors[tier];
+        const countEl = document.getElementById('combo-count');
+        if (countEl) countEl.textContent = count;
+        const multEl = document.getElementById('combo-mult');
+        if (multEl) {
+            multEl.textContent = `×${mult} ${tierEmojis[tier]}`;
+            multEl.style.color = tierColors[tier];
+        }
+        const barEl = document.getElementById('combo-bar');
+        if (barEl) {
+            barEl.style.width = (fraction * 100) + '%';
+            barEl.style.background = tierColors[tier];
+        }
     }
 
     gameLoop() {
