@@ -12,6 +12,7 @@ import { Particle } from '../effects/Particle.js';
 import { WeaponBlast } from '../effects/WeaponBlast.js';
 import { ImageLoader } from '../utils/ImageLoader.js';
 import { SpriteProcessor } from '../utils/SpriteProcessor.js';
+import { SoundManager } from '../utils/SoundManager.js';
 import { WaveManager } from './WaveManager.js';
 import { ComboSystem } from './ComboSystem.js';
 import { ShopManager } from './ShopManager.js';
@@ -77,9 +78,9 @@ export class GameEngine {
             onChanged: (count, mult, tier, fraction) => this.#updateComboHUD(count, mult, tier, fraction),
             onBreak: () => {
                 this.#updateComboHUD(0, 1, 'grey', 0);
-                // SoundManager wired in Task 8: this.sound.playComboBreak();
+                this.sound.playComboBreak();
             },
-            onMilestone: (mult, tier) => { /* SoundManager wired in Task 8 */ }
+            onMilestone: (mult, tier) => { this.sound.playComboMilestone(); }
         });
         this.maxCombo = 0; // track for leaderboard
         this.shopManager = new ShopManager({
@@ -96,7 +97,10 @@ export class GameEngine {
         this.images = {};
         this.imageLoader = new ImageLoader();
         this.spriteProcessor = new SpriteProcessor();
-        
+
+        // Sound manager
+        this.sound = new SoundManager();
+
         // Input handling
         this.keys = {};
         this.mousePos = { x: 0, y: 0 };
@@ -310,8 +314,8 @@ export class GameEngine {
         });
         this.comboSystem = new ComboSystem({
             onChanged: (count, mult, tier, fraction) => this.#updateComboHUD(count, mult, tier, fraction),
-            onBreak: () => { this.#updateComboHUD(0, 1, 'grey', 0); },
-            onMilestone: (mult, tier) => { /* SoundManager wired in Task 8 */ }
+            onBreak: () => { this.#updateComboHUD(0, 1, 'grey', 0); this.sound.playComboBreak(); },
+            onMilestone: (mult, tier) => { this.sound.playComboMilestone(); }
         });
         this.maxCombo = 0;
         this.shopManager = new ShopManager({
@@ -591,6 +595,8 @@ export class GameEngine {
         const coinDrop = this.comboSystem.getMultiplier(); // ×1 to ×4
         this.shopManager.addCoins(coinDrop);
         this.coins = this.shopManager.getCoins();
+        this.sound.playHit(this.comboSystem.getTier());
+        this.sound.playCoinCollect();
         this.updateHUD();
     }
     
@@ -701,7 +707,7 @@ export class GameEngine {
         // Add invulnerability frames
         this.playerInvulnerable = true;
         this.invulnerabilityTimer = 2000; // 2 seconds of invulnerability
-        
+
         if (this.shieldHP > 0) {
             this.shieldHP = Math.max(0, this.shieldHP - amount);
             this.showCelebrationMessage("Shield absorbed damage! 🛡️");
@@ -712,6 +718,7 @@ export class GameEngine {
                 this.gameOver();
             }
         }
+        this.sound.playPlayerHit();
         this.updateUI();
         this.updateHUD();
     }
@@ -819,6 +826,7 @@ export class GameEngine {
             const hpText = document.getElementById('boss-hp-text');
             if (hpText) hpText.textContent = `${this.bossBear.hp} / ${this.bossBear.maxHp}`;
         } else if (this.bossBear && this.bossBear.isDead) {
+            this.sound.playBossDeath();
             const wrapper = document.getElementById('boss-bar-wrapper');
             if (wrapper) wrapper.classList.add('hidden');
             this.bossBear = null;
@@ -1012,6 +1020,7 @@ export class GameEngine {
     
     #onWaveCleared(waveNum) {
         this.waveInProgress = false;
+        this.sound.playWaveClear();
         this.#showWaveBanner(`Wave ${waveNum} — Survived! 🎉`);
         setTimeout(() => {
             if (this.waveManager.shouldOpenShop(waveNum)) {
@@ -1024,6 +1033,7 @@ export class GameEngine {
 
     #openShop() {
         this.gameState = 'shop';
+        this.sound.playShopOpen();
         this.shopManager.renderShop();
         const overlay = document.getElementById('shop-overlay');
         if (overlay) overlay.classList.remove('hidden');
@@ -1077,6 +1087,7 @@ export class GameEngine {
     #onBossWaveStart(waveNum) {
         const bossBar = document.getElementById('boss-bar-wrapper');
         if (bossBar) bossBar.classList.remove('hidden');
+        this.sound.playBossSpawn();
         this.bossBear = null; // will be set in #spawnEnemiesOfType
     }
 
