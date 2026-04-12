@@ -8,6 +8,7 @@ import { Particle } from '../effects/Particle.js';
 import { WeaponBlast } from '../effects/WeaponBlast.js';
 import { ImageLoader } from '../utils/ImageLoader.js';
 import { SpriteProcessor } from '../utils/SpriteProcessor.js';
+import { WaveManager } from './WaveManager.js';
 
 export class GameEngine {
     constructor() {
@@ -23,21 +24,20 @@ export class GameEngine {
         this.gameTime = 0;
         this.levelStartTime = 0;
         this.isPaused = false;
-        
+
         // Player stats
-        this.maxHP = 5;
-        this.currentHP = 5;
+        this.maxHP = 6; // 6 HP per spec
+        this.currentHP = 6;
         this.attackRange = 4; // Increased from 2 to make game easier
         this.killStreak = 0;
-        this.totalKills = 0;
         this.weaponBlastReady = false;
-        
+
         // Collections and power-ups
         this.yarnBalls = 0;
         this.butterflies = 0;
         this.fishTreats = 0;
         this.shieldHP = 0;
-        
+
         // Game objects
         this.player = null;
         this.enemies = [];
@@ -45,49 +45,28 @@ export class GameEngine {
         this.environment = [];
         this.particles = [];
         this.weaponEffects = [];
-        
+
         // World settings
         this.worldWidth = 1600;
         this.worldHeight = 1200;
         this.camera = { x: 0, y: 0 };
-        
-        // Enemy spawn system - MUCH FASTER spawn speed
-        this.enemySpawnTimer = 0;
-        this.enemySpawnDelay = 1000; // Fast initial spawn (1 second)
-        this.enemiesKilled = 0;
+
+        // Invulnerability
         this.playerInvulnerable = false;
         this.invulnerabilityTimer = 0;
-        
-        // Level configurations - INCREASED enemies by 1.5x
-        this.levels = [
-            {
-                name: "Boar Invasion",
-                bgColor: "#7CB342",
-                totalBoars: 30, // Increased from 20 to 30 (1.5x)
-                totalWolves: 0,
-                targetKills: 30, // Increased from 20 to 30 (1.5x)
-                theme: "garden",
-                description: "Defend the garden from wild boars!"
-            },
-            {
-                name: "Wolf Pack Attack",
-                bgColor: "#66BB6A", 
-                totalBoars: 45, // Increased from 30 to 45 (1.5x)
-                totalWolves: 8, // Increased from 5 to 8 (1.5x, rounded up)
-                targetKills: 53, // Increased from 35 to 53 (1.5x, rounded up)
-                theme: "forest",
-                description: "Face the fierce wolf pack!"
-            },
-            {
-                name: "Final Battle",
-                bgColor: "#42A5F5",
-                totalBoars: 60, // Increased from 40 to 60 (1.5x)
-                totalWolves: 15, // Increased from 10 to 15 (1.5x)
-                targetKills: 75, // Increased from 50 to 75 (1.5x)
-                theme: "battlefield",
-                description: "The ultimate showdown!"
-            }
-        ];
+
+        // Wave state (replaces old level/kill system)
+        this.currentWave = 0;
+        this.coins = 0;
+        this.totalKills = 0;
+        this.usedFreeRevive = false;
+        this.waveInProgress = false;
+
+        this.waveManager = new WaveManager({
+            onWaveCleared: (waveNum) => this.#onWaveCleared(waveNum),
+            onSpawnEnemy: (type, count) => this.#spawnEnemiesOfType(type, count),
+            onBossWaveStart: (waveNum) => this.#onBossWaveStart(waveNum)
+        });
         
         // Image loading and processing
         this.images = {};
@@ -244,10 +223,30 @@ export class GameEngine {
     }
     
     startNewGame() {
-        this.currentLevel = 1;
         this.totalKills = 0;
-        this.gameTime = 0;
-        this.startLevel();
+        this.coins = 0;
+        this.currentHP = 6; // 6 HP per spec
+        this.maxHP = 6;
+        this.usedFreeRevive = false;
+        this.gameState = 'playing';
+        const mainMenu = document.getElementById('main-menu');
+        if (mainMenu) mainMenu.classList.add('hidden');
+        const gameContainer = document.getElementById('game-container');
+        if (gameContainer) gameContainer.classList.remove('hidden');
+        this.initializeWorld();
+        // Start first wave after a short delay
+        setTimeout(() => this.#startNextWave(), 1000);
+    }
+
+    initializeWorld() {
+        this.player = new CatHero(this.worldWidth / 2, this.worldHeight / 2, this.images);
+        this.enemies = [];
+        this.collectibles = [];
+        this.environment = [];
+        this.particles = [];
+        this.weaponEffects = [];
+        this.createEnvironment('garden');
+        this.updateCamera();
     }
     
     startLevel() {
@@ -499,17 +498,11 @@ export class GameEngine {
     }
     
     onEnemyKilled() {
-        this.killStreak++;
-        this.enemiesKilled++;
         this.totalKills++;
-        
-        if (this.killStreak >= 10) {
-            this.weaponBlastReady = true;
-            this.showCelebrationMessage("Weapon Blast Ready! ⚡");
-        }
-        
-        // Check level completion
-        this.checkLevelComplete();
+        this.waveManager.enemyKilled();
+        // ComboSystem.hit() wired in Task 3
+        // coin drop wired in Task 6
+        this.updateHUD();
     }
     
     createHitEffect(x, y) {
@@ -579,6 +572,20 @@ export class GameEngine {
     }
     
     gameOver() {
+        // Free revive safety net for younger players (waves 1–5, once per run)
+        if (this.waveManager && this.waveManager.getCurrentWave() <= 5 && !this.usedFreeRevive) {
+            this.usedFreeRevive = true;
+            this.currentHP = 3;
+            this.playerInvulnerable = true;
+            this.invulnerabilityTimer = 3000;
+            const celebMsg = document.getElementById('celebration-message');
+            if (celebMsg) {
+                celebMsg.textContent = 'Second chance! 🐱💪';
+                celebMsg.classList.remove('hidden');
+                setTimeout(() => celebMsg.classList.add('hidden'), 2000);
+            }
+            return; // don't actually end the run
+        }
         this.gameState = 'gameOver';
         // Show game over modal (you'll need to add this to HTML)
         this.showCelebrationMessage("Game Over! Try Again 💔");
@@ -603,6 +610,7 @@ export class GameEngine {
             }
         }
         this.updateUI();
+        this.updateHUD();
     }
     
     collectItem(collectible) {
@@ -667,9 +675,6 @@ export class GameEngine {
         // Update player
         this.player.update(this.keys, this.worldWidth, this.worldHeight);
         
-        // Spawn enemies
-        this.spawnEnemies();
-        
         // Update enemies
         this.enemies.forEach(enemy => {
             enemy.update(this.player);
@@ -718,9 +723,10 @@ export class GameEngine {
         
         // Update camera
         this.updateCamera();
-        
+
         // Update UI
         this.updateUI();
+        this.updateHUD();
     }
     
     createCollectionEffect(x, y, type) {
@@ -767,31 +773,36 @@ export class GameEngine {
         const timeDisplay = document.getElementById('time-display');
         if (timeDisplay) timeDisplay.textContent = this.formatTime(this.gameTime);
 
-        // Update progress bar (elements may be removed in HTML restructure)
+        // Update progress bar (legacy elements — no-op if elements removed in HTML restructure)
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
-        if (this.currentLevel <= this.levels.length) {
-            const level = this.levels[this.currentLevel - 1];
-            const progress = Math.min(100, (this.enemiesKilled / level.targetKills) * 100);
-
-            if (progressBar) progressBar.style.width = progress + '%';
-            if (progressText) progressText.textContent =
-                `${this.enemiesKilled}/${level.targetKills} enemies defeated - ${level.name}`;
-        }
-
-        // Update weapon blast indicator
-        if (progressText) {
-            if (this.weaponBlastReady) {
-                progressText.innerHTML += ' | <span style="color: gold; font-weight: bold;">⚡ SWORD BLAST READY! ⚡</span>';
-            } else if (this.killStreak > 0) {
-                progressText.innerHTML += ` | Kill Streak: ${this.killStreak}/10`;
-            }
-        }
+        if (progressBar) progressBar.style.width = '0%';
+        if (progressText) progressText.textContent =
+            `Wave ${this.waveManager ? this.waveManager.getCurrentWave() : 0} — ${this.totalKills} kills`;
     }
     
     createHeartsDisplay() {
         const container = document.querySelector('.hearts-display');
         return container;
+    }
+
+    updateHUD() {
+        // HP hearts
+        const el = document.getElementById('hp-hearts');
+        if (el) {
+            el.innerHTML = Array.from({ length: this.maxHP }, (_, i) =>
+                `<span>${i < this.currentHP ? '❤️' : '🤍'}</span>`
+            ).join('');
+        }
+        // Coin display
+        const coinEl = document.getElementById('coin-display');
+        if (coinEl) coinEl.textContent = this.coins;
+        // Wave progress
+        const remaining = this.waveManager ? this.waveManager.getRemainingCount() : 0;
+        const total = remaining + this.totalKills;
+        const pct = total > 0 ? Math.min(100, ((total - remaining) / total) * 100) : 0;
+        const bar = document.getElementById('wave-progress-bar');
+        if (bar) bar.style.width = pct + '%';
     }
     
     formatTime(ms) {
@@ -831,8 +842,7 @@ export class GameEngine {
     
     render() {
         // Clear canvas
-        this.ctx.fillStyle = this.currentLevel <= this.levels.length ? 
-            this.levels[this.currentLevel - 1].bgColor : '#7CB342';
+        this.ctx.fillStyle = '#7CB342';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Save context for camera transform
@@ -871,6 +881,73 @@ export class GameEngine {
         this.ctx.restore();
     }
     
+    #onWaveCleared(waveNum) {
+        this.waveInProgress = false;
+        // Show wave banner
+        this.#showWaveBanner(`Wave ${waveNum} — Survived! 🎉`);
+
+        // Delay before next wave / shop
+        setTimeout(() => {
+            if (this.waveManager.shouldOpenShop(waveNum)) {
+                // Task 6 will wire shopManager here
+                this.#startNextWave();
+            } else {
+                this.#startNextWave();
+            }
+        }, 2000);
+    }
+
+    #startNextWave() {
+        if (this.gameState !== 'playing') return;
+        this.waveInProgress = true;
+        this.waveManager.startWave();
+        const w = this.waveManager.getCurrentWave();
+        const waveLabelEl = document.getElementById('wave-label');
+        if (waveLabelEl) waveLabelEl.textContent = `WAVE ${w}`;
+    }
+
+    #onBossWaveStart(waveNum) {
+        const bossBar = document.getElementById('boss-bar-wrapper');
+        if (bossBar) bossBar.classList.remove('hidden');
+        const bossName = document.getElementById('boss-name');
+        if (bossName) bossName.textContent = '🐻 ANGRY BEAR';
+        const bossHpText = document.getElementById('boss-hp-text');
+        if (bossHpText) bossHpText.textContent = '20 / 20';
+        const bossFill = document.getElementById('boss-bar-fill');
+        if (bossFill) bossFill.style.width = '100%';
+    }
+
+    #spawnEnemiesOfType(type, count) {
+        for (let i = 0; i < count; i++) {
+            const { x, y } = this.#randomEdgePosition();
+            switch (type) {
+                case 'boar': this.enemies.push(new WildBoar(x, y, this.images)); break;
+                case 'wolf': this.enemies.push(new DireWolf(x, y, this.images)); break;
+                // raccoon/fox/bug/bear added in Task 5
+            }
+        }
+    }
+
+    #randomEdgePosition() {
+        const edge = Math.floor(Math.random() * 4);
+        let x, y;
+        switch (edge) {
+            case 0: x = Math.random() * this.worldWidth; y = -50; break;
+            case 1: x = this.worldWidth + 50; y = Math.random() * this.worldHeight; break;
+            case 2: x = Math.random() * this.worldWidth; y = this.worldHeight + 50; break;
+            default: x = -50; y = Math.random() * this.worldHeight;
+        }
+        return { x, y };
+    }
+
+    #showWaveBanner(text) {
+        const el = document.getElementById('wave-banner');
+        if (!el) return;
+        el.textContent = text;
+        el.classList.add('visible');
+        setTimeout(() => el.classList.remove('visible'), 2000);
+    }
+
     gameLoop() {
         this.update();
         this.render();
