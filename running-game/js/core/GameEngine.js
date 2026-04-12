@@ -228,6 +228,12 @@ export class GameEngine {
         this.currentHP = 6; // 6 HP per spec
         this.maxHP = 6;
         this.usedFreeRevive = false;
+        this.killStreak = 0;
+        this.waveManager = new WaveManager({
+            onWaveCleared: (waveNum) => this.#onWaveCleared(waveNum),
+            onSpawnEnemy: (type, count) => this.#spawnEnemiesOfType(type, count),
+            onBossWaveStart: (waveNum) => this.#onBossWaveStart(waveNum)
+        });
         this.gameState = 'playing';
         const mainMenu = document.getElementById('main-menu');
         if (mainMenu) mainMenu.classList.add('hidden');
