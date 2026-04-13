@@ -6,7 +6,6 @@ import { Raccoon } from '../entities/Raccoon.js';
 import { Fox } from '../entities/Fox.js';
 import { GiantBug } from '../entities/GiantBug.js';
 import { AngryBear } from '../entities/AngryBear.js';
-import { Collectible } from '../entities/Collectible.js';
 import { EnvironmentItem } from '../entities/EnvironmentItem.js';
 import { Particle } from '../effects/Particle.js';
 import { WeaponBlast } from '../effects/WeaponBlast.js';
@@ -28,26 +27,14 @@ export class GameEngine {
         
         // Game state
         this.gameState = 'menu'; // menu, playing, paused, gameOver, levelComplete, victory
-        this.currentLevel = 1;
-        this.gameTime = 0;
-        this.levelStartTime = 0;
-        this.isPaused = false;
-
         // Player stats
         this.maxHP = 6; // 6 HP per spec
         this.currentHP = 6;
         this.attackRange = 4; // Increased from 2 to make game easier
 
-        // Collections and power-ups
-        this.yarnBalls = 0;
-        this.butterflies = 0;
-        this.fishTreats = 0;
-        this.shieldHP = 0;
-
         // Game objects
         this.player = null;
         this.enemies = [];
-        this.collectibles = [];
         this.environment = [];
         this.particles = [];
         this.weaponEffects = [];
@@ -61,12 +48,10 @@ export class GameEngine {
         this.playerInvulnerable = false;
         this.invulnerabilityTimer = 0;
 
-        // Wave state (replaces old level/kill system)
-        this.currentWave = 0;
+        // Wave state
         this.coins = 0;
         this.totalKills = 0;
         this.usedFreeRevive = false;
-        this.waveInProgress = false;
         this.bossBear = null;
 
         this.waveManager = new WaveManager({
@@ -105,7 +90,6 @@ export class GameEngine {
 
         // Input handling
         this.keys = {};
-        this.mousePos = { x: 0, y: 0 };
         this.isAttacking = false;
         this.attackCooldown = 0;
 
@@ -284,23 +268,6 @@ export class GameEngine {
             this.exitToMenu();
         });
         
-        // Level complete (elements may be removed in HTML restructure)
-        const nextLevelBtn = document.getElementById('next-level-btn');
-        if (nextLevelBtn) nextLevelBtn.addEventListener('click', () => {
-            this.nextLevel();
-        });
-
-        const backToMenuBtn = document.getElementById('back-to-menu-btn');
-        if (backToMenuBtn) backToMenuBtn.addEventListener('click', () => {
-            this.exitToMenu();
-        });
-
-        // Victory/Game Over (elements may be removed in HTML restructure)
-        const playAgainBtn = document.getElementById('play-again-btn');
-        if (playAgainBtn) playAgainBtn.addEventListener('click', () => {
-            this.startNewGame();
-        });
-
         // Leaderboard button on main menu
         const lbBtn = document.getElementById('leaderboard-btn');
         if (lbBtn) lbBtn.addEventListener('click', () => {
@@ -387,78 +354,20 @@ export class GameEngine {
     initializeWorld() {
         this.player = new CatHero(this.worldWidth / 2, this.worldHeight / 2, this.images);
         this.enemies = [];
-        this.collectibles = [];
         this.environment = [];
         this.particles = [];
         this.weaponEffects = [];
         this.bossBear = null;
-        this.createEnvironment('garden');
+        this.createEnvironment();
         this.updateCamera();
     }
     
-    startLevel() {
-        this.gameState = 'playing';
-        this.levelStartTime = Date.now();
-        
-        // Reset player stats
-        this.currentHP = this.maxHP;
-        this.enemiesKilled = 0;
-        this.attackRange = 4; // Base sword range (increased for better gameplay)
-        this.shieldHP = 0;
-        
-        // Reset collections
-        this.yarnBalls = 0;
-        this.butterflies = 0;
-        this.fishTreats = 0;
-        
-        // Show game container
-        document.getElementById('main-menu').classList.add('hidden');
-        document.getElementById('game-container').classList.remove('hidden');
-        
-        // Initialize game world
-        this.initializeLevel();
-        this.updateUI();
-    }
-    
-    initializeLevel() {
-        const level = this.levels[this.currentLevel - 1];
-        
-        // Create player
-        this.player = new CatHero(this.worldWidth / 2, this.worldHeight / 2, this.images);
-        
-        // Clear arrays
-        this.enemies = [];
-        this.collectibles = [];
-        this.environment = [];
-        this.particles = [];
-        this.weaponEffects = [];
-        
-        // Create environment
-        this.createEnvironment(level.theme);
-        
-        // Create limited collectibles (max 3 of each)
-        this.createCollectibles();
-        
-        // Reset enemy spawn timer
-        this.enemySpawnTimer = Date.now();
-        
-        // Center camera on player
-        this.updateCamera();
-    }
-    
-    createEnvironment(theme) {
-        // Add decorative environment elements
+    createEnvironment() {
         for (let i = 0; i < 40; i++) {
             const x = Math.random() * this.worldWidth;
             const y = Math.random() * this.worldHeight;
             
-            if (theme === 'garden') {
-                this.environment.push(new EnvironmentItem(x, y, 'flower', '🌸'));
-            } else if (theme === 'forest') {
-                this.environment.push(new EnvironmentItem(x, y, 'flower', '🌲'));
-            } else if (theme === 'battlefield') {
-                this.environment.push(new EnvironmentItem(x, y, 'rock', '🗿'));
-            }
+            this.environment.push(new EnvironmentItem(x, y, 'flower', '🌸'));
         }
         
         // Add trees and bushes for cover
@@ -467,99 +376,6 @@ export class GameEngine {
             const y = Math.random() * this.worldHeight;
             this.environment.push(new EnvironmentItem(x, y, 'tree', '🌳'));
         }
-    }
-    
-    createCollectibles() {
-        // Create exactly 3 of each type per level
-        const types = [
-            { type: 'yarn', emoji: '🧶', count: 3 },
-            { type: 'butterfly', emoji: '🦋', count: 3 },
-            { type: 'fish', emoji: '🐟', count: 3 }
-        ];
-        
-        types.forEach(({ type, emoji, count }) => {
-            for (let i = 0; i < count; i++) {
-                const x = Math.random() * (this.worldWidth - 200) + 100;
-                const y = Math.random() * (this.worldHeight - 200) + 100;
-                this.collectibles.push(new Collectible(x, y, type, emoji));
-            }
-        });
-    }
-    
-    spawnEnemies() {
-        const level = this.levels[this.currentLevel - 1];
-        const now = Date.now();
-        
-        // Check if it's time to spawn enemies
-        if (now - this.enemySpawnTimer < this.enemySpawnDelay) return;
-        
-        // Calculate how many enemies we still need to spawn
-        const totalEnemiesNeeded = level.totalBoars + level.totalWolves;
-        const currentEnemyCount = this.enemies.length;
-        const spawnedCount = this.enemiesKilled + currentEnemyCount;
-        
-        if (spawnedCount >= totalEnemiesNeeded) return;
-        
-        // Spawn 1-3 enemies randomly for more dynamic gameplay
-        const randomSpawnCount = 1 + Math.floor(Math.random() * 3); // 1-3 enemies
-        const spawnCount = Math.min(randomSpawnCount, totalEnemiesNeeded - spawnedCount);
-        
-        for (let i = 0; i < spawnCount; i++) {
-            this.spawnRandomEnemy(level);
-        }
-        
-        // Reset spawn timer with faster intervals
-        this.enemySpawnTimer = now;
-        this.enemySpawnDelay = 800 + Math.random() * 1200; // Much faster: 800-2000ms (0.8-2 seconds)
-    }
-    
-    spawnRandomEnemy(level) {
-        // Determine enemy type based on level configuration
-        const totalBoarsLeft = level.totalBoars - this.enemies.filter(e => e.type === 'boar').length - this.countKilledEnemies('boar');
-        const totalWolvesLeft = level.totalWolves - this.enemies.filter(e => e.type === 'wolf').length - this.countKilledEnemies('wolf');
-        
-        let enemyType = 'boar';
-        if (totalWolvesLeft > 0 && totalBoarsLeft > 0) {
-            enemyType = Math.random() < 0.8 ? 'boar' : 'wolf'; // 80% boar, 20% wolf
-        } else if (totalWolvesLeft > 0) {
-            enemyType = 'wolf';
-        }
-        
-        if (totalBoarsLeft <= 0 && totalWolvesLeft <= 0) return;
-        
-        // Spawn from edges of the screen
-        const edge = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
-        let x, y;
-        
-        switch (edge) {
-            case 0: // top
-                x = Math.random() * this.worldWidth;
-                y = -50;
-                break;
-            case 1: // right
-                x = this.worldWidth + 50;
-                y = Math.random() * this.worldHeight;
-                break;
-            case 2: // bottom
-                x = Math.random() * this.worldWidth;
-                y = this.worldHeight + 50;
-                break;
-            case 3: // left
-                x = -50;
-                y = Math.random() * this.worldHeight;
-                break;
-        }
-        
-        if (enemyType === 'boar') {
-            this.enemies.push(new WildBoar(x, y, this.images));
-        } else {
-            this.enemies.push(new DireWolf(x, y, this.images));
-        }
-    }
-    
-    countKilledEnemies(type) {
-        // This would normally be tracked, for now we'll estimate
-        return 0;
     }
     
     performAttack() {
@@ -666,61 +482,6 @@ export class GameEngine {
         }
     }
     
-    checkLevelComplete() {
-        const level = this.levels[this.currentLevel - 1];
-        if (this.enemiesKilled >= level.targetKills) {
-            this.completeLevel();
-        }
-    }
-    
-    completeLevel() {
-        this.gameState = 'levelComplete';
-
-        // Update level complete UI (elements may be removed in HTML restructure)
-        const levelYarn = document.getElementById('level-yarn');
-        if (levelYarn) levelYarn.textContent = this.yarnBalls;
-        const levelButterflies = document.getElementById('level-butterflies');
-        if (levelButterflies) levelButterflies.textContent = this.butterflies;
-        const levelFish = document.getElementById('level-fish');
-        if (levelFish) levelFish.textContent = this.fishTreats;
-        const levelTime = document.getElementById('level-time');
-        if (levelTime) levelTime.textContent = this.formatTime(this.gameTime);
-
-        // Show modal if present
-        const levelCompleteModal = document.getElementById('level-complete-modal');
-        if (levelCompleteModal) levelCompleteModal.classList.remove('hidden');
-    }
-    
-    nextLevel() {
-        const levelCompleteModal = document.getElementById('level-complete-modal');
-        if (levelCompleteModal) levelCompleteModal.classList.add('hidden');
-        
-        if (this.currentLevel < this.levels.length) {
-            this.currentLevel++;
-            this.startLevel();
-        } else {
-            this.showVictory();
-        }
-    }
-    
-    showVictory() {
-        this.gameState = 'victory';
-
-        // Update victory UI (elements may be removed in HTML restructure)
-        const victoryYarn = document.getElementById('victory-yarn');
-        if (victoryYarn) victoryYarn.textContent = this.yarnBalls;
-        const victoryButterflies = document.getElementById('victory-butterflies');
-        if (victoryButterflies) victoryButterflies.textContent = this.butterflies;
-        const victoryFish = document.getElementById('victory-fish');
-        if (victoryFish) victoryFish.textContent = this.fishTreats;
-        const victoryTime = document.getElementById('victory-time');
-        if (victoryTime) victoryTime.textContent = this.formatTime(this.gameTime);
-
-        // Show modal if present
-        const victoryModal = document.getElementById('victory-modal');
-        if (victoryModal) victoryModal.classList.remove('hidden');
-    }
-    
     gameOver() {
         // Free revive safety net for younger players (waves 1–5, once per run)
         if (this.waveManager && this.waveManager.getCurrentWave() <= 5 && !this.usedFreeRevive) {
@@ -764,35 +525,12 @@ export class GameEngine {
         this.playerInvulnerable = true;
         this.invulnerabilityTimer = 2000; // 2 seconds of invulnerability
 
-        if (this.shieldHP > 0) {
-            this.shieldHP = Math.max(0, this.shieldHP - amount);
-            this.showCelebrationMessage("Shield absorbed damage! 🛡️");
-        } else {
-            this.currentHP = Math.max(0, this.currentHP - amount);
-            this.showCelebrationMessage("Health lost! Find fish treats! 🐟");
-            if (this.currentHP <= 0) {
-                this.gameOver();
-            }
+        this.currentHP = Math.max(0, this.currentHP - amount);
+        if (this.currentHP <= 0) {
+            this.gameOver();
         }
         this.sound.playPlayerHit();
-        this.updateUI();
         this.updateHUD();
-    }
-    
-    collectItem(collectible) {
-        if (collectible.type === 'yarn') {
-            this.yarnBalls++;
-            this.attackRange += 0.5; // Increase attack range
-            this.showCelebrationMessage("Attack Range Increased! ⚔️");
-        } else if (collectible.type === 'butterfly') {
-            this.butterflies++;
-            this.shieldHP += 2; // Add shield
-            this.showCelebrationMessage("Shield Activated! 🛡️");
-        } else if (collectible.type === 'fish') {
-            this.fishTreats++;
-            this.currentHP = Math.min(this.maxHP, this.currentHP + 1); // Heal 1 HP
-            this.showCelebrationMessage("Health Restored! ❤️");
-        }
     }
     
     showCelebrationMessage(message) {
@@ -823,9 +561,6 @@ export class GameEngine {
         if (this.gameState !== 'playing') return;
 
         if (this.screenShake > 0) this.screenShake = Math.max(0, this.screenShake - 0.5);
-
-        // Update game time
-        this.gameTime = Date.now() - this.levelStartTime;
 
         // Update attack cooldown
         if (this.attackCooldown > 0) {
@@ -881,7 +616,6 @@ export class GameEngine {
                 if (Math.sqrt(dx*dx + dy*dy) < 40 && enemy.trySteaCoins()) {
                     this.coins = Math.max(0, this.coins - 2);
                     this.updateHUD();
-                    // coin-stolen particle (text pop) wired in Task 9
                 }
             }
         });
@@ -904,25 +638,6 @@ export class GameEngine {
             this.bossBear = null;
         }
         
-        // Update collectibles
-        this.collectibles.forEach(collectible => {
-            collectible.update();
-            
-            // Check collision with player
-            const dx = collectible.x - this.player.x;
-            const dy = collectible.y - this.player.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < 30 && !collectible.collected) {
-                collectible.collected = true;
-                this.collectItem(collectible);
-                this.createCollectionEffect(collectible.x, collectible.y, collectible.type);
-            }
-        });
-        
-        // Remove collected items
-        this.collectibles = this.collectibles.filter(item => !item.collected);
-        
         // Update particles and effects
         this.particles.forEach(particle => particle.update());
         this.particles = this.particles.filter(particle => particle.life > 0);
@@ -936,68 +651,9 @@ export class GameEngine {
         // Update camera
         this.updateCamera();
 
-        // Update UI
-        this.updateUI();
         this.updateHUD();
     }
     
-    createCollectionEffect(x, y, type) {
-        // Create celebration effect when collecting items
-        const emoji = type === 'yarn' ? '⚔️' : type === 'butterfly' ? '🛡️' : '❤️';
-        for (let i = 0; i < 8; i++) {
-            this.particles.push(new Particle(
-                x, y, emoji, 
-                Math.random() * 6.28, 
-                2 + Math.random() * 3,
-                1000
-            ));
-        }
-    }
-    
-    updateUI() {
-        // Update HP hearts
-        const heartsContainer = document.querySelector('.hearts-display') || this.createHeartsDisplay();
-        heartsContainer.innerHTML = '';
-        
-        // Add HP hearts
-        for (let i = 0; i < this.maxHP; i++) {
-            const heart = document.createElement('span');
-            heart.style.fontSize = '24px';
-            heart.textContent = i < this.currentHP ? '❤️' : '🤍';
-            heartsContainer.appendChild(heart);
-        }
-        
-        // Add shield hearts
-        for (let i = 0; i < this.shieldHP; i++) {
-            const shield = document.createElement('span');
-            shield.style.fontSize = '24px';
-            shield.textContent = '🛡️';
-            heartsContainer.appendChild(shield);
-        }
-        
-        // Update collections (elements may be removed in HTML restructure)
-        const yarnDisplay = document.getElementById('yarn-display');
-        if (yarnDisplay) yarnDisplay.textContent = this.yarnBalls;
-        const butterflyDisplay = document.getElementById('butterfly-display');
-        if (butterflyDisplay) butterflyDisplay.textContent = this.butterflies;
-        const fishDisplay = document.getElementById('fish-display');
-        if (fishDisplay) fishDisplay.textContent = this.fishTreats;
-        const timeDisplay = document.getElementById('time-display');
-        if (timeDisplay) timeDisplay.textContent = this.formatTime(this.gameTime);
-
-        // Update progress bar (legacy elements — no-op if elements removed in HTML restructure)
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        if (progressBar) progressBar.style.width = '0%';
-        if (progressText) progressText.textContent =
-            `Wave ${this.waveManager ? this.waveManager.getCurrentWave() : 0} — ${this.totalKills} kills`;
-    }
-    
-    createHeartsDisplay() {
-        const container = document.querySelector('.hearts-display');
-        return container;
-    }
-
     updateHUD() {
         // HP hearts
         const el = document.getElementById('hp-hearts');
@@ -1029,13 +685,6 @@ export class GameEngine {
         if (bestEl && pb) bestEl.textContent = `BEST ${pb.score.toLocaleString()}`;
     }
     
-    formatTime(ms) {
-        const seconds = Math.floor(ms / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-    
     pauseGame() {
         if (this.gameState === 'playing') {
             this.gameState = 'paused';
@@ -1056,10 +705,6 @@ export class GameEngine {
         if (gameContainer) gameContainer.classList.add('hidden');
         const pauseModal = document.getElementById('pause-modal');
         if (pauseModal) pauseModal.classList.add('hidden');
-        const levelCompleteModal = document.getElementById('level-complete-modal');
-        if (levelCompleteModal) levelCompleteModal.classList.add('hidden');
-        const victoryModal = document.getElementById('victory-modal');
-        if (victoryModal) victoryModal.classList.add('hidden');
         const mainMenu = document.getElementById('main-menu');
         if (mainMenu) mainMenu.classList.remove('hidden');
     }
@@ -1075,9 +720,6 @@ export class GameEngine {
         
         // Render environment
         this.environment.forEach(item => item.render(this.ctx));
-        
-        // Render collectibles
-        this.collectibles.forEach(item => item.render(this.ctx));
         
         // Render enemies
         this.enemies.forEach(enemy => enemy.render(this.ctx));
@@ -1117,7 +759,6 @@ export class GameEngine {
     }
     
     #onWaveCleared(waveNum) {
-        this.waveInProgress = false;
         this.sound.playWaveClear();
         this.#showWaveBanner(`Wave ${waveNum} — Survived! 🎉`);
         setTimeout(() => {
@@ -1175,7 +816,6 @@ export class GameEngine {
 
     #startNextWave() {
         if (this.gameState !== 'playing') return;
-        this.waveInProgress = true;
         this.waveManager.startWave();
         const w = this.waveManager.getCurrentWave();
         const waveLabelEl = document.getElementById('wave-label');
