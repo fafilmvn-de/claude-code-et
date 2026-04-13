@@ -2,6 +2,7 @@
 export class WaveManager {
     #wave = 0;
     #remaining = 0;
+    #total = 0;
     #onWaveCleared;
     #onSpawnEnemy;
     #onBossWaveStart;
@@ -15,17 +16,27 @@ export class WaveManager {
     startWave() {
         this.#wave++;
         const config = this.#buildConfig(this.#wave);
-        this.#remaining = config.total;
 
         if (this.isBossWave(this.#wave)) {
             this.#onBossWaveStart(this.#wave);
             this.#onSpawnEnemy('bear', 1);
             this.#onSpawnEnemy(this.#primaryTypeFor(this.#wave), 4);
+            this.#remaining = 5;
         } else {
             const types = this.getEnemyTypesForWave(this.#wave);
-            const perType = Math.ceil(config.total / types.length);
-            types.forEach(type => this.#onSpawnEnemy(type, perType));
+            // Distribute exactly config.total — floor+remainder avoids spawning
+            // more enemies than #remaining tracks (prevents cascade wave bug)
+            const base = Math.floor(config.total / types.length);
+            let leftover = config.total % types.length;
+            let spawned = 0;
+            types.forEach(type => {
+                const count = base + (leftover-- > 0 ? 1 : 0);
+                if (count > 0) this.#onSpawnEnemy(type, count);
+                spawned += count;
+            });
+            this.#remaining = spawned; // equals config.total exactly
         }
+        this.#total = this.#remaining;
     }
 
     enemyKilled() {
@@ -36,6 +47,7 @@ export class WaveManager {
     }
 
     getRemainingCount() { return this.#remaining; }
+    getWaveTotal() { return this.#total; }
     getCurrentWave() { return this.#wave; }
 
     isBossWave(wave) { return wave > 0 && wave % 10 === 0; }

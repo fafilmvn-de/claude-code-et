@@ -665,10 +665,10 @@ export class GameEngine {
         // Coin display
         const coinEl = document.getElementById('coin-display');
         if (coinEl) coinEl.textContent = this.coins;
-        // Wave progress
+        // Wave progress — use current wave's total, not cumulative kills
         const remaining = this.waveManager ? this.waveManager.getRemainingCount() : 0;
-        const total = remaining + this.totalKills;
-        const pct = total > 0 ? Math.min(100, ((total - remaining) / total) * 100) : 0;
+        const waveTotal = this.waveManager ? this.waveManager.getWaveTotal() : 0;
+        const pct = waveTotal > 0 ? Math.min(100, ((waveTotal - remaining) / waveTotal) * 100) : 0;
         const bar = document.getElementById('wave-progress-bar');
         if (bar) bar.style.width = pct + '%';
 
@@ -838,15 +838,9 @@ export class GameEngine {
                 case 'wolf':    enemy = new DireWolf(x, y, this.images); break;
                 case 'raccoon': enemy = new Raccoon(x, y); break;
                 case 'fox':     enemy = new Fox(x, y); break;
-                case 'bug': {
-                    // GiantBug spawns in pairs — spawn partner offset
-                    const bug = new GiantBug(x, y);
-                    this.enemies.push(bug);
-                    const bug2 = new GiantBug(x + 60, y + 60);
-                    this.enemies.push(bug2);
-                    // Already pushed both; skip the push below
-                    continue;
-                }
+                case 'bug':
+                    enemy = new GiantBug(x, y);
+                    break;
                 case 'bear': {
                     const bear = new AngryBear(x, y);
                     bear.onScreenEdgeFlash = (color) => this.#flashScreenEdge(color);
