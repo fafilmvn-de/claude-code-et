@@ -3,15 +3,20 @@ export class WaveManager {
     #wave = 0;
     #remaining = 0;
     #total = 0;
+    #spawnMult = 1;
     #onWaveCleared;
     #onSpawnEnemy;
     #onBossWaveStart;
 
-    constructor({ onWaveCleared, onSpawnEnemy, onBossWaveStart }) {
+    constructor({ onWaveCleared, onSpawnEnemy, onBossWaveStart, spawnMult = 1 }) {
         this.#onWaveCleared = onWaveCleared;
         this.#onSpawnEnemy = onSpawnEnemy;
         this.#onBossWaveStart = onBossWaveStart;
+        this.#spawnMult = spawnMult;
     }
+
+    /** Set wave counter so next startWave() begins at wave n. Used for save/resume. */
+    setStartWave(n) { this.#wave = Math.max(0, n - 1); }
 
     startWave() {
         this.#wave++;
@@ -73,7 +78,8 @@ export class WaveManager {
 
     #buildConfig(wave) {
         if (this.isBossWave(wave)) return { total: 5 }; // 1 bear + 4 normal
-        const total = Math.min(3 + Math.floor(wave * 1.5), 30 + wave); // soft cap
+        const base = Math.min(3 + Math.floor(wave * 1.5), 30 + wave); // soft cap
+        const total = Math.max(1, Math.round(base * this.#spawnMult));
         return { total };
     }
 }

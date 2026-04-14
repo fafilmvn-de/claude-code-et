@@ -16,8 +16,15 @@ import { WaveManager } from './WaveManager.js';
 import { ComboSystem } from './ComboSystem.js';
 import { ShopManager } from './ShopManager.js';
 import { LeaderboardManager } from './LeaderboardManager.js';
+import { SaveManager } from './SaveManager.js';
 
 export class GameEngine {
+    static DIFFICULTIES = {
+        easy:   { label: 'Easy',   startHp: 8, enemyHp: 0.75, enemySpeed: 0.8,  spawnMult: 0.75 },
+        normal: { label: 'Normal', startHp: 6, enemyHp: 1.0,  enemySpeed: 1.0,  spawnMult: 1.0  },
+        hard:   { label: 'Hard',   startHp: 4, enemyHp: 1.5,  enemySpeed: 1.25, spawnMult: 1.25 },
+    };
+
     constructor() {
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -25,12 +32,16 @@ export class GameEngine {
         // Enable image smoothing for better sprite rendering
         this.ctx.imageSmoothingEnabled = false; // Keep pixel art crisp
         
+        // Difficulty + save/resume
+        this.difficulty = (() => { try { return localStorage.getItem('catHero_difficulty') || 'normal'; } catch (_) { return 'normal'; } })();
+        this.saveManager = new SaveManager();
+
         // Game state
-        this.gameState = 'menu'; // menu, playing, paused, gameOver, levelComplete, victory
+        this.gameState = 'menu';
         // Player stats
-        this.maxHP = 6; // 6 HP per spec
+        this.maxHP = 6;
         this.currentHP = 6;
-        this.attackRange = 4; // Increased from 2 to make game easier
+        this.attackRange = 4;
 
         // Game objects
         this.player = null;
@@ -242,8 +253,37 @@ export class GameEngine {
     }
     
     setupUI() {
+        // Difficulty buttons
+        const diffBtns = { easy: 'diff-easy-btn', normal: 'diff-normal-btn', hard: 'diff-hard-btn' };
+        Object.entries(diffBtns).forEach(([key, id]) => {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                this.difficulty = key;
+                try { localStorage.setItem('catHero_difficulty', key); } catch (_) {}
+                this.#updateDifficultyUI();
+            });
+        });
+        this.#updateDifficultyUI();
+
+        // Continue button — shown only when a save exists
+        const continueBtn = document.getElementById('continue-btn');
+        if (continueBtn) {
+            const save = this.saveManager.load();
+            if (save) {
+                continueBtn.classList.remove('hidden');
+                const waveSpan = document.getElementById('continue-wave');
+                if (waveSpan) waveSpan.textContent = save.wave + 1;
+            }
+            continueBtn.addEventListener('click', () => {
+                const save = this.saveManager.load();
+                if (save) this.startNewGame(save);
+            });
+        }
+
         // Main menu
         document.getElementById('new-game-btn').addEventListener('click', () => {
+            this.saveManager.clear();
             this.startNewGame();
         });
         
@@ -319,36 +359,65 @@ export class GameEngine {
         });
     }
     
-    startNewGame() {
-        this.totalKills = 0;
-        this.coins = 0;
-        this.currentHP = 6; // 6 HP per spec
-        this.maxHP = 6;
-        this.usedFreeRevive = false;
-        this.bossBear = null;
+    startNewGame(resumeData = null) {
+        const diff = GameEngine.DIFFICULTIES[resumeData?.difficulty ?? this.difficulty] ?? GameEngine.DIFFICULTIES.normal;
+        if (resumeData) this.difficulty = resumeData.difficulty;
+
+        // Stats — fresh or restored
+        this.totalKills   = resumeData?.totalKills   ?? 0;
+        this.maxCombo     = resumeData?.maxCombo      ?? 0;
+        this.usedFreeRevive = resumeData?.usedFreeRevive ?? false;
+        this.maxHP        = resumeData?.maxHP         ?? diff.startHp;
+        this.currentHP    = resumeData?.currentHP     ?? diff.startHp;
+        this.coins        = resumeData?.coins         ?? 0;
+        this.attackRange  = resumeData?.attackRange   ?? 4;
+        this.attackCooldownBase = resumeData?.attackCooldownBase ?? 500;
+        this.invulnerabilityDuration = resumeData?.invulnerabilityDuration ?? 2000;
+        this.bossBear     = null;
+
         this.waveManager = new WaveManager({
-            onWaveCleared: (waveNum) => this.#onWaveCleared(waveNum),
-            onSpawnEnemy: (type, count) => this.#spawnEnemiesOfType(type, count),
-            onBossWaveStart: (waveNum) => this.#onBossWaveStart(waveNum)
+            onWaveCleared:  (waveNum) => this.#onWaveCleared(waveNum),
+            onSpawnEnemy:   (type, count) => this.#spawnEnemiesOfType(type, count),
+            onBossWaveStart:(waveNum) => this.#onBossWaveStart(waveNum),
+            spawnMult: diff.spawnMult,
         });
+        if (resumeData) this.waveManager.setStartWave(resumeData.wave + 1);
+
         this.comboSystem = new ComboSystem({
-            onChanged: (count, mult, tier, fraction) => this.#updateComboHUD(count, mult, tier, fraction),
-            onBreak: () => { this.#updateComboHUD(0, 1, 'grey', 0); this.sound.playComboBreak(); },
-            onMilestone: (mult, tier) => { this.sound.playComboMilestone(); }
+            onChanged:   (count, mult, tier, fraction) => this.#updateComboHUD(count, mult, tier, fraction),
+            onBreak:     () => { this.#updateComboHUD(0, 1, 'grey', 0); this.sound.playComboBreak(); },
+            onMilestone: () => { this.sound.playComboMilestone(); },
         });
-        this.maxCombo = 0;
-        this.shopManager = new ShopManager({
-            onPurchase: (upgrade) => this.#applyUpgrade(upgrade)
-        });
-        this.coins = 0;
+        // Re-apply catnip window extensions from saved purchases
+        const catnipCount = resumeData?.purchases?.catnip_frenzy ?? 0;
+        if (catnipCount > 0) this.comboSystem.extendWindow(500 * catnipCount);
+
+        this.shopManager = new ShopManager({ onPurchase: (upgrade) => this.#applyUpgrade(upgrade) });
+        if (resumeData) {
+            this.shopManager.restoreState({
+                purchases: resumeData.purchases,
+                coins: resumeData.coins,
+                coinsSpent: resumeData.coinsSpent,
+            });
+        }
+
         this.gameState = 'playing';
         const mainMenu = document.getElementById('main-menu');
         if (mainMenu) mainMenu.classList.add('hidden');
         const gameContainer = document.getElementById('game-container');
         if (gameContainer) gameContainer.classList.remove('hidden');
         this.initializeWorld();
-        // Start first wave after a short delay
-        setTimeout(() => this.#startNextWave(), 1000);
+
+        // Restore player speed after world init creates the player object
+        if (resumeData && this.player) this.player.speed = resumeData.playerSpeed ?? 3;
+
+        const label = resumeData
+            ? `Resuming Wave ${resumeData.wave + 1} — ${diff.label} 🐱`
+            : `Wave 1 — ${diff.label} 🐱`;
+        setTimeout(() => {
+            this.#showWaveBanner(label);
+            setTimeout(() => this.#startNextWave(), 1000);
+        }, 500);
     }
 
     initializeWorld() {
@@ -382,7 +451,7 @@ export class GameEngine {
         if (this.attackCooldown > 0 || this.isAttacking) return;
         
         this.isAttacking = true;
-        this.attackCooldown = 500; // 0.5 second cooldown
+        this.attackCooldown = this.attackCooldownBase ?? 500;
         this.player.startAttack();
         
         // Check for weapon blast (AOE attack)
@@ -498,6 +567,7 @@ export class GameEngine {
             return;
         }
 
+        this.saveManager.clear(); // run over — no point resuming a dead run
         this.gameState = 'gameOver';
         if (this.comboSystem) this.comboSystem.reset();
 
@@ -760,6 +830,8 @@ export class GameEngine {
     
     #onWaveCleared(waveNum) {
         this.sound.playWaveClear();
+        this.saveManager.save(this.#buildSaveState());
+        this.#updateContinueButton();
         this.#showWaveBanner(`Wave ${waveNum} — Survived! 🎉`);
         setTimeout(() => {
             if (this.waveManager.shouldOpenShop(waveNum)) {
@@ -829,6 +901,20 @@ export class GameEngine {
         this.bossBear = null; // will be set in #spawnEnemiesOfType
     }
 
+    #applyDifficultyToEnemy(enemy) {
+        const diff = GameEngine.DIFFICULTIES[this.difficulty] ?? GameEngine.DIFFICULTIES.normal;
+        if (diff.enemyHp !== 1) {
+            if (enemy.hp !== undefined) {
+                enemy.hp = Math.max(1, Math.round(enemy.hp * diff.enemyHp));
+                if (enemy.maxHp !== undefined) enemy.maxHp = enemy.hp;
+            } else if (enemy.currentHP !== undefined) {
+                enemy.currentHP = Math.max(1, Math.round(enemy.currentHP * diff.enemyHp));
+                if (enemy.maxHP !== undefined) enemy.maxHP = enemy.currentHP;
+            }
+        }
+        if (diff.enemySpeed !== 1 && enemy.speed !== undefined) enemy.speed *= diff.enemySpeed;
+    }
+
     #spawnEnemiesOfType(type, count) {
         for (let i = 0; i < count; i++) {
             const { x, y } = this.#randomEdgePosition();
@@ -838,18 +924,18 @@ export class GameEngine {
                 case 'wolf':    enemy = new DireWolf(x, y, this.images); break;
                 case 'raccoon': enemy = new Raccoon(x, y); break;
                 case 'fox':     enemy = new Fox(x, y); break;
-                case 'bug':
-                    enemy = new GiantBug(x, y);
-                    break;
+                case 'bug':     enemy = new GiantBug(x, y); break;
                 case 'bear': {
                     const bear = new AngryBear(x, y);
                     bear.onScreenEdgeFlash = (color) => this.#flashScreenEdge(color);
                     this.bossBear = bear;
+                    this.#applyDifficultyToEnemy(bear);
                     this.enemies.push(bear);
                     continue;
                 }
                 default: enemy = new WildBoar(x, y, this.images);
             }
+            this.#applyDifficultyToEnemy(enemy);
             this.enemies.push(enemy);
         }
     }
@@ -912,6 +998,49 @@ export class GameEngine {
             const el = document.getElementById('canvas-wrapper');
             if (el) el.style.boxShadow = '';
         }, 600);
+    }
+
+    #buildSaveState() {
+        return {
+            wave: this.waveManager.getCurrentWave(),
+            currentHP: this.currentHP,
+            maxHP: this.maxHP,
+            coins: this.shopManager.getCoins(),
+            coinsSpent: this.shopManager.getCoinsSpent(),
+            totalKills: this.totalKills,
+            maxCombo: this.maxCombo,
+            usedFreeRevive: this.usedFreeRevive,
+            difficulty: this.difficulty,
+            purchases: this.shopManager.getPurchases(),
+            attackRange: this.attackRange,
+            attackCooldownBase: this.attackCooldownBase ?? 500,
+            invulnerabilityDuration: this.invulnerabilityDuration ?? 2000,
+            playerSpeed: this.player?.speed ?? 3,
+        };
+    }
+
+    #updateDifficultyUI() {
+        const active = 'bg-green-500 text-white border-green-600';
+        const inactive = 'bg-white text-gray-600 border-gray-300 hover:border-gray-400';
+        ['easy', 'normal', 'hard'].forEach(key => {
+            const btn = document.getElementById(`diff-${key}-btn`);
+            if (!btn) return;
+            btn.className = btn.className.replace(/bg-\S+|text-\S+|border-\S+/g, '').trim();
+            btn.classList.add(...(key === this.difficulty ? active : inactive).split(' '));
+        });
+    }
+
+    #updateContinueButton() {
+        const btn = document.getElementById('continue-btn');
+        if (!btn) return;
+        const save = this.saveManager.load();
+        if (save) {
+            btn.classList.remove('hidden');
+            const span = document.getElementById('continue-wave');
+            if (span) span.textContent = save.wave + 1;
+        } else {
+            btn.classList.add('hidden');
+        }
     }
 
     gameLoop() {

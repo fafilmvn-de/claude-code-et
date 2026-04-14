@@ -60,6 +60,14 @@ export class ShopManager {
         document.getElementById('shop-coin-count').textContent = coins;
     }
 
+    getPurchases() { return { ...this.#purchases }; }
+
+    restoreState({ purchases, coins, coinsSpent }) {
+        this.#purchases = { ...Object.fromEntries(CATALOGUE.map(u => [u.id, 0])), ...purchases };
+        this.#coins = coins ?? 0;
+        this.#coinsSpent = coinsSpent ?? 0;
+    }
+
     reset() {
         this.#coins = 0;
         this.#coinsSpent = 0;

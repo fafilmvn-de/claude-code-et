@@ -191,9 +191,22 @@
                 <p class="text-gray-600 text-lg">Fight endless waves and become a legend! ⚔️</p>
             </div>
 
+            <!-- Difficulty selector -->
+            <div class="mb-4">
+                <p class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-widest">Difficulty</p>
+                <div class="flex gap-2">
+                    <button id="diff-easy-btn"   class="flex-1 py-2 px-3 rounded-xl font-bold text-sm border-2 transition-all">🌱 Easy</button>
+                    <button id="diff-normal-btn" class="flex-1 py-2 px-3 rounded-xl font-bold text-sm border-2 transition-all">⚔️ Normal</button>
+                    <button id="diff-hard-btn"   class="flex-1 py-2 px-3 rounded-xl font-bold text-sm border-2 transition-all">💀 Hard</button>
+                </div>
+            </div>
+
             <div class="space-y-4">
+                <button id="continue-btn" class="hidden w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-blue-500 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg">
+                    ▶️ Continue — Wave <span id="continue-wave">?</span>
+                </button>
                 <button id="new-game-btn" class="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-green-500 hover:to-green-600 transition-all transform hover:scale-105 bounce-gentle shadow-lg">
-                    🎮 Start Adventure!
+                    🎮 New Adventure
                 </button>
                 <button id="instructions-btn" class="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:from-purple-500 hover:to-purple-600 transition-all transform hover:scale-105 shadow-lg">
                     📖 How to Play
