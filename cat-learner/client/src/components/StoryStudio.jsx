@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { AITutor } from './AITutor.jsx';
 
-const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:3001';
+// /api/tutor is served by a Netlify Function on the same origin in production,
+// or by the Express dev server via VITE_API_BASE in local development.
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 const MAX_CHARS = 2000;
 const MIN_CHARS = 20; // require at least a sentence
 
