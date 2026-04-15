@@ -36,10 +36,10 @@ export default async (req) => {
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
-  const model  = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+  const model  = process.env.GEMINI_MODEL;
 
-  if (!apiKey) {
-    return Response.json({ error: 'AI tutor not configured (missing GEMINI_API_KEY)', model }, { status: 503 });
+  if (!apiKey || !model) {
+    return Response.json({ error: 'AI tutor not configured (missing env vars)' }, { status: 503 });
   }
 
   const prompt = `${SYSTEM_PROMPT}\n\nBài viết của học sinh:\n"""\n${text}\n"""`;
