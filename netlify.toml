@@ -1,0 +1,10 @@
+# Redirect /cat-learner and /cat-learner/ to the built React app
+[[redirects]]
+  from = "/cat-learner"
+  to   = "/cat-learner/dist/"
+  status = 301
+
+[[redirects]]
+  from = "/cat-learner/"
+  to   = "/cat-learner/dist/"
+  status = 301
