@@ -49,5 +49,5 @@ npm -w server run test         # Vitest — tutor API validation (3 tests)
 
 ## Repository
 
-- **Local**: `side-projects/cat-learner/`
-- **GitHub**: [fafilmvn-de/cat-learner](https://github.com/fafilmvn-de/cat-learner)
+- **Local**: `**/cat-learner/`
+- **GitHub**: [fafilmvn-de/claude-code-de/cat-learner](https://github.com/fafilmvn-de/claude-code-et/cat-learner)
