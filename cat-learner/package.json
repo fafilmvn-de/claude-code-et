@@ -1,0 +1,11 @@
+{
+  "name": "cat-learner",
+  "private": true,
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev:client": "npm -w client run dev",
+    "dev:server": "npm -w server run dev",
+    "test:client": "npm -w client run test",
+    "test:server": "npm -w server run test"
+  }
+}
