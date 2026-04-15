@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { AlphabetDisplay } from './components/AlphabetDisplay.jsx';
-import { TypingModule }    from './components/TypingModule.jsx';
-import { StoryStudio }     from './components/StoryStudio.jsx';
+import { HowToUse }      from './components/HowToUse.jsx';
+import { TypingModule }  from './components/TypingModule.jsx';
+import { StoryStudio }   from './components/StoryStudio.jsx';
 
-const TABS = ['alphabet', 'typing', 'story'];
+const TABS = ['guide', 'typing', 'story'];
 const TAB_LABELS = {
-  alphabet: '📖 Bảng chữ',
-  typing:   '⌨️ Gõ phím',
-  story:    '✍️ Viết văn',
+  guide:  '📖 Hướng dẫn',
+  typing: '⌨️ Gõ phím',
+  story:  '✍️ Viết văn',
 };
 
 export default function App() {
-  const [tab, setTab] = useState('alphabet');
+  const [tab, setTab] = useState('guide');
   return (
     <div className="min-h-screen bg-orange-50 font-vi">
       <header className="bg-orange-400 text-white py-4 px-6 flex items-center gap-3 shadow-md">
@@ -34,8 +34,8 @@ export default function App() {
         </nav>
       </header>
       <main className="max-w-4xl mx-auto py-8 px-4">
-        <div id="panel-alphabet" role="tabpanel" hidden={tab !== 'alphabet'}>
-          {tab === 'alphabet' && <AlphabetDisplay />}
+        <div id="panel-guide" role="tabpanel" hidden={tab !== 'guide'}>
+          {tab === 'guide' && <HowToUse />}
         </div>
         <div id="panel-typing" role="tabpanel" hidden={tab !== 'typing'}>
           {tab === 'typing' && <TypingModule />}
