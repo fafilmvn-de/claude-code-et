@@ -109,6 +109,7 @@ export class TypingEngine {
     }
 
     // Vowel modifier on known base (aa, aw, ee, oo, ow, uw)
+    // Returns 'pending' — a tone mark (s/f/r/x/j) can still follow.
     if (this.#buf.base && !this.#buf.vowelMod) {
       const pair = this.#buf.base + k;
       if (pair in TELEX_VOWEL) {
@@ -120,7 +121,7 @@ export class TypingEngine {
         }
         this.#buf.vowelMod = mod;
         const display = this.#compose();
-        return { display, status: 'ready' };
+        return { display, status: 'pending' };
       }
     }
 
@@ -155,12 +156,13 @@ export class TypingEngine {
     }
 
     // Vowel digit modifier (6,7,8,9)
+    // Returns 'pending' — a tone digit (1-5) can still follow.
     if (this.#buf.base && !this.#buf.vowelMod && VNI_VOWEL_DIGITS.has(k)) {
       const pair = this.#buf.base + k;
       if (pair in VNI_VOWEL) {
         this.#buf.vowelMod = VNI_VOWEL[pair];
         const display = this.#compose();
-        return { display, status: 'ready' };
+        return { display, status: 'pending' };
       }
       // Non-matching digit on base — emit base as-is, don't swallow it
       const prev = this.#buf.base;

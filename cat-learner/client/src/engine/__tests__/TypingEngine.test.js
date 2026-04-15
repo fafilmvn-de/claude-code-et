@@ -26,37 +26,37 @@ describe('Telex mode — vowel transformation', () => {
   test('aa → â', () => {
     const e = new TypingEngine('telex');
     e.processKey('a');
-    expect(e.processKey('a')).toEqual({ display: 'â', status: 'ready' });
+    expect(e.processKey('a')).toEqual({ display: 'â', status: 'pending' });
   });
 
   test('aw → ă', () => {
     const e = new TypingEngine('telex');
     e.processKey('a');
-    expect(e.processKey('w')).toEqual({ display: 'ă', status: 'ready' });
+    expect(e.processKey('w')).toEqual({ display: 'ă', status: 'pending' });
   });
 
   test('ee → ê', () => {
     const e = new TypingEngine('telex');
     e.processKey('e');
-    expect(e.processKey('e')).toEqual({ display: 'ê', status: 'ready' });
+    expect(e.processKey('e')).toEqual({ display: 'ê', status: 'pending' });
   });
 
   test('oo → ô', () => {
     const e = new TypingEngine('telex');
     e.processKey('o');
-    expect(e.processKey('o')).toEqual({ display: 'ô', status: 'ready' });
+    expect(e.processKey('o')).toEqual({ display: 'ô', status: 'pending' });
   });
 
   test('ow → ơ', () => {
     const e = new TypingEngine('telex');
     e.processKey('o');
-    expect(e.processKey('w')).toEqual({ display: 'ơ', status: 'ready' });
+    expect(e.processKey('w')).toEqual({ display: 'ơ', status: 'pending' });
   });
 
   test('uw → ư', () => {
     const e = new TypingEngine('telex');
     e.processKey('u');
-    expect(e.processKey('w')).toEqual({ display: 'ư', status: 'ready' });
+    expect(e.processKey('w')).toEqual({ display: 'ư', status: 'pending' });
   });
 
   test('dd → đ', () => {
@@ -112,22 +112,22 @@ describe('Telex mode — tones', () => {
 
 // ── VNI mode ─────────────────────────────────────────────────────────────
 describe('VNI mode — vowel transformation', () => {
-  test('a6 → â', () => {
+  test('a6 → â (pending — tone can follow)', () => {
     const e = new TypingEngine('vni');
     e.processKey('a');
-    expect(e.processKey('6')).toEqual({ display: 'â', status: 'ready' });
+    expect(e.processKey('6')).toEqual({ display: 'â', status: 'pending' });
   });
 
-  test('a8 → ă', () => {
+  test('a8 → ă (pending — tone can follow)', () => {
     const e = new TypingEngine('vni');
     e.processKey('a');
-    expect(e.processKey('8')).toEqual({ display: 'ă', status: 'ready' });
+    expect(e.processKey('8')).toEqual({ display: 'ă', status: 'pending' });
   });
 
-  test('o7 → ơ', () => {
+  test('o7 → ơ (pending — tone can follow)', () => {
     const e = new TypingEngine('vni');
     e.processKey('o');
-    expect(e.processKey('7')).toEqual({ display: 'ơ', status: 'ready' });
+    expect(e.processKey('7')).toEqual({ display: 'ơ', status: 'pending' });
   });
 
   test('d9 → đ', () => {
@@ -155,6 +155,53 @@ describe('VNI mode — tones', () => {
     e.processKey('a');
     e.processKey('6');
     expect(e.processKey('1')).toEqual({ display: 'ấ', status: 'ready' });
+  });
+});
+
+// ── Telex: vowel mod + tone combos (regression for premature-error bug) ──
+describe('Telex mode — vowel mod + tone', () => {
+  test('owf → ờ (ơ + huyền): no premature error after ow', () => {
+    const e = new TypingEngine('telex');
+    e.processKey('o');
+    expect(e.processKey('w')).toEqual({ display: 'ơ', status: 'pending' }); // must NOT be ready
+    expect(e.processKey('f')).toEqual({ display: 'ờ', status: 'ready' });
+  });
+
+  test('ows → ớ (ơ + sắc)', () => {
+    const e = new TypingEngine('telex');
+    e.processKey('o');
+    e.processKey('w');
+    expect(e.processKey('s')).toEqual({ display: 'ớ', status: 'ready' });
+  });
+
+  test('uwr → ử (ư + hỏi)', () => {
+    const e = new TypingEngine('telex');
+    e.processKey('u');
+    e.processKey('w');
+    expect(e.processKey('r')).toEqual({ display: 'ử', status: 'ready' });
+  });
+
+  test('aaf → ầ (â + huyền)', () => {
+    const e = new TypingEngine('telex');
+    e.processKey('a');
+    e.processKey('a');
+    expect(e.processKey('f')).toEqual({ display: 'ầ', status: 'ready' });
+  });
+});
+
+describe('VNI mode — vowel mod + tone (regression)', () => {
+  test('o72 → ờ (ơ + huyền): no premature error after o7', () => {
+    const e = new TypingEngine('vni');
+    e.processKey('o');
+    expect(e.processKey('7')).toEqual({ display: 'ơ', status: 'pending' }); // must NOT be ready
+    expect(e.processKey('2')).toEqual({ display: 'ờ', status: 'ready' });
+  });
+
+  test('u71 → ứ (ư + sắc)', () => {
+    const e = new TypingEngine('vni');
+    e.processKey('u');
+    e.processKey('7');
+    expect(e.processKey('1')).toEqual({ display: 'ứ', status: 'ready' });
   });
 });
 
@@ -186,10 +233,10 @@ describe('compare()', () => {
 
 // ── uppercase input ─────────────────────────────────────────────────────
 describe('uppercase input in Telex', () => {
-  test('AA → â (lowercased internally)', () => {
+  test('AA → â (lowercased internally, pending — tone can follow)', () => {
     const e = new TypingEngine('telex');
     e.processKey('A');
-    expect(e.processKey('A')).toEqual({ display: 'â', status: 'ready' });
+    expect(e.processKey('A')).toEqual({ display: 'â', status: 'pending' });
   });
 
   test('AS → á (uppercase tone key)', () => {
