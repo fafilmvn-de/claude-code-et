@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { AITutor } from './AITutor.jsx';
 
-const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 const MAX_CHARS = 2000;
 const MIN_CHARS = 20; // require at least a sentence
 
