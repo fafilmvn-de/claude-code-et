@@ -1,0 +1,223 @@
+// cat-learner/client/src/data/lessonData.js
+// UTF-8. All text is NFC-normalized Vietnamese.
+// Each level has an ordered array of lessons.
+// Each lesson has an array of screens (what the user types in one go).
+// Beginner: single words. Intermediate: short phrases.
+// Advanced: full sentences (variant='line'). Expert: short paragraphs (variant='line').
+
+export const LEVELS = [
+  {
+    id: 'beginner',
+    name: 'Người mới bắt đầu',
+    emoji: '🌱',
+    description: 'Từ đơn giản, 1–2 âm tiết',
+    variant: 'boxes',
+    lessons: [
+      {
+        id: 'b1',
+        title: 'Bài 1 – Đồ ăn',
+        screens: [
+          { text: 'quả táo',   emoji: '🍎', hint: 'apple' },
+          { text: 'quả cam',   emoji: '🍊', hint: 'orange' },
+          { text: 'quả chuối', emoji: '🍌', hint: 'banana' },
+          { text: 'quả xoài',  emoji: '🥭', hint: 'mango' },
+          { text: 'quả nho',   emoji: '🍇', hint: 'grapes' },
+          { text: 'quả dâu',   emoji: '🍓', hint: 'strawberry' },
+          { text: 'quả lê',    emoji: '🍐', hint: 'pear' },
+          { text: 'bát cơm',   emoji: '🍚', hint: 'bowl of rice' },
+          { text: 'cốc nước',  emoji: '🥤', hint: 'glass of water' },
+          { text: 'quả dưa',   emoji: '🍈', hint: 'melon' },
+        ],
+      },
+      {
+        id: 'b2',
+        title: 'Bài 2 – Động vật',
+        screens: [
+          { text: 'con mèo',  emoji: '🐱', hint: 'cat' },
+          { text: 'con chó',  emoji: '🐶', hint: 'dog' },
+          { text: 'con cá',   emoji: '🐟', hint: 'fish' },
+          { text: 'con gà',   emoji: '🐔', hint: 'chicken' },
+          { text: 'con bò',   emoji: '🐄', hint: 'cow' },
+          { text: 'con vịt',  emoji: '🦆', hint: 'duck' },
+          { text: 'con heo',  emoji: '🐷', hint: 'pig' },
+          { text: 'con chim', emoji: '🐦', hint: 'bird' },
+          { text: 'con bướm', emoji: '🦋', hint: 'butterfly' },
+          { text: 'con ong',  emoji: '🐝', hint: 'bee' },
+        ],
+      },
+      {
+        id: 'b3',
+        title: 'Bài 3 – Đồ vật',
+        screens: [
+          { text: 'cái bút',    emoji: '✏️',  hint: 'pen' },
+          { text: 'cái bàn',    emoji: '🪵',  hint: 'table' },
+          { text: 'cái ghế',    emoji: '🪑',  hint: 'chair' },
+          { text: 'cái mũ',     emoji: '🎩',  hint: 'hat' },
+          { text: 'cái áo',     emoji: '👕',  hint: 'shirt' },
+          { text: 'cái quần',   emoji: '👖',  hint: 'pants' },
+          { text: 'đôi giày',   emoji: '👟',  hint: 'shoes' },
+          { text: 'quyển sách', emoji: '📚',  hint: 'book' },
+          { text: 'ngôi nhà',   emoji: '🏠',  hint: 'house' },
+          { text: 'trường học', emoji: '🏫',  hint: 'school' },
+        ],
+      },
+      {
+        id: 'b4',
+        title: 'Bài 4 – Thiên nhiên',
+        screens: [
+          { text: 'bầu trời',  emoji: '🌤️', hint: 'sky' },
+          { text: 'bông hoa',  emoji: '🌸', hint: 'flower' },
+          { text: 'cây cối',   emoji: '🌳', hint: 'tree' },
+          { text: 'ngôi sao',  emoji: '⭐', hint: 'star' },
+          { text: 'mặt trăng', emoji: '🌙', hint: 'moon' },
+          { text: 'đám mây',   emoji: '☁️', hint: 'cloud' },
+          { text: 'cơn gió',   emoji: '💨', hint: 'wind' },
+          { text: 'mưa rơi',   emoji: '🌧️', hint: 'rain' },
+          { text: 'ngọn núi',  emoji: '⛰️', hint: 'mountain' },
+          { text: 'dòng sông', emoji: '🌊', hint: 'river' },
+        ],
+      },
+      {
+        id: 'b5',
+        title: 'Bài 5 – Nơi chốn',
+        screens: [
+          { text: 'con đường', emoji: '🛤️', hint: 'road' },
+          { text: 'xe đạp',    emoji: '🚲', hint: 'bicycle' },
+          { text: 'ô tô',      emoji: '🚗', hint: 'car' },
+          { text: 'máy bay',   emoji: '✈️', hint: 'airplane' },
+          { text: 'con thuyền',emoji: '⛵', hint: 'boat' },
+          { text: 'công viên', emoji: '🌿', hint: 'park' },
+          { text: 'bãi biển',  emoji: '🏖️', hint: 'beach' },
+          { text: 'khu rừng',  emoji: '🌲', hint: 'forest' },
+          { text: 'vườn hoa',  emoji: '🌻', hint: 'garden' },
+          { text: 'cái cầu',   emoji: '🌉', hint: 'bridge' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'intermediate',
+    name: 'Trung cấp',
+    emoji: '🌿',
+    description: 'Cụm từ ngắn, 3–5 từ',
+    variant: 'boxes',
+    lessons: [
+      {
+        id: 'i1',
+        title: 'Bài 1 – Gia đình',
+        screens: [
+          { text: 'ông bà yêu cháu',    emoji: '👴', hint: 'grandparents love grandchild' },
+          { text: 'mẹ nấu cơm ngon',    emoji: '👩‍🍳', hint: 'mom cooks delicious rice' },
+          { text: 'bố đi làm về',       emoji: '👨', hint: 'dad is coming home from work' },
+          { text: 'em bé đáng yêu',     emoji: '👶', hint: 'baby is adorable' },
+          { text: 'chị gái học giỏi',   emoji: '👧', hint: 'older sister studies well' },
+          { text: 'anh trai vui vẻ',    emoji: '👦', hint: 'older brother is cheerful' },
+          { text: 'cả nhà hạnh phúc',   emoji: '🏠', hint: 'the whole family is happy' },
+          { text: 'gia đình yêu thương',emoji: '❤️', hint: 'loving family' },
+        ],
+      },
+      {
+        id: 'i2',
+        title: 'Bài 2 – Trường học',
+        screens: [
+          { text: 'học sinh chăm học',  emoji: '📚', hint: 'students study diligently' },
+          { text: 'thầy giáo dạy hay',  emoji: '👨‍🏫', hint: 'teacher teaches well' },
+          { text: 'bạn bè thân thiết',  emoji: '🤝', hint: 'close friends' },
+          { text: 'lớp học sạch đẹp',   emoji: '🏫', hint: 'clean and nice classroom' },
+          { text: 'viết chữ thật đẹp',  emoji: '✏️', hint: 'write letters beautifully' },
+          { text: 'đọc sách mỗi ngày',  emoji: '📖', hint: 'read books every day' },
+          { text: 'thi đua học tốt',    emoji: '🏅', hint: 'compete to study well' },
+          { text: 'trường học vui vẻ',  emoji: '😊', hint: 'school is fun' },
+        ],
+      },
+      {
+        id: 'i3',
+        title: 'Bài 3 – Thiên nhiên',
+        screens: [
+          { text: 'bầu trời xanh lam',   emoji: '🌤️', hint: 'blue sky' },
+          { text: 'mặt trời sáng tỏ',    emoji: '☀️', hint: 'bright sun' },
+          { text: 'mưa rơi nhè nhẹ',     emoji: '🌧️', hint: 'gentle rain' },
+          { text: 'cây cối xanh tươi',   emoji: '🌳', hint: 'lush green trees' },
+          { text: 'bông hoa tươi đẹp',   emoji: '🌸', hint: 'beautiful fresh flower' },
+          { text: 'ngọn núi hùng vĩ',    emoji: '⛰️', hint: 'majestic mountain' },
+          { text: 'dòng sông trong mát', emoji: '🌊', hint: 'cool clear river' },
+          { text: 'biển cả bao la',      emoji: '🏖️', hint: 'vast ocean' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'advanced',
+    name: 'Nâng cao',
+    emoji: '🌺',
+    description: 'Câu hoàn chỉnh',
+    variant: 'line',
+    lessons: [
+      {
+        id: 'a1',
+        title: 'Bài 1 – Cuộc sống hàng ngày',
+        screens: [
+          { text: 'Con mèo nhỏ ngủ trên chiếc ghế gỗ.' },
+          { text: 'Hôm nay trời nắng đẹp và trong xanh.' },
+          { text: 'Em bé đang học đọc những chữ cái đầu tiên.' },
+          { text: 'Bạn Nam đi học sớm mỗi buổi sáng.' },
+          { text: 'Cây táo trong vườn đang ra hoa trắng muốt.' },
+          { text: 'Ông bà rất vui khi cháu về thăm.' },
+        ],
+      },
+      {
+        id: 'a2',
+        title: 'Bài 2 – Thiên nhiên',
+        screens: [
+          { text: 'Bầu trời xanh biếc với những đám mây trắng bồng bềnh.' },
+          { text: 'Những chú chim hót líu lo trên cành cây xanh.' },
+          { text: 'Mưa rơi lộp độp trên mái nhà lúc đêm khuya.' },
+          { text: 'Con suối trong xanh chảy qua vườn nhà bà nội.' },
+          { text: 'Những bông hoa dại nở rộ bên vệ đường làng.' },
+          { text: 'Mặt trời mọc đỏ rực phía chân trời xa xa.' },
+        ],
+      },
+      {
+        id: 'a3',
+        title: 'Bài 3 – Kể chuyện',
+        screens: [
+          { text: 'Ngày xưa có một cô bé tên là Hồng.' },
+          { text: 'Cô bé sống cùng ông bà trong ngôi nhà nhỏ.' },
+          { text: 'Mỗi sáng cô dậy sớm để cho gà ăn.' },
+          { text: 'Hôm đó trên đường đi học cô gặp một chú mèo.' },
+          { text: 'Chú mèo có bộ lông vàng óng và đôi mắt xanh.' },
+          { text: 'Cô bé đặt tên cho chú mèo là Miu.' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'expert',
+    name: 'Chuyên gia',
+    emoji: '🏆',
+    description: 'Đoạn văn ngắn',
+    variant: 'line',
+    lessons: [
+      {
+        id: 'e1',
+        title: 'Bài 1 – Câu chuyện',
+        screens: [
+          { text: 'Mỗi buổi sáng, Lan thức dậy sớm và nhìn ra cửa sổ. Cô bé thấy những chú chim đang hót ca vui vẻ trên cành cây trước nhà.' },
+          { text: 'Thầy giáo Minh dạy lớp ba rất hay. Thầy hay kể chuyện và cho học sinh chơi trò chơi sau giờ học.' },
+          { text: 'Con đường làng thân quen trải dài qua những cánh đồng xanh. Hai bên đường là hàng tre xanh rì rào trong gió.' },
+          { text: 'Buổi tối, cả nhà quây quần bên mâm cơm ấm cúng. Bố kể chuyện ngày đi làm, mẹ hỏi thăm bài vở của các con.' },
+        ],
+      },
+      {
+        id: 'e2',
+        title: 'Bài 2 – Mô tả',
+        screens: [
+          { text: 'Mùa hè đến, ve sầu cất tiếng kêu râm ran khắp nơi. Những đứa trẻ ùa ra sân chơi đùa dưới bóng mát của những tán cây.' },
+          { text: 'Chợ quê họp mỗi sáng sớm, người bán kẻ mua tấp nập. Mùi thơm của bánh cuốn nóng hổi lan tỏa khắp cả khu chợ nhỏ.' },
+          { text: 'Bà nội ngồi trên hiên nhà, tay thoăn thoắt đan chiếc giỏ tre. Thỉnh thoảng bà lại nhìn ra vườn và mỉm cười một mình.' },
+          { text: 'Sau cơn mưa, bầu trời trở nên trong xanh và mát mẻ. Những giọt mưa còn đọng trên lá cây lấp lánh như những hạt ngọc.' },
+        ],
+      },
+    ],
+  },
+];
