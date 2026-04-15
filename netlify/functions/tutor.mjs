@@ -39,7 +39,7 @@ export default async (req) => {
   const model  = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
 
   if (!apiKey) {
-    return Response.json({ error: 'AI tutor not configured (missing GEMINI_API_KEY)' }, { status: 503 });
+    return Response.json({ error: 'AI tutor not configured (missing GEMINI_API_KEY)', model }, { status: 503 });
   }
 
   const prompt = `${SYSTEM_PROMPT}\n\nBài viết của học sinh:\n"""\n${text}\n"""`;
@@ -61,7 +61,8 @@ export default async (req) => {
     if (!res.ok) {
       const msg = data?.error?.message || 'Gemini API error';
       console.error('Gemini error:', res.status, msg);
-      return Response.json({ error: 'AI tutor unavailable, please try again.' }, { status: 502 });
+      // Temporary: return actual error for debugging
+      return Response.json({ error: `Gemini ${res.status}: ${msg}` }, { status: 502 });
     }
 
     const feedback = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -72,7 +73,8 @@ export default async (req) => {
     return Response.json({ feedback });
   } catch (err) {
     console.error('Fetch error:', err.message);
-    return Response.json({ error: 'AI tutor unavailable, please try again.' }, { status: 502 });
+    // Temporary: return actual error for debugging
+    return Response.json({ error: `Fetch failed: ${err.message}` }, { status: 502 });
   }
 };
 
