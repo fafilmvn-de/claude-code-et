@@ -36,7 +36,7 @@ export default async (req) => {
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
-  const model  = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model  = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
 
   if (!apiKey) {
     return Response.json({ error: 'AI tutor not configured (missing GEMINI_API_KEY)' }, { status: 503 });
