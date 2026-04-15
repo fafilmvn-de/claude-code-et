@@ -35,6 +35,24 @@ describe('useTypingEngine', () => {
     expect(result.current.matched).toBe(false);
   });
 
+  test('Telex: typing plain u when target is u auto-commits (not stuck pending)', () => {
+    const { result } = renderHook(() =>
+      useTypingEngine({ mode: 'telex', targetGrapheme: 'u' })
+    );
+    act(() => { result.current.processKey('u'); });
+    expect(result.current.matched).toBe(true);
+    expect(result.current.status).toBe('ready');
+  });
+
+  test('Telex: typing u when target is ư stays pending (no false commit)', () => {
+    const { result } = renderHook(() =>
+      useTypingEngine({ mode: 'telex', targetGrapheme: 'ư' })
+    );
+    act(() => { result.current.processKey('u'); });
+    expect(result.current.matched).toBe(null);
+    expect(result.current.status).toBe('pending');
+  });
+
   test('reset clears display and status back to idle', () => {
     const { result } = renderHook(() =>
       useTypingEngine({ mode: 'direct', targetGrapheme: 'a' })

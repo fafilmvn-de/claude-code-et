@@ -23,13 +23,22 @@ export function useTypingEngine({ mode, targetGrapheme }) {
   }, [mode]);
 
   const processKey = useCallback((key) => {
-    setMatched(null); // I9 fix: reset matched before each keystroke
+    setMatched(null); // reset matched before each keystroke
     const engine = engineRef.current;
     const result = engine.processKey(key);
     setDisplay(result.display);
-    setStatus(result.status);
+
     if (result.status === 'ready') {
+      setStatus('ready');
       setMatched(engine.compare(result.display, targetGrapheme));
+    } else if (engine.compare(result.display, targetGrapheme)) {
+      // Pending but display already matches target — auto-commit.
+      // e.g. typing plain 'u' in Telex when target is 'u' (not 'ư'),
+      // or plain 'a' when target is 'a' (not 'â'/'á'/etc.)
+      setStatus('ready');
+      setMatched(true);
+    } else {
+      setStatus(result.status);
     }
   }, [targetGrapheme]);
 
