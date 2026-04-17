@@ -121,14 +121,25 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
     if (e.key.length !== 1) return;
     e.preventDefault();
 
-    // ── Case A: cursor is past all graphemes — awaiting deferred tone ──────
-    if (deferredToneRef.current !== null && cursorRef.current >= graphemes.length) {
+    // ── Case A: a deferred tone is pending — intercept tone keys ──────────
+    // Fires any time deferredToneRef is set, not just at end of target.
+    // This lets users type "chiếc" mid-sentence as c-h-i-e-e-c-s — pressing
+    // 's' after the trailing 'c' resolves the tentative 'ế' slot even though
+    // the cursor has only advanced to the next space/char, not past the end.
+    //
+    // Exception: if the engine already has an active pending buffer (e.g. the
+    // user is mid-composing another 'ê' → 'ế' later in the sentence), we let
+    // normal processing handle the tone so it applies to the current buffer,
+    // not the stale earlier slot.
+    if (deferredToneRef.current !== null) {
       const dt = deferredToneRef.current;
       const toneChar = mode === 'telex'
         ? TELEX_TONE_CHARS[e.key.toLowerCase()]
         : mode === 'vni' ? VNI_TONE_CHARS[e.key] : null;
 
-      if (toneChar) {
+      const activePending = statusRef.current === 'pending' && displayRef.current !== '';
+
+      if (toneChar && !activePending) {
         const composed = (dt.displaySnapshot + toneChar).normalize('NFC');
         const isCorrect = composed.toLowerCase() ===
           graphemes[dt.slotIdx].normalize('NFC').toLowerCase();
@@ -142,8 +153,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
             next[dt.slotIdx] = 'correct';
             return next;
           });
-          const tid = setTimeout(() => onCompleteRef.current(), 400);
-          timeoutRefs.current.push(tid);
+          // Only fire onComplete if the cursor has also reached end of target.
+          if (cursorRef.current >= graphemes.length) {
+            const tid = setTimeout(() => onCompleteRef.current(), 400);
+            timeoutRefs.current.push(tid);
+          }
         } else {
           setSlotStates(prev => {
             const next = [...prev];
@@ -161,11 +175,16 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
           }, 500);
           timeoutRefs.current.push(tid);
         }
+        return;
       }
-      // Non-tone key while awaiting deferred tone: deliberately ignored.
-      // Accuracy metrics are not penalised for unrecognised keys in this state
-      // because the user's intent is clear (they're finishing a word mid-tone).
-      return;
+
+      // Non-tone key at end of target: ignore (user's intent is clear, they're
+      // finishing the word and the tone key just hasn't been pressed yet).
+      if (!toneChar && cursorRef.current >= graphemes.length) {
+        return;
+      }
+      // Otherwise fall through to normal processing (continue the sentence,
+      // or let the active pending buffer receive the tone).
     }
 
     // ── Deferred-tone detection: pending display matches target sans tone ──

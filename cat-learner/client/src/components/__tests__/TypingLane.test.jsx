@@ -76,6 +76,45 @@ describe('TypingLane — deferred tone (Telex)', () => {
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 
+  test('chieecs resolves mid-sentence chiếc (tone after trailing consonant, cursor not at end)', async () => {
+    const onComplete = vi.fn();
+    render(
+      <TypingLane
+        target="trên chiếc ghế"
+        mode="telex"
+        variant="line"
+        onComplete={onComplete}
+      />
+    );
+
+    // Type "trên " — 't','r','e','e','n',' '
+    pressKey('t'); pressKey('r');
+    pressKey('e'); pressKey('e'); // display='ê' matches target 'ê' (no tone on ê here) — auto-commit
+    pressKey('n'); pressKey(' ');
+
+    // Type "chiế" base without tone: c,h,i,e,e (display='ê' on 'ế' slot, pending)
+    pressKey('c'); pressKey('h'); pressKey('i');
+    pressKey('e'); pressKey('e');
+
+    // 'c' triggers deferred tone (ê → ế pending), cursor advances past the 'c' of chiếc into the space
+    pressKey('c');
+    await act(async () => {});
+
+    expect(onComplete).not.toHaveBeenCalled();
+
+    // 's' (sắc) should resolve the deferred tone even though cursor is mid-sentence
+    pressKey('s');
+    await act(async () => {});
+
+    // Finish the sentence: ' ghế' → ' ','g','h','e','e','s'
+    pressKey(' '); pressKey('g'); pressKey('h');
+    pressKey('e'); pressKey('e'); pressKey('s');
+
+    act(() => vi.advanceTimersByTime(500));
+
+    expect(onComplete).toHaveBeenCalledTimes(1);
+  });
+
   test('vuwowfn (tone before n) still works — no regression', async () => {
     const onComplete = vi.fn();
     render(
