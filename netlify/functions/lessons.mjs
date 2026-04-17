@@ -113,6 +113,13 @@ export default async (req) => {
     return Response.json({ error: 'levelId, theme, screenCount, and variant are required' }, { status: 400 });
   }
 
+  if (typeof screenCount !== 'number' || screenCount < 1 || screenCount > 50) {
+    return Response.json({ error: 'screenCount must be a positive number (max 50)' }, { status: 400 });
+  }
+  if (typeof theme !== 'string' || theme.length === 0 || theme.length > 200) {
+    return Response.json({ error: 'theme must be a non-empty string (max 200 chars)' }, { status: 400 });
+  }
+
   if (!PROMPT_TEMPLATES[levelId]) {
     return Response.json({ error: `Unknown levelId: ${levelId}` }, { status: 400 });
   }
