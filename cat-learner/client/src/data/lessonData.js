@@ -16,6 +16,8 @@ export const LEVELS = [
       {
         id: 'b1',
         title: 'Bài 1 – Đồ ăn',
+        theme: 'Vietnamese food items, fruits, and common foods',
+        screenCount: 10,
         screens: [
           { text: 'quả táo',   emoji: '🍎', hint: 'apple' },
           { text: 'quả cam',   emoji: '🍊', hint: 'orange' },
@@ -32,6 +34,8 @@ export const LEVELS = [
       {
         id: 'b2',
         title: 'Bài 2 – Động vật',
+        theme: 'Vietnamese animals, pets, and farm animals',
+        screenCount: 10,
         screens: [
           { text: 'con mèo',  emoji: '🐱', hint: 'cat' },
           { text: 'con chó',  emoji: '🐶', hint: 'dog' },
@@ -48,6 +52,8 @@ export const LEVELS = [
       {
         id: 'b3',
         title: 'Bài 3 – Đồ vật',
+        theme: 'Vietnamese household objects and school supplies',
+        screenCount: 10,
         screens: [
           { text: 'cái bút',    emoji: '✏️',  hint: 'pen' },
           { text: 'cái bàn',    emoji: '🪵',  hint: 'table' },
@@ -64,6 +70,8 @@ export const LEVELS = [
       {
         id: 'b4',
         title: 'Bài 4 – Thiên nhiên',
+        theme: 'Vietnamese nature, weather, and outdoor scenery',
+        screenCount: 10,
         screens: [
           { text: 'bầu trời',  emoji: '🌤️', hint: 'sky' },
           { text: 'bông hoa',  emoji: '🌸', hint: 'flower' },
@@ -80,6 +88,8 @@ export const LEVELS = [
       {
         id: 'b5',
         title: 'Bài 5 – Nơi chốn',
+        theme: 'Vietnamese places, transportation, and locations',
+        screenCount: 10,
         screens: [
           { text: 'con đường', emoji: '🛤️', hint: 'road' },
           { text: 'xe đạp',    emoji: '🚲', hint: 'bicycle' },
@@ -105,6 +115,8 @@ export const LEVELS = [
       {
         id: 'i1',
         title: 'Bài 1 – Gia đình',
+        theme: 'Vietnamese family relationships and home life',
+        screenCount: 8,
         screens: [
           { text: 'ông bà yêu cháu',    emoji: '👴', hint: 'grandparents love grandchild' },
           { text: 'mẹ nấu cơm ngon',    emoji: '👩‍🍳', hint: 'mom cooks delicious rice' },
@@ -119,6 +131,8 @@ export const LEVELS = [
       {
         id: 'i2',
         title: 'Bài 2 – Trường học',
+        theme: 'Vietnamese school, studying, and classroom activities',
+        screenCount: 8,
         screens: [
           { text: 'học sinh chăm học',  emoji: '📚', hint: 'students study diligently' },
           { text: 'thầy giáo dạy hay',  emoji: '👨‍🏫', hint: 'teacher teaches well' },
@@ -133,6 +147,8 @@ export const LEVELS = [
       {
         id: 'i3',
         title: 'Bài 3 – Thiên nhiên',
+        theme: 'Vietnamese nature and weather descriptions',
+        screenCount: 8,
         screens: [
           { text: 'bầu trời xanh lam',   emoji: '🌤️', hint: 'blue sky' },
           { text: 'mặt trời sáng tỏ',    emoji: '☀️', hint: 'bright sun' },
@@ -156,6 +172,8 @@ export const LEVELS = [
       {
         id: 'a1',
         title: 'Bài 1 – Cuộc sống hàng ngày',
+        theme: 'Vietnamese daily life activities and routines',
+        screenCount: 6,
         screens: [
           { text: 'Con mèo nhỏ ngủ trên chiếc ghế gỗ.' },
           { text: 'Hôm nay trời nắng đẹp và trong xanh.' },
@@ -168,6 +186,8 @@ export const LEVELS = [
       {
         id: 'a2',
         title: 'Bài 2 – Thiên nhiên',
+        theme: 'Vietnamese nature descriptions and outdoor scenes',
+        screenCount: 6,
         screens: [
           { text: 'Bầu trời xanh biếc với những đám mây trắng bồng bềnh.' },
           { text: 'Những chú chim hót líu lo trên cành cây xanh.' },
@@ -180,6 +200,8 @@ export const LEVELS = [
       {
         id: 'a3',
         title: 'Bài 3 – Kể chuyện',
+        theme: "Vietnamese children's story narrative sentences",
+        screenCount: 6,
         screens: [
           { text: 'Ngày xưa có một cô bé tên là Hồng.' },
           { text: 'Cô bé sống cùng ông bà trong ngôi nhà nhỏ.' },
@@ -201,6 +223,8 @@ export const LEVELS = [
       {
         id: 'e1',
         title: 'Bài 1 – Câu chuyện',
+        theme: "Vietnamese children's story paragraphs about daily life",
+        screenCount: 4,
         screens: [
           { text: 'Mỗi buổi sáng, Lan thức dậy sớm và nhìn ra cửa sổ. Cô bé thấy những chú chim đang hót ca vui vẻ trên cành cây trước nhà.' },
           { text: 'Thầy giáo Minh dạy lớp ba rất hay. Thầy hay kể chuyện và cho học sinh chơi trò chơi sau giờ học.' },
@@ -211,6 +235,8 @@ export const LEVELS = [
       {
         id: 'e2',
         title: 'Bài 2 – Mô tả',
+        theme: 'Vietnamese descriptive paragraphs about places and seasons',
+        screenCount: 4,
         screens: [
           { text: 'Mùa hè đến, ve sầu cất tiếng kêu râm ran khắp nơi. Những đứa trẻ ùa ra sân chơi đùa dưới bóng mát của những tán cây.' },
           { text: 'Chợ quê họp mỗi sáng sớm, người bán kẻ mua tấp nập. Mùi thơm của bánh cuốn nóng hổi lan tỏa khắp cả khu chợ nhỏ.' },
