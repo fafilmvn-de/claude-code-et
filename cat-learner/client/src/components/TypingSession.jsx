@@ -2,20 +2,65 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { TypingLane } from './TypingLane.jsx';
 
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
+const FETCH_TIMEOUT_MS = 10_000;
+
 /**
  * Props:
- *   lesson   {{ id, title, screens: Array<{text, emoji?, hint?}> }}
+ *   lesson   {{ id, title, theme, screenCount, screens: Array<{text, emoji?, hint?}> }}
+ *   levelId  {string} — 'beginner' | 'intermediate' | 'advanced' | 'expert'
  *   variant  {'boxes'|'line'}
  *   mode     {'telex'|'vni'|'direct'}
- *   onComplete  {fn(stats)} — called with session stats when all screens done
- *   onBack      {fn()}      — called when user clicks "← Quay lại"
- *
- * stats shape: { wpm, accuracy, elapsedMs, correctKeystrokes, totalKeystrokes, lessonTitle }
- * WPM = Math.round((correctKeystrokes / 5) / (elapsedMs / 60000)), min elapsed 1000ms
- * accuracy = Math.round(correctKeystrokes / totalKeystrokes * 100), or 100 if no keystrokes
+ *   onComplete  {fn(stats)}
+ *   onBack      {fn()}
  */
-export function TypingSession({ lesson, variant, mode, onComplete, onBack }) {
+export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBack }) {
   const [screenIndex, setScreenIndex] = useState(0);
+
+  // AI-generated screens (null = not yet loaded)
+  const [aiScreens, setAiScreens]   = useState(null);
+  const [aiLoading, setAiLoading]   = useState(true);
+  const fetchAbortRef = useRef(null);
+
+  // Fetch AI-generated screens on mount; fall back silently on error
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    fetchAbortRef.current = controller;
+
+    fetch(`${API_BASE}/api/lessons`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        levelId,
+        theme:       lesson.theme,
+        screenCount: lesson.screenCount,
+        variant,
+      }),
+      signal: controller.signal,
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data.screens) && data.screens.length > 0) {
+          setAiScreens(data.screens);
+        }
+      })
+      .catch(() => {
+        // Network error, timeout, or API error — fall back to hardcoded screens
+      })
+      .finally(() => {
+        clearTimeout(timeoutId);
+        setAiLoading(false);
+      });
+
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
+  }, [lesson.id]); // re-fetch only if lesson changes
+
+  // The actual screens for this session: AI-generated if available, else hardcoded fallback
+  const screens = aiScreens ?? lesson.screens;
 
   // Metrics — mutable refs to avoid stale closure issues in callbacks
   const startTimeRef         = useRef(null);
@@ -29,7 +74,6 @@ export function TypingSession({ lesson, variant, mode, onComplete, onBack }) {
 
   const intervalRef = useRef(null);
 
-  // Start interval on first keystroke
   const ensureTimerRunning = useCallback(() => {
     if (startTimeRef.current !== null) return;
     startTimeRef.current = Date.now();
@@ -56,7 +100,7 @@ export function TypingSession({ lesson, variant, mode, onComplete, onBack }) {
 
   const handleScreenComplete = useCallback(() => {
     const nextIndex = screenIndex + 1;
-    if (nextIndex >= lesson.screens.length) {
+    if (nextIndex >= screens.length) {
       if (intervalRef.current) clearInterval(intervalRef.current);
       const elapsedMs = startTimeRef.current ? Date.now() - startTimeRef.current : 1000;
       const elapsed   = Math.max(elapsedMs, 1000);
@@ -68,10 +112,32 @@ export function TypingSession({ lesson, variant, mode, onComplete, onBack }) {
     } else {
       setScreenIndex(nextIndex);
     }
-  }, [screenIndex, lesson, onComplete]);
+  }, [screenIndex, screens.length, lesson.title, onComplete]);
 
-  const screen = lesson.screens[screenIndex];
-  const total  = lesson.screens.length;
+  // Loading state — show spinner while fetching AI screens
+  if (aiLoading) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={onBack}
+            className="text-sm text-gray-400 hover:text-gray-600 transition-colors font-vi"
+            aria-label="Quay lại chọn bài"
+          >
+            ← Quay lại
+          </button>
+          <h2 className="text-lg font-bold text-orange-500 font-vi truncate">{lesson.title}</h2>
+        </div>
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <div className="w-10 h-10 border-4 border-orange-300 border-t-orange-500 rounded-full animate-spin" />
+          <p className="text-gray-400 font-vi text-sm">Miu đang chuẩn bị bài mới…</p>
+        </div>
+      </div>
+    );
+  }
+
+  const screen = screens[screenIndex];
+  const total  = screens.length;
 
   const mm = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
   const ss = String(elapsedSec % 60).padStart(2, '0');

@@ -57,6 +57,7 @@ export function TypingModule() {
         <TypingSession
           key={`${selectedLesson.id}-${Date.now()}`}
           lesson={selectedLesson}
+          levelId={selectedLevel.id}
           variant={selectedLevel.variant}
           mode={mode}
           onComplete={handleSessionComplete}
