@@ -22,6 +22,8 @@
  * immediately as status:'ready' — no buffering needed.
  */
 
+import { TELEX_TONE_CHARS as TELEX_TONE, VNI_TONE_CHARS as VNI_TONE } from './toneUtils.js';
+
 // Telex: modifier key → combining diacritic (Unicode combining character)
 const TELEX_VOWEL = {
   aa: '\u0302', // circumflex  â
@@ -33,14 +35,6 @@ const TELEX_VOWEL = {
   dd: null,     // special-cased: just replaces 'd' with 'đ'
 };
 
-const TELEX_TONE = {
-  s: '\u0301', // sắc
-  f: '\u0300', // huyền
-  r: '\u0309', // hỏi
-  x: '\u0303', // ngã
-  j: '\u0323', // nặng
-};
-
 // VNI: digit modifier → combining diacritic
 const VNI_VOWEL = {
   a6: '\u0302', a8: '\u0306',
@@ -48,11 +42,6 @@ const VNI_VOWEL = {
   o6: '\u0302', o7: '\u031B',
   u7: '\u031B',
   d9: null, // 'đ' replacement
-};
-
-const VNI_TONE = {
-  '1': '\u0301', '2': '\u0300', '3': '\u0309',
-  '4': '\u0303', '5': '\u0323',
 };
 
 const TELEX_VOWEL_BASES = new Set(['a','e','o','u','d']);

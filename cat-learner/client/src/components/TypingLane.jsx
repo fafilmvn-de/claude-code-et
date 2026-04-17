@@ -47,10 +47,12 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
   statusRef.current  = status;
 
   useEffect(() => {
+    timeoutRefs.current.forEach(id => clearTimeout(id));
+    timeoutRefs.current = [];
     deferredToneRef.current = null;
     setPendingReplayKey(null);
     setCursor(0);
-    setSlotStates(splitGraphemes(target.normalize('NFC')).map(() => 'idle'));
+    setSlotStates(graphemes.map(() => 'idle'));
     reset();
     hiddenInputRef.current?.focus();
   }, [target, reset]);
