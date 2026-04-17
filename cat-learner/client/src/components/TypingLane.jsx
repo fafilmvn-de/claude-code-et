@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { splitGraphemes } from '../engine/TypingEngine.js';
 import { useTypingEngine } from '../hooks/useTypingEngine.js';
+import { strippedOfTone, isToneKey, TELEX_TONE_CHARS, VNI_TONE_CHARS } from '../engine/toneUtils.js';
 
 /**
  * TypingLane — renders grapheme slots for a target word/sentence and
@@ -31,13 +32,23 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
   const hiddenInputRef = useRef(null);
   const timeoutRefs    = useRef([]);
 
+  const [pendingReplayKey, setPendingReplayKey] = useState(null);
+  const displayRef      = useRef('');
+  const statusRef       = useRef('idle');
+  const deferredToneRef = useRef(null);
+
   const currentTarget = graphemes[cursor] ?? '';
-  const { display, matched, processKey, reset } = useTypingEngine({
+  const { display, status, matched, processKey, reset } = useTypingEngine({
     mode,
     targetGrapheme: currentTarget,
   });
 
+  displayRef.current = display;
+  statusRef.current  = status;
+
   useEffect(() => {
+    deferredToneRef.current = null;
+    setPendingReplayKey(null);
     setCursor(0);
     setSlotStates(splitGraphemes(target.normalize('NFC')).map(() => 'idle'));
     reset();
@@ -50,6 +61,13 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
       timeoutRefs.current = [];
     };
   }, []);
+
+  // Replay a key after cursor has advanced (deferred-tone path)
+  useEffect(() => {
+    if (pendingReplayKey === null) return;
+    setPendingReplayKey(null);
+    processKey(pendingReplayKey);
+  }, [pendingReplayKey, processKey]);
 
   useEffect(() => {
     if (matched === null) return;
@@ -66,8 +84,13 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
       });
       const nextCursor = c + 1;
       if (nextCursor >= graphemes.length) {
-        const tid = setTimeout(() => onCompleteRef.current(), 400);
-        timeoutRefs.current.push(tid);
+        if (deferredToneRef.current !== null) {
+          // Not done yet — waiting for the deferred tone key
+          setCursor(nextCursor);
+        } else {
+          const tid = setTimeout(() => onCompleteRef.current(), 400);
+          timeoutRefs.current.push(tid);
+        }
       } else {
         setCursor(nextCursor);
         reset();
@@ -95,8 +118,82 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
   const handleKeyDown = useCallback((e) => {
     if (e.key.length !== 1) return;
     e.preventDefault();
+
+    // ── Case A: cursor is past all graphemes — awaiting deferred tone ──────
+    if (deferredToneRef.current !== null && cursorRef.current >= graphemes.length) {
+      const dt = deferredToneRef.current;
+      const toneChar = mode === 'telex'
+        ? TELEX_TONE_CHARS[e.key.toLowerCase()]
+        : mode === 'vni' ? VNI_TONE_CHARS[e.key] : null;
+
+      if (toneChar) {
+        const composed = (dt.displaySnapshot + toneChar).normalize('NFC');
+        const isCorrect = composed.toLowerCase() ===
+          graphemes[dt.slotIdx].normalize('NFC').toLowerCase();
+
+        onKeyResultRef.current?.(isCorrect);
+
+        if (isCorrect) {
+          deferredToneRef.current = null;
+          setSlotStates(prev => {
+            const next = [...prev];
+            next[dt.slotIdx] = 'correct';
+            return next;
+          });
+          const tid = setTimeout(() => onCompleteRef.current(), 400);
+          timeoutRefs.current.push(tid);
+        } else {
+          setSlotStates(prev => {
+            const next = [...prev];
+            next[dt.slotIdx] = 'error';
+            return next;
+          });
+          setShake(true);
+          const tid = setTimeout(() => {
+            setSlotStates(prev => {
+              const next = [...prev];
+              next[dt.slotIdx] = 'tentative';
+              return next;
+            });
+            setShake(false);
+          }, 500);
+          timeoutRefs.current.push(tid);
+        }
+      }
+      // Non-tone key while awaiting deferred tone: ignore
+      return;
+    }
+
+    // ── Deferred-tone detection: pending display matches target sans tone ──
+    if (
+      mode !== 'direct' &&
+      statusRef.current === 'pending' &&
+      displayRef.current !== ''
+    ) {
+      const c    = cursorRef.current;
+      const tgt  = graphemes[c];
+      const bare = strippedOfTone(displayRef.current);
+      if (
+        bare === strippedOfTone(tgt) &&
+        bare !== tgt.normalize('NFC') && // target genuinely has a tone
+        !isToneKey(e.key, mode)
+      ) {
+        const dt = { slotIdx: c, displaySnapshot: displayRef.current };
+        deferredToneRef.current = dt;
+        setSlotStates(prev => {
+          const next = [...prev];
+          next[c] = 'tentative';
+          return next;
+        });
+        setCursor(c + 1);
+        reset();
+        setPendingReplayKey(e.key);
+        return;
+      }
+    }
+
     processKey(e.key);
-  }, [processKey]);
+  }, [processKey, graphemes, mode, reset]);
 
   const handleMobileInput = useCallback((e) => {
     const val = e.target.value;
@@ -110,6 +207,8 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
+
+  const awaitingTone = cursor >= graphemes.length && slotStates.some(s => s === 'tentative');
 
   // ── 'line' variant: inline colored characters ──────────────────────────
   if (variant === 'line') {
@@ -133,10 +232,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
             const state = slotStates[i];
             const isCurrent = i === cursor;
             const colorClass =
-              state === 'correct' ? 'text-green-600' :
-              state === 'error'   ? 'text-red-500' :
-              isCurrent           ? 'text-orange-500 underline underline-offset-4 decoration-2' :
-                                    'text-gray-300';
+              state === 'correct'   ? 'text-green-600' :
+              state === 'error'     ? 'text-red-500' :
+              state === 'tentative' ? 'text-amber-400' :
+              isCurrent             ? 'text-orange-500 underline underline-offset-4 decoration-2' :
+                                      'text-gray-300';
             return (
               <span
                 key={i}
@@ -149,6 +249,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
           })}
         </div>
         <p className="sr-only">Character {cursor + 1} of {graphemes.length}</p>
+        {awaitingTone && (
+          <p className="text-center text-amber-500 text-sm mt-2 font-vi animate-pulse">
+            Nhập dấu thanh! (Telex: s f r x j · VNI: 1–5)
+          </p>
+        )}
       </div>
     );
   }
@@ -175,10 +280,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
 
         const baseClass  = 'relative w-12 h-14 flex items-center justify-center rounded-xl text-2xl font-bold font-vi border-2 transition-all select-none';
         const stateClass =
-          state === 'correct' ? 'bg-green-100 border-green-400 text-green-700' :
-          state === 'error'   ? 'bg-red-100   border-red-400   text-red-700'   :
-          isCurrent           ? 'bg-orange-100 border-orange-400 text-orange-700 scale-110' :
-                                'bg-white border-gray-200 text-gray-400';
+          state === 'correct'   ? 'bg-green-100 border-green-400 text-green-700' :
+          state === 'error'     ? 'bg-red-100   border-red-400   text-red-700'   :
+          state === 'tentative' ? 'bg-amber-50  border-amber-300 text-amber-600 opacity-80' :
+          isCurrent             ? 'bg-orange-100 border-orange-400 text-orange-700 scale-110' :
+                                  'bg-white border-gray-200 text-gray-400';
 
         return (
           <div
@@ -198,6 +304,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
           </div>
         );
       })}
+      {awaitingTone && (
+        <p className="w-full text-center text-amber-500 text-sm mt-2 font-vi animate-pulse">
+          Nhập dấu thanh! (Telex: s f r x j · VNI: 1–5)
+        </p>
+      )}
     </div>
   );
 }
