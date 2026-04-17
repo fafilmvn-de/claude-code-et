@@ -109,11 +109,11 @@ export default async (req) => {
 
   const { levelId, theme, screenCount, variant } = body;
 
-  if (!levelId || !theme || !screenCount || !variant) {
-    return Response.json({ error: 'levelId, theme, screenCount, and variant are required' }, { status: 400 });
+  if (!levelId || !theme || !screenCount) {
+    return Response.json({ error: 'levelId, theme, and screenCount are required' }, { status: 400 });
   }
 
-  if (typeof screenCount !== 'number' || screenCount < 1 || screenCount > 50) {
+  if (!Number.isInteger(screenCount) || screenCount < 1 || screenCount > 50) {
     return Response.json({ error: 'screenCount must be a positive number (max 50)' }, { status: 400 });
   }
   if (typeof theme !== 'string' || theme.length === 0 || theme.length > 200) {

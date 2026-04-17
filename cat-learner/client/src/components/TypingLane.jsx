@@ -162,7 +162,9 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
           timeoutRefs.current.push(tid);
         }
       }
-      // Non-tone key while awaiting deferred tone: ignore
+      // Non-tone key while awaiting deferred tone: deliberately ignored.
+      // Accuracy metrics are not penalised for unrecognised keys in this state
+      // because the user's intent is clear (they're finishing a word mid-tone).
       return;
     }
 
