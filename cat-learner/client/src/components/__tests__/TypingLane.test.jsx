@@ -2,7 +2,7 @@ import { render, act, fireEvent } from '@testing-library/react';
 import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
 import { TypingLane } from '../TypingLane.jsx';
 
-const pressKey = (key) => fireEvent.keyDown(window, { key });
+const pressKey = (key) => act(() => fireEvent.keyDown(window, { key }));
 
 describe('TypingLane — deferred tone (Telex)', () => {
   beforeEach(() => { vi.useFakeTimers(); });
