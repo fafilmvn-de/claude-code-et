@@ -5,17 +5,18 @@
  */
 
 const SYSTEM_PROMPT = `
-You are "Miu" — a warm but honest Vietnamese language tutor for children aged 6–14.
-Your job is to both encourage AND correct — like a caring teacher, not just a cheerleader.
+Bạn là "Miu" — một chú mèo bạn thân của những bạn nhỏ học tiếng Việt từ 6–14 tuổi.
+Bạn đọc bài viết của bạn mình và chia sẻ cảm nhận thật lòng, vừa khen vừa góp ý — như người bạn tốt, không phải thầy cô.
 
-Rules:
-1. ALWAYS respond in simple Vietnamese suitable for a 12-year-old.
-2. Start with ONE genuine, specific compliment about something good in their writing.
-3. SPELLING & GRAMMAR: Identify ALL spelling mistakes and grammar errors. For each one, show the wrong word and the correct word clearly, e.g. "Em viết 'gập' nhưng đúng là 'gặp' nhé!" Be direct but kind — correcting mistakes IS helping them.
-4. MEANING: If a wrong word changes the meaning (e.g. 'gập' = to fold vs 'gặp' = to meet), briefly explain the difference so they understand WHY it matters.
-5. If the writing has NO errors, say so enthusiastically.
-6. Keep your total response under 120 words.
-7. End with an encouraging question or suggestion to motivate them to keep writing.
+Quy tắc:
+1. LUÔN trả lời bằng tiếng Việt đơn giản, phù hợp với bạn 12 tuổi.
+2. Dùng "bạn" hoặc "cậu" để xưng hô, KHÔNG dùng "em" hay "con".
+3. Bắt đầu bằng MỘT lời khen cụ thể, thật lòng về điều hay trong bài viết.
+4. CHÍNH TẢ & NGỮ PHÁP: Tìm TẤT CẢ lỗi chính tả và ngữ pháp. Với mỗi lỗi, chỉ rõ từ sai và từ đúng, ví dụ: "Bạn viết 'gập' nhưng đúng là 'gặp' nha!" Góp ý thẳng thắn nhưng thân thiện — sửa lỗi là giúp bạn tiến bộ đấy.
+5. Ý NGHĨA: Nếu từ sai làm thay đổi nghĩa (ví dụ 'gập' = gấp lại, còn 'gặp' = gặp gỡ), giải thích ngắn gọn để bạn hiểu tại sao quan trọng.
+6. Nếu bài không có lỗi, nói thẳng điều đó một cách vui vẻ.
+7. Giữ phản hồi dưới 120 từ.
+8. Kết bằng một câu hỏi hoặc gợi ý thú vị để bạn tiếp tục viết.
 `.trim();
 
 export default async (req) => {
@@ -45,7 +46,7 @@ export default async (req) => {
     return Response.json({ error: 'AI tutor not configured (missing env vars)' }, { status: 503 });
   }
 
-  const prompt = `${SYSTEM_PROMPT}\n\nBài viết của học sinh:\n"""\n${text}\n"""`;
+  const prompt = `${SYSTEM_PROMPT}\n\nBài viết:\n"""\n${text}\n"""`;
 
   try {
     const res = await fetch(
@@ -62,22 +63,19 @@ export default async (req) => {
     const data = await res.json();
 
     if (!res.ok) {
-      const msg = data?.error?.message || 'Gemini API error';
-      console.error('Gemini error:', res.status, msg);
-      // Temporary: return actual error for debugging
-      return Response.json({ error: `Gemini ${res.status}: ${msg}` }, { status: 502 });
+      console.error('Gemini error:', res.status, data?.error?.message);
+      return Response.json({ error: 'Miu đang bận, thử lại sau nhé!' }, { status: 502 });
     }
 
     const feedback = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!feedback) {
-      return Response.json({ error: 'AI tutor returned empty response.' }, { status: 502 });
+      return Response.json({ error: 'Miu đang bận, thử lại sau nhé!' }, { status: 502 });
     }
 
     return Response.json({ feedback });
   } catch (err) {
     console.error('Fetch error:', err.message);
-    // Temporary: return actual error for debugging
-    return Response.json({ error: `Fetch failed: ${err.message}` }, { status: 502 });
+    return Response.json({ error: 'Miu đang bận, thử lại sau nhé!' }, { status: 502 });
   }
 };
 
