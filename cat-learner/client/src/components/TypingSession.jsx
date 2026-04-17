@@ -20,13 +20,11 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
   // AI-generated screens (null = not yet loaded)
   const [aiScreens, setAiScreens]   = useState(null);
   const [aiLoading, setAiLoading]   = useState(true);
-  const fetchAbortRef = useRef(null);
 
   // Fetch AI-generated screens on mount; fall back silently on error
   useEffect(() => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-    fetchAbortRef.current = controller;
 
     fetch(`${API_BASE}/api/lessons`, {
       method: 'POST',
