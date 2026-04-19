@@ -29,7 +29,7 @@ export function LessonPicker({ onSelect }) {
             <button
               onClick={() => toggleLevel(level.id)}
               aria-expanded={isOpen}
-              className="w-full flex items-center gap-4 p-4 text-left hover:bg-white/5 transition-colors"
+              className="w-full flex items-center gap-4 p-4 text-left hover:bg-ds-surface-hi transition-colors"
             >
               <span className="text-4xl">{level.emoji}</span>
               <div className="flex-1">
