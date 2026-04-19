@@ -29,8 +29,13 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
   onCompleteRef.current  = onComplete;
   onKeyResultRef.current = onKeyResult;
 
-  const hiddenInputRef = useRef(null);
-  const timeoutRefs    = useRef([]);
+  const hiddenInputRef  = useRef(null);
+  const timeoutRefs     = useRef([]);
+  const [inputFocused, setInputFocused] = useState(false);
+
+  const refocusInput = useCallback(() => {
+    hiddenInputRef.current?.focus();
+  }, []);
 
   const [pendingReplayKey, setPendingReplayKey] = useState(null);
   const displayRef      = useRef('');
@@ -240,6 +245,7 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
         className={`mt-6 ${shake ? 'motion-safe:animate-shake' : ''}`}
         role="group"
         aria-label="Type each character of the sentence"
+        onClick={refocusInput}
       >
         <input
           ref={hiddenInputRef}
@@ -247,6 +253,8 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
           aria-label="Type Vietnamese characters here"
           autoFocus
           onInput={handleMobileInput}
+          onFocus={() => setInputFocused(true)}
+          onBlur={() => setInputFocused(false)}
           inputMode="text"
           tabIndex={-1}
         />
@@ -277,6 +285,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
             Nhập dấu thanh! (Telex: s f r x j · VNI: 1–5)
           </p>
         )}
+        {!inputFocused && (
+          <p className="text-center text-orange-400 text-sm mt-2 font-vi animate-pulse cursor-pointer">
+            👆 Chạm vào đây để gõ tiếp
+          </p>
+        )}
       </div>
     );
   }
@@ -287,6 +300,7 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
       className={`flex flex-wrap justify-center gap-1 mt-4 ${shake ? 'motion-safe:animate-shake' : ''}`}
       role="group"
       aria-label="Typing lane — type each character"
+      onClick={refocusInput}
     >
       <input
         ref={hiddenInputRef}
@@ -294,6 +308,8 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
         aria-label="Type Vietnamese characters here"
         autoFocus
         onInput={handleMobileInput}
+        onFocus={() => setInputFocused(true)}
+        onBlur={() => setInputFocused(false)}
         inputMode="text"
         tabIndex={-1}
       />
@@ -330,6 +346,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
       {awaitingTone && (
         <p className="w-full text-center text-amber-500 text-sm mt-2 font-vi animate-pulse">
           Nhập dấu thanh! (Telex: s f r x j · VNI: 1–5)
+        </p>
+      )}
+      {!inputFocused && (
+        <p className="w-full text-center text-orange-400 text-sm mt-2 font-vi animate-pulse cursor-pointer">
+          👆 Chạm vào đây để gõ tiếp
         </p>
       )}
     </div>
