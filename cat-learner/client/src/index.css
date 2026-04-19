@@ -2,16 +2,16 @@
   --ds-bg:           #08090f;
   --ds-surface:      #0f0e1a;
   --ds-surface-hi:   #1a1040;
-  --ds-accent:       #6c63ff;
-  --ds-accent-lt:    #a78bfa;
+  --ds-accent:       108 99 255;
+  --ds-accent-lt:    167 139 250;
   --ds-accent-sub:   rgba(108, 99, 255, 0.15);
   --ds-border:       rgba(108, 99, 255, 0.3);
   --ds-text:         #e2e8ff;
   --ds-text-muted:   #94a3b8;
   --ds-text-ghost:   #374151;
-  --ds-correct:      #22c55e;
-  --ds-error:        #f87171;
-  --ds-warn:         #fbbf24;
+  --ds-correct:      34 197 94;
+  --ds-error:        248 113 113;
+  --ds-warn:         251 191 36;
 }
 
 @tailwind base;
