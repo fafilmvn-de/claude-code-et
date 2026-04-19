@@ -5,36 +5,19 @@ import { TypingLane } from './TypingLane.jsx';
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 const FETCH_TIMEOUT_MS = 10_000;
 
-/**
- * Props:
- *   lesson   {{ id, title, theme, screenCount, screens: Array<{text, emoji?, hint?}> }}
- *   levelId  {string} — 'beginner' | 'intermediate' | 'advanced' | 'expert'
- *   variant  {'boxes'|'line'}
- *   mode     {'telex'|'vni'|'direct'}
- *   onComplete  {fn(stats)}
- *   onBack      {fn()}
- */
 export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBack }) {
   const [screenIndex, setScreenIndex] = useState(0);
+  const [aiScreens, setAiScreens]     = useState(null);
+  const [aiLoading, setAiLoading]     = useState(true);
 
-  // AI-generated screens (null = not yet loaded)
-  const [aiScreens, setAiScreens]   = useState(null);
-  const [aiLoading, setAiLoading]   = useState(true);
-
-  // Fetch AI-generated screens on mount; fall back silently on error
   useEffect(() => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    const timeoutId  = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
     fetch(`${API_BASE}/api/lessons`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        levelId,
-        theme:       lesson.theme,
-        screenCount: lesson.screenCount,
-        variant,
-      }),
+      body: JSON.stringify({ levelId, theme: lesson.theme, screenCount: lesson.screenCount, variant }),
       signal: controller.signal,
     })
       .then(r => r.json())
@@ -43,29 +26,18 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
           setAiScreens(data.screens);
         }
       })
-      .catch(() => {
-        // Network error, timeout, or API error — fall back to hardcoded screens
-      })
-      .finally(() => {
-        clearTimeout(timeoutId);
-        setAiLoading(false);
-      });
+      .catch(() => {})
+      .finally(() => { clearTimeout(timeoutId); setAiLoading(false); });
 
-    return () => {
-      clearTimeout(timeoutId);
-      controller.abort();
-    };
-  }, [lesson.id]); // re-fetch only if lesson changes
+    return () => { clearTimeout(timeoutId); controller.abort(); };
+  }, [lesson.id]);
 
-  // The actual screens for this session: AI-generated if available, else hardcoded fallback
   const screens = aiScreens ?? lesson.screens;
 
-  // Metrics — mutable refs to avoid stale closure issues in callbacks
   const startTimeRef         = useRef(null);
   const correctKeystrokesRef = useRef(0);
   const totalKeystrokesRef   = useRef(0);
 
-  // Live display state (updated by interval)
   const [elapsedSec, setElapsedSec]     = useState(0);
   const [liveWpm, setLiveWpm]           = useState(0);
   const [liveAccuracy, setLiveAccuracy] = useState(100);
@@ -75,7 +47,7 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
   const ensureTimerRunning = useCallback(() => {
     if (startTimeRef.current !== null) return;
     startTimeRef.current = Date.now();
-    intervalRef.current = setInterval(() => {
+    intervalRef.current  = setInterval(() => {
       const elapsedMs = Date.now() - startTimeRef.current;
       const elapsed   = Math.max(elapsedMs, 1000);
       const correct   = correctKeystrokesRef.current;
@@ -104,31 +76,35 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
       const elapsed   = Math.max(elapsedMs, 1000);
       const correct   = correctKeystrokesRef.current;
       const total     = totalKeystrokesRef.current;
-      const wpm       = Math.round((correct / 5) / (elapsed / 60000));
-      const accuracy  = total === 0 ? 100 : Math.round((correct / total) * 100);
-      onComplete({ wpm, accuracy, elapsedMs, correctKeystrokes: correct, totalKeystrokes: total, lessonTitle: lesson.title });
+      onComplete({
+        wpm:              Math.round((correct / 5) / (elapsed / 60000)),
+        accuracy:         total === 0 ? 100 : Math.round((correct / total) * 100),
+        elapsedMs,
+        correctKeystrokes: correct,
+        totalKeystrokes:   total,
+        lessonTitle:       lesson.title,
+      });
     } else {
       setScreenIndex(nextIndex);
     }
   }, [screenIndex, screens.length, lesson.title, onComplete]);
 
-  // Loading state — show spinner while fetching AI screens
   if (aiLoading) {
     return (
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-3 mb-4">
           <button
             onClick={onBack}
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors font-vi"
+            className="text-sm text-ds-text-muted hover:text-ds-text transition-colors font-vi"
             aria-label="Quay lại chọn bài"
           >
             ← Quay lại
           </button>
-          <h2 className="text-lg font-bold text-orange-500 font-vi truncate">{lesson.title}</h2>
+          <h2 className="text-lg font-bold text-ds-text font-vi truncate">{lesson.title}</h2>
         </div>
         <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <div className="w-10 h-10 border-4 border-orange-300 border-t-orange-500 rounded-full animate-spin" />
-          <p className="text-gray-400 font-vi text-sm">Miu đang chuẩn bị bài mới…</p>
+          <div className="w-10 h-10 border-4 border-ds-accent-sub border-t-ds-accent rounded-full animate-spin" />
+          <p className="text-ds-text-muted font-vi text-sm">Miu đang chuẩn bị bài mới…</p>
         </div>
       </div>
     );
@@ -136,9 +112,8 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
 
   const screen = screens[screenIndex];
   const total  = screens.length;
-
-  const mm = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
-  const ss = String(elapsedSec % 60).padStart(2, '0');
+  const mm     = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+  const ss     = String(elapsedSec % 60).padStart(2, '0');
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -146,40 +121,40 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
       <div className="flex items-center gap-3 mb-4">
         <button
           onClick={onBack}
-          className="text-sm text-gray-400 hover:text-gray-600 transition-colors font-vi"
+          className="text-sm text-ds-text-muted hover:text-ds-text transition-colors font-vi"
           aria-label="Quay lại chọn bài"
         >
           ← Quay lại
         </button>
-        <h2 className="text-lg font-bold text-orange-500 font-vi truncate">{lesson.title}</h2>
+        <h2 className="text-lg font-bold text-ds-text font-vi truncate">{lesson.title}</h2>
       </div>
 
       {/* Progress bar */}
-      <div className="flex items-center gap-2 mb-2">
-        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="flex-1 h-[3px] bg-white/5 rounded-full overflow-hidden">
           <div
-            className="h-2 bg-orange-400 rounded-full transition-all duration-300"
+            className="h-[3px] bg-ds-accent rounded-full transition-all duration-300 shadow-[0_0_6px_var(--ds-accent)]"
             style={{ width: `${(screenIndex / total) * 100}%` }}
           />
         </div>
-        <span className="text-xs text-gray-400 font-vi whitespace-nowrap">
+        <span className="font-mono text-ds-text-ghost text-[10px] whitespace-nowrap">
           {screenIndex + 1} / {total}
         </span>
       </div>
 
       {/* Live stats */}
-      <div className="flex justify-center gap-6 mb-6 text-center">
-        <div>
-          <p className="text-2xl font-bold text-orange-500">{mm}:{ss}</p>
-          <p className="text-xs text-gray-400 font-vi">Thời gian</p>
+      <div className="flex justify-center gap-3 mb-6 text-center">
+        <div className="bg-ds-surface border border-ds-border rounded-xl px-5 py-2.5">
+          <p className="font-mono text-ds-accent-lt text-xl font-bold">{mm}:{ss}</p>
+          <p className="font-mono text-ds-text-ghost text-[9px] tracking-widest uppercase mt-0.5">Time</p>
         </div>
-        <div>
-          <p className="text-2xl font-bold text-blue-500">{liveWpm}</p>
-          <p className="text-xs text-gray-400 font-vi">WPM</p>
+        <div className="bg-ds-surface border border-ds-border rounded-xl px-5 py-2.5">
+          <p className="font-mono text-ds-accent-lt text-xl font-bold">{liveWpm}</p>
+          <p className="font-mono text-ds-text-ghost text-[9px] tracking-widest uppercase mt-0.5">WPM</p>
         </div>
-        <div>
-          <p className="text-2xl font-bold text-green-500">{liveAccuracy}%</p>
-          <p className="text-xs text-gray-400 font-vi">Chính xác</p>
+        <div className="bg-ds-surface border border-ds-border rounded-xl px-5 py-2.5">
+          <p className="font-mono text-ds-correct text-xl font-bold">{liveAccuracy}%</p>
+          <p className="font-mono text-ds-text-ghost text-[9px] tracking-widest uppercase mt-0.5">ACC</p>
         </div>
       </div>
 
@@ -187,9 +162,9 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
       {variant === 'boxes' && screen.emoji && (
         <div className="text-center mb-4">
           <p className="text-6xl mb-1">{screen.emoji}</p>
-          <p className="text-3xl font-bold font-vi text-gray-800">{screen.text}</p>
+          <p className="text-3xl font-bold font-vi text-ds-text">{screen.text}</p>
           {screen.hint && (
-            <p className="text-sm text-gray-400 mt-1 font-vi">({screen.hint})</p>
+            <p className="text-sm text-ds-text-muted mt-1 font-vi">({screen.hint})</p>
           )}
         </div>
       )}
@@ -205,10 +180,10 @@ export function TypingSession({ lesson, levelId, variant, mode, onComplete, onBa
       />
 
       {variant === 'boxes' && (
-        <p className="text-center text-gray-400 text-sm mt-3 font-vi">Gõ từ bên trên ↑</p>
+        <p className="text-center text-ds-text-ghost text-sm mt-3 font-vi">Gõ từ bên trên ↑</p>
       )}
       {variant === 'line' && (
-        <p className="text-center text-gray-400 text-sm mt-3 font-vi">Gõ từng ký tự của câu trên ↑</p>
+        <p className="text-center text-ds-text-ghost text-sm mt-3 font-vi">Gõ từng ký tự của câu trên ↑</p>
       )}
     </div>
   );
