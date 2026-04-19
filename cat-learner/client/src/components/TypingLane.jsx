@@ -258,16 +258,16 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
           inputMode="text"
           tabIndex={-1}
         />
-        <div className="text-2xl font-vi leading-relaxed text-center p-4 bg-white rounded-2xl border-2 border-orange-200 shadow-inner tracking-wide">
+        <div className="text-2xl font-vi leading-relaxed text-center p-4 bg-ds-surface rounded-2xl border-2 border-ds-border shadow-inner tracking-wide">
           {graphemes.map((g, i) => {
             const state = slotStates[i];
             const isCurrent = i === cursor;
             const colorClass =
-              state === 'correct'   ? 'text-green-600' :
-              state === 'error'     ? 'text-red-500' :
-              state === 'tentative' ? 'text-amber-400' :
-              isCurrent             ? 'text-orange-500 underline underline-offset-4 decoration-2' :
-                                      'text-gray-300';
+              state === 'correct'   ? 'text-ds-correct' :
+              state === 'error'     ? 'text-ds-error' :
+              state === 'tentative' ? 'text-ds-warn' :
+              isCurrent             ? 'text-ds-accent-lt underline underline-offset-4 decoration-2' :
+                                      'text-ds-text-ghost';
             return (
               <span
                 key={i}
@@ -281,12 +281,12 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
         </div>
         <p className="sr-only">Character {cursor + 1} of {graphemes.length}</p>
         {awaitingTone && (
-          <p className="text-center text-amber-500 text-sm mt-2 font-vi animate-pulse">
+          <p className="text-center text-ds-warn text-sm mt-2 font-vi animate-pulse">
             Nhập dấu thanh! (Telex: s f r x j · VNI: 1–5)
           </p>
         )}
         {!inputFocused && (
-          <p className="text-center text-orange-400 text-sm mt-2 font-vi animate-pulse cursor-pointer">
+          <p className="text-center text-ds-accent-lt text-sm mt-2 font-vi animate-pulse cursor-pointer">
             👆 Chạm vào đây để gõ tiếp
           </p>
         )}
@@ -319,11 +319,11 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
 
         const baseClass  = 'relative w-12 h-14 flex items-center justify-center rounded-xl text-2xl font-bold font-vi border-2 transition-all select-none';
         const stateClass =
-          state === 'correct'   ? 'bg-green-100 border-green-400 text-green-700' :
-          state === 'error'     ? 'bg-red-100   border-red-400   text-red-700'   :
-          state === 'tentative' ? 'bg-amber-50  border-amber-300 text-amber-600 opacity-80' :
-          isCurrent             ? 'bg-orange-100 border-orange-400 text-orange-700 scale-110' :
-                                  'bg-white border-gray-200 text-gray-400';
+          state === 'correct'   ? 'bg-ds-correct/10  border-ds-correct  text-ds-correct' :
+          state === 'error'     ? 'bg-ds-error/10    border-ds-error    text-ds-error' :
+          state === 'tentative' ? 'bg-ds-warn/10     border-ds-warn     text-ds-warn opacity-80' :
+          isCurrent             ? 'bg-ds-accent-sub  border-ds-accent   text-ds-accent-lt scale-110 shadow-[0_0_14px_rgba(108,99,255,0.35)]' :
+                                  'bg-ds-surface      border-ds-border/50 text-ds-text-ghost';
 
         return (
           <div
@@ -332,7 +332,7 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
             aria-label={`Character ${i + 1}: ${state === 'correct' ? 'correct' : state === 'error' ? 'incorrect' : isCurrent ? 'current' : 'upcoming'}`}
           >
             {g === ' ' ? (
-              <span className="text-gray-300">_</span>
+              <span className="text-ds-text-ghost">_</span>
             ) : (
               <>
                 {isCurrent && display ? display : g}
@@ -344,12 +344,12 @@ export function TypingLane({ target, mode = 'direct', variant = 'boxes', onCompl
         );
       })}
       {awaitingTone && (
-        <p className="w-full text-center text-amber-500 text-sm mt-2 font-vi animate-pulse">
+        <p className="w-full text-center text-ds-warn text-sm mt-2 font-vi animate-pulse">
           Nhập dấu thanh! (Telex: s f r x j · VNI: 1–5)
         </p>
       )}
       {!inputFocused && (
-        <p className="w-full text-center text-orange-400 text-sm mt-2 font-vi animate-pulse cursor-pointer">
+        <p className="w-full text-center text-ds-accent-lt text-sm mt-2 font-vi animate-pulse cursor-pointer">
           👆 Chạm vào đây để gõ tiếp
         </p>
       )}
