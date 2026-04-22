@@ -1,0 +1,1311 @@
+# US Immigration Roadmap Infographic — Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Build a bilingual (EN+VI) glassmorphism HTML infographic and Markdown companion documenting a Vietnamese family's US immigration roadmap (EB-5, Jun 2026).
+
+**Architecture:** Single self-contained `us-immigration-plan.html` file with all CSS inlined in `<style>`. No build step, no JS framework, no bundler. One companion `us-immigration-plan.md` for future DOCX/PDF expansion. Both files go in `/immigration-plan/`.
+
+**Tech Stack:** Vanilla HTML5, CSS3 (glassmorphism, CSS custom properties, `@media print`), Google Fonts (Inter + Space Grotesk), Markdown.
+
+---
+
+## File Map
+
+| File | Action | Responsibility |
+|---|---|---|
+| `immigration-plan/us-immigration-plan.html` | Create | Complete infographic — all CSS + all 5 modules |
+| `immigration-plan/us-immigration-plan.md` | Create | Structured Markdown mirror for future expansion |
+
+---
+
+### Task 1: Scaffold + HTML skeleton with full CSS system
+
+**Files:**
+- Create: `immigration-plan/us-immigration-plan.html`
+
+- [ ] **Step 1: Create the directory and base HTML file**
+
+```bash
+mkdir -p /Users/mac/dev/claude-code-et/immigration-plan
+```
+
+Create `immigration-plan/us-immigration-plan.html` with this complete skeleton (CSS system included — all subsequent tasks only add HTML inside `<body>`):
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US Immigration Roadmap 2026 | Lộ Trình Định Cư Hoa Kỳ 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── CSS Custom Properties ── */
+    :root {
+      --bg-from: #0a192f;
+      --bg-via: #112240;
+      --bg-to: #1d3461;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-bg-strong: rgba(255, 255, 255, 0.13);
+      --glass-border: rgba(100, 200, 255, 0.2);
+      --glass-blur: blur(16px);
+      --accent: #0ea5e9;
+      --accent-light: #38bdf8;
+      --accent-dim: rgba(14, 165, 233, 0.15);
+      --accent-border: rgba(56, 189, 248, 0.35);
+      --warning: #f59e0b;
+      --warning-dim: rgba(245, 158, 11, 0.12);
+      --warning-border: rgba(245, 158, 11, 0.4);
+      --success: #10b981;
+      --success-dim: rgba(16, 185, 129, 0.12);
+      --success-border: rgba(16, 185, 129, 0.35);
+      --danger: #ef4444;
+      --danger-dim: rgba(239, 68, 68, 0.12);
+      --danger-border: rgba(239, 68, 68, 0.35);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-accent: #67e8f9;
+      --text-vi: #a5b4fc;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --page-max: 900px;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Base ── */
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--bg-from), var(--bg-via), var(--bg-to));
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px 64px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── Glass card ── */
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+    }
+
+    .card--accent {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+    }
+
+    .card--warning {
+      background: var(--warning-dim);
+      border-color: var(--warning-border);
+    }
+
+    .card--success {
+      background: var(--success-dim);
+      border-color: var(--success-border);
+    }
+
+    .card--danger {
+      background: var(--danger-dim);
+      border-color: var(--danger-border);
+    }
+
+    /* ── Section header ── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .section-title-vi {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-vi);
+      margin-bottom: 20px;
+    }
+
+    /* ── Typography ── */
+    h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+    h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+
+    .vi { color: var(--text-vi); font-size: 0.85em; font-weight: 400; display: block; margin-top: 1px; }
+
+    /* ── Pills / badges ── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent-light);
+      white-space: nowrap;
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+    /* ── Two-column grid ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+    /* ── Checklist ── */
+    .checklist { display: flex; flex-direction: column; gap: 8px; }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .check-item::before {
+      content: '✓';
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent-light);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .check-item .vi { display: inline; font-size: 0.8em; color: var(--text-vi); margin-left: 4px; }
+
+    /* ── Sub-heading inside cards ── */
+    .sub-heading {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      margin-top: 18px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .sub-heading:first-child { margin-top: 0; }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 6px 10px 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    td {
+      padding: 9px 10px;
+      color: var(--text);
+      border-bottom: 1px solid rgba(100,200,255,0.07);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    td.amount {
+      font-weight: 600;
+      color: var(--accent-light);
+      white-space: nowrap;
+    }
+
+    td.total {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    td.total.amount { color: var(--accent); font-size: 15px; }
+
+    /* ── City comparison cards ── */
+    .city-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+    }
+
+    .city-card.recommended { border-color: var(--accent-border); background: var(--accent-dim); }
+
+    .city-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .city-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .city-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(100,200,255,0.08);
+      gap: 8px;
+    }
+
+    .city-row:last-child { border-bottom: none; }
+    .city-row-label { color: var(--text-muted); flex-shrink: 0; }
+    .city-row-value { color: var(--text); text-align: right; }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-week {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      padding-top: 2px;
+    }
+
+    .timeline-week .vi { color: var(--text-vi); font-size: 11px; }
+
+    .timeline-tasks { display: flex; flex-direction: column; gap: 6px; }
+
+    .timeline-task {
+      font-size: 14px;
+      color: var(--text);
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .timeline-task::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent-light);
+      font-size: 12px;
+    }
+
+    /* ── Opportunity / Risk columns ── */
+    .opp-risk { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .opp-item, .risk-item {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      line-height: 1.5;
+    }
+
+    .opp-item { background: var(--success-dim); border: 1px solid var(--success-border); }
+    .risk-item { background: var(--danger-dim); border: 1px solid var(--danger-border); }
+
+    .opp-item strong, .risk-item strong { color: var(--text); display: block; font-size: 13px; }
+    .opp-item .body, .risk-item .body { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+
+    /* ── Runway bar ── */
+    .runway-bar-wrap {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+    }
+
+    .runway-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .runway-bar {
+      height: 10px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .runway-fill {
+      height: 100%;
+      width: 38%;  /* ~5mo target / 13mo runway */
+      background: linear-gradient(90deg, var(--success), var(--accent));
+      border-radius: 999px;
+    }
+
+    .runway-note {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .runway-note strong { color: var(--accent-light); }
+
+    /* ── Horizon box ── */
+    .horizon {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: rgba(165,180,252,0.08);
+      border: 1px solid rgba(165,180,252,0.25);
+      border-radius: var(--radius-sm);
+    }
+
+    .horizon-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-vi);
+      margin-bottom: 8px;
+    }
+
+    .horizon-item {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 3px 0 3px 14px;
+      position: relative;
+    }
+
+    .horizon-item::before { content: '◦'; position: absolute; left: 0; color: var(--text-vi); }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+      margin: 4px 0;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding-top: 8px;
+    }
+
+    /* ──────────────────────────────────────────────
+       PRINT STYLES
+       ────────────────────────────────────────────── */
+    @media print {
+      @page { size: A4; margin: 18mm 15mm; }
+
+      body {
+        background: #ffffff !important;
+        color: #1a1a2e !important;
+        padding: 0;
+        font-size: 12px;
+      }
+
+      .page { gap: 16px; }
+
+      .card, .city-card, .opp-item, .risk-item,
+      .runway-bar-wrap, .horizon {
+        background: #f8faff !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1px solid #c7d8f0 !important;
+        break-inside: avoid;
+      }
+
+      .card--warning { background: #fffbeb !important; border-color: #f59e0b !important; }
+      .card--success { background: #f0fdf4 !important; border-color: #10b981 !important; }
+
+      .section-label, .section-title, .section-title-vi,
+      .sub-heading, .city-tag, .timeline-week { color: #1e3a5f !important; }
+
+      .vi, .text-vi, .city-row-label, .runway-note,
+      .horizon-item, .opp-item .body, .risk-item .body { color: #4b5563 !important; }
+
+      .pill {
+        background: #e8f4fd !important;
+        border-color: #0ea5e9 !important;
+        color: #0369a1 !important;
+      }
+
+      .check-item::before { background: #e8f4fd !important; border-color: #0ea5e9 !important; color: #0369a1 !important; }
+      .timeline-task::before { color: #0369a1 !important; }
+
+      .opp-item { background: #f0fdf4 !important; border-color: #10b981 !important; }
+      .risk-item { background: #fef2f2 !important; border-color: #ef4444 !important; }
+      .opp-item strong, .risk-item strong { color: #111827 !important; }
+
+      td.amount { color: #0369a1 !important; }
+      td.total.amount { color: #0ea5e9 !important; }
+
+      /* Page breaks before each module */
+      .module { page-break-before: always; }
+      .module:first-of-type { page-break-before: avoid; }
+      .hero { page-break-before: avoid; page-break-after: avoid; }
+
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- HERO + 5 MODULES GO HERE (Tasks 2–7) -->
+    <footer class="footer">
+      Prepared April 2026 · For personal use · Consult a licensed immigration attorney for legal decisions
+    </footer>
+  </div>
+</body>
+</html>
+```
+
+- [ ] **Step 2: Open in browser to verify background renders**
+
+```bash
+open /Users/mac/dev/claude-code-et/immigration-plan/us-immigration-plan.html
+```
+
+Expected: Dark navy-to-indigo gradient background, blank page, footer text visible at bottom.
+
+- [ ] **Step 3: Commit skeleton**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "feat: scaffold immigration plan HTML with full CSS system"
+```
+
+---
+
+### Task 2: Hero banner
+
+**Files:**
+- Modify: `immigration-plan/us-immigration-plan.html` — replace the `<!-- HERO + 5 MODULES GO HERE -->` comment
+
+- [ ] **Step 1: Insert hero HTML** — replace `<!-- HERO + 5 MODULES GO HERE (Tasks 2–7) -->` with:
+
+```html
+    <!-- ── HERO ── -->
+    <div class="card hero" style="text-align:center; padding: 40px 32px 36px;">
+      <div class="section-label" style="justify-content:center; margin-bottom:12px;">
+        🇺🇸 EB-5 Green Card · Vietnam → United States
+      </div>
+      <h1 style="font-size:28px; line-height:1.3; margin-bottom:6px;">
+        U.S. Immigration Roadmap 2026
+      </h1>
+      <p style="font-size:17px; color:var(--text-vi); margin-bottom:4px; font-weight:500;">
+        Lộ Trình Định Cư Hoa Kỳ 2026
+      </p>
+      <p style="font-size:15px; color:var(--text-muted); margin-bottom:20px;">
+        Immigration Plan for Family of 4 · Vietnam → USA
+      </p>
+      <div class="pills" style="justify-content:center;">
+        <span class="pill">📅 Target: Jun 2026</span>
+        <span class="pill">👨‍👩‍👧‍👦 Family of 4</span>
+      </div>
+      <p style="margin-top:22px; font-size:13px; color:var(--text-vi); font-style:italic; letter-spacing:0.03em;">
+        "Từng bước — Từng tháng — Từng mục tiêu"
+      </p>
+      <p style="font-size:11px; color:var(--text-muted); margin-top:4px; font-style:italic;">
+        Step by step — Month by month — Goal by goal
+      </p>
+    </div>
+
+    <!-- MODULES GO HERE (Tasks 3–7) -->
+```
+
+- [ ] **Step 2: Verify in browser** — hero card should show centered title, bilingual subtitle, two pills, Vietnamese tagline.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "feat: add hero banner to immigration plan"
+```
+
+---
+
+### Task 3: Module 1 — Legal Must-Haves
+
+**Files:**
+- Modify: `immigration-plan/us-immigration-plan.html` — replace `<!-- MODULES GO HERE (Tasks 3–7) -->`
+
+- [ ] **Step 1: Insert Module 1 HTML** — replace `<!-- MODULES GO HERE (Tasks 3–7) -->` with:
+
+```html
+    <!-- ── MODULE 1: LEGAL ── -->
+    <div class="card module" id="legal">
+      <div class="section-label">⚖️ Module 1</div>
+      <div class="section-title">Legal Must-Haves</div>
+      <div class="section-title-vi">Thủ Tục Pháp Lý Bắt Buộc</div>
+
+      <div class="grid-2">
+        <div>
+          <div class="sub-heading">Immediate — Week 1–2 · Tuần 1–2</div>
+          <div class="checklist">
+            <div class="check-item">Port of Entry — preserve all stamps + print I-94 online <span class="vi">Lưu tất cả dấu nhập cảnh + in I-94</span></div>
+            <div class="check-item">Apply for SSNs — all 4 family members at SSA office <span class="vi">Đăng ký số SSN cho cả 4 thành viên</span></div>
+            <div class="check-item">Open US bank account — passport + visa sufficient (Chase / BofA) <span class="vi">Mở tài khoản ngân hàng — hộ chiếu + visa là đủ</span></div>
+            <div class="check-item">Get local SIM cards for all adults <span class="vi">Mua SIM điện thoại nội địa</span></div>
+          </div>
+
+          <div class="sub-heading">Within 30 Days · Trong 30 ngày</div>
+          <div class="checklist">
+            <div class="check-item">State ID / driver's license — bring international license + certified translation <span class="vi">Bằng lái xe tiểu bang — mang bằng quốc tế + bản dịch công chứng</span></div>
+            <div class="check-item">Health insurance via ACA Marketplace <span class="vi">Bảo hiểm sức khoẻ qua ACA Marketplace</span></div>
+            <div class="check-item">ITIN for wife (if no SSN-eligible activity yet) <span class="vi">Đăng ký ITIN cho vợ nếu chưa đủ điều kiện SSN</span></div>
+            <div class="check-item">Open secured credit card — Discover IT Secured or Capital One <span class="vi">Mở thẻ tín dụng có bảo đảm để xây dựng credit</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sub-heading">Ongoing · Liên tục</div>
+          <div class="checklist">
+            <div class="check-item">US taxes — global income reportable from Day 1 of residency; hire US–Vietnam CPA for Year 1 <span class="vi">Khai thuế Mỹ — thu nhập toàn cầu phải khai từ ngày đầu; thuê CPA am hiểu Việt–Mỹ</span></div>
+            <div class="check-item">Credit building — secured card → all 3 bureaus → target 700+ score within 12 months <span class="vi">Xây dựng lịch sử tín dụng — mục tiêu 700+ điểm trong 12 tháng</span></div>
+          </div>
+
+          <div class="sub-heading">2027 Horizon · Kế hoạch 2027</div>
+          <div class="horizon" style="margin-top:0;">
+            <div class="horizon-item">Research school districts in chosen city (Niche.com, GreatSchools.org)</div>
+            <div class="horizon-item">Enroll Child 1 (Grade 10, high school) — Fall 2027</div>
+            <div class="horizon-item">Enroll Child 2 (Grade 5, elementary) — Fall 2027</div>
+            <div class="horizon-item">File US Year 1 tax return (global income disclosure)</div>
+            <div class="horizon-item">Begin I-829 preparation with immigration attorney — Month 18 alert</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider" style="margin: 20px 0;"></div>
+
+      <!-- Warning card -->
+      <div class="card card--warning" style="padding: 18px 22px;">
+        <div style="font-size:13px; font-weight:700; color:var(--warning); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+          ⚠️ Conditional Green Card — Critical Obligations
+          <span style="font-weight:400; color:#fbbf24; font-size:12px;">| Thẻ Xanh Có Điều Kiện — Nghĩa Vụ Quan Trọng</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--text);">
+          <div><strong style="color:var(--warning);">1. Extended absence risk:</strong> Staying outside the US continuously for more than 6 months can trigger Green Card abandonment. Obtain <strong>Form I-131 Re-Entry Permit</strong> before any extended Vietnam stay — especially critical if children or one parent remain in Vietnam for the 2026–2027 school year. <span class="vi">Ở ngoài Mỹ liên tục hơn 6 tháng có thể mất thẻ xanh. Nộp đơn I-131 trước khi về Việt Nam dài hạn.</span></div>
+          <div><strong style="color:var(--warning);">2. I-829 petition deadline:</strong> Must be filed within the <strong>90-day window before the 2-year anniversary</strong> of your conditional Green Card. Set a hard calendar reminder at Month 18. Missing this deadline = loss of status. <span class="vi">Nộp đơn I-829 trong vòng 90 ngày trước kỷ niệm 2 năm của thẻ xanh. Đặt nhắc nhở tháng thứ 18.</span></div>
+          <div><strong style="color:var(--warning);">3. EB-5 investment conditions:</strong> Underlying EB-5 investment must remain compliant through the conditional period. Confirm with your EB-5 attorney that investment conditions are on track. <span class="vi">Điều kiện đầu tư EB-5 phải được duy trì. Liên hệ luật sư EB-5 để xác nhận.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULES 2–5 GO HERE (Tasks 4–7) -->
+```
+
+- [ ] **Step 2: Verify in browser** — two-column checklist, horizon box, amber warning card all render correctly.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "feat: add Module 1 Legal Must-Haves"
+```
+
+---
+
+### Task 4: Module 2 — City Comparison
+
+**Files:**
+- Modify: `immigration-plan/us-immigration-plan.html` — replace `<!-- MODULES 2–5 GO HERE (Tasks 4–7) -->`
+
+- [ ] **Step 1: Insert Module 2 HTML** — replace `<!-- MODULES 2–5 GO HERE (Tasks 4–7) -->` with:
+
+```html
+    <!-- ── MODULE 2: CITIES ── -->
+    <div class="card module" id="cities">
+      <div class="section-label">📍 Module 2</div>
+      <div class="section-title">City Comparison</div>
+      <div class="section-title-vi">So Sánh Thành Phố — Gợi Ý Định Cư</div>
+
+      <div class="sub-heading">Top 3 Recommended · 3 Thành phố hàng đầu</div>
+      <div class="grid-3" style="margin-bottom:20px;">
+
+        <div class="city-card recommended">
+          <div class="city-name">Austin, TX</div>
+          <div class="city-tag">🏆 Top Pick · No State Tax</div>
+          <div class="city-row"><span class="city-row-label">Data jobs</span><span class="city-row-value">⭐⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">Cost of living</span><span class="city-row-value">Medium</span></div>
+          <div class="city-row"><span class="city-row-label">Schools</span><span class="city-row-value">⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">State income tax</span><span class="city-row-value" style="color:var(--success);">None ✅</span></div>
+          <div class="city-row"><span class="city-row-label">Viet community</span><span class="city-row-value">Medium</span></div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Booming tech scene, Dell/Oracle/Tesla/Apple offices, no state tax saves $8–14K/yr at senior salary.</div>
+        </div>
+
+        <div class="city-card recommended">
+          <div class="city-name">Seattle / Bellevue, WA</div>
+          <div class="city-tag">🏆 Top Pick · No State Tax</div>
+          <div class="city-row"><span class="city-row-label">Data jobs</span><span class="city-row-value">⭐⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">Cost of living</span><span class="city-row-value">High</span></div>
+          <div class="city-row"><span class="city-row-label">Schools</span><span class="city-row-value">⭐⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">State income tax</span><span class="city-row-value" style="color:var(--success);">None ✅</span></div>
+          <div class="city-row"><span class="city-row-label">Viet community</span><span class="city-row-value">Large</span></div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Amazon, Microsoft HQ. Top-ranked schools in Bellevue/Redmond. Strong Vietnamese community in South Seattle.</div>
+        </div>
+
+        <div class="city-card recommended">
+          <div class="city-name">Raleigh-Durham, NC</div>
+          <div class="city-tag">🏆 Top Pick · Lowest COL</div>
+          <div class="city-row"><span class="city-row-label">Data jobs</span><span class="city-row-value">⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">Cost of living</span><span class="city-row-value">Low–Medium</span></div>
+          <div class="city-row"><span class="city-row-label">Schools</span><span class="city-row-value">⭐⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">State income tax</span><span class="city-row-value">4.5%</span></div>
+          <div class="city-row"><span class="city-row-label">Viet community</span><span class="city-row-value">Small</span></div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Research Triangle (Duke, UNC, NC State). Excellent public schools. Lowest COL of the three — maximises runway.</div>
+        </div>
+      </div>
+
+      <div class="sub-heading">Honorable Mentions · Đáng Cân Nhắc Thêm</div>
+      <div class="grid-3">
+
+        <div class="city-card">
+          <div class="city-name">Dallas, TX</div>
+          <div class="city-tag">No State Tax · Large Viet Community</div>
+          <div class="city-row"><span class="city-row-label">Data jobs</span><span class="city-row-value">⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">Cost of living</span><span class="city-row-value">Medium</span></div>
+          <div class="city-row"><span class="city-row-label">Schools</span><span class="city-row-value">⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">State income tax</span><span class="city-row-value" style="color:var(--success);">None ✅</span></div>
+          <div class="city-row"><span class="city-row-label">Viet community</span><span class="city-row-value">Large</span></div>
+        </div>
+
+        <div class="city-card">
+          <div class="city-name">Atlanta, GA</div>
+          <div class="city-tag">Growing Hub · Diverse Community</div>
+          <div class="city-row"><span class="city-row-label">Data jobs</span><span class="city-row-value">⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">Cost of living</span><span class="city-row-value">Low–Medium</span></div>
+          <div class="city-row"><span class="city-row-label">Schools</span><span class="city-row-value">⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">State income tax</span><span class="city-row-value">5.75%</span></div>
+          <div class="city-row"><span class="city-row-label">Viet community</span><span class="city-row-value">Medium</span></div>
+        </div>
+
+        <div class="city-card">
+          <div class="city-name">Irvine / Orange County, CA</div>
+          <div class="city-tag">🏘️ Largest Vietnamese Community in US</div>
+          <div class="city-row"><span class="city-row-label">Data jobs</span><span class="city-row-value">⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">Cost of living</span><span class="city-row-value">High</span></div>
+          <div class="city-row"><span class="city-row-label">Schools</span><span class="city-row-value">⭐⭐⭐⭐⭐</span></div>
+          <div class="city-row"><span class="city-row-label">State income tax</span><span class="city-row-value">9.3%+</span></div>
+          <div class="city-row"><span class="city-row-label">Viet community</span><span class="city-row-value" style="color:var(--accent-light);">Largest in US</span></div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">Little Saigon (Garden Grove/Westminster). Irvine Unified = top-ranked schools nationally. Higher COL but unmatched cultural support.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULES 3–5 GO HERE (Tasks 5–7) -->
+```
+
+- [ ] **Step 2: Verify in browser** — 3 recommended city cards with accent border, 3 honorable mention cards below.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "feat: add Module 2 City Comparison"
+```
+
+---
+
+### Task 5: Module 3 — Budget & Runway
+
+**Files:**
+- Modify: `immigration-plan/us-immigration-plan.html` — replace `<!-- MODULES 3–5 GO HERE (Tasks 5–7) -->`
+
+- [ ] **Step 1: Insert Module 3 HTML** — replace `<!-- MODULES 3–5 GO HERE (Tasks 5–7) -->` with:
+
+```html
+    <!-- ── MODULE 3: BUDGET ── -->
+    <div class="card module" id="budget">
+      <div class="section-label">💰 Module 3</div>
+      <div class="section-title">Budget & Runway</div>
+      <div class="section-title-vi">Ngân Sách & Dự Toán Tài Chính</div>
+
+      <div class="grid-2">
+        <div>
+          <div class="sub-heading">Initial Setup Costs (Month 1–2) · Chi phí ban đầu</div>
+          <table>
+            <thead><tr><th>Item · Hạng mục</th><th style="text-align:right;">Estimate</th></tr></thead>
+            <tbody>
+              <tr><td>Flights + baggage / shipping <span class="vi">Vé máy bay + hành lý / vận chuyển</span></td><td class="amount" style="text-align:right;">$5,000–8,000</td></tr>
+              <tr><td>Rental deposit + first/last month <span class="vi">Đặt cọc + tiền thuê tháng đầu/cuối</span></td><td class="amount" style="text-align:right;">$6,000–12,000</td></tr>
+              <tr><td>Car purchase (used, reliable) <span class="vi">Mua xe ô tô đã qua sử dụng</span></td><td class="amount" style="text-align:right;">$15,000–22,000</td></tr>
+              <tr><td>Furniture & household setup <span class="vi">Nội thất & đồ gia dụng</span></td><td class="amount" style="text-align:right;">$5,000–8,000</td></tr>
+              <tr><td>Health insurance (first 3 months) <span class="vi">Bảo hiểm y tế 3 tháng đầu</span></td><td class="amount" style="text-align:right;">$2,500–3,500</td></tr>
+              <tr><td>Emergency reserve <span class="vi">Quỹ dự phòng khẩn cấp</span></td><td class="amount" style="text-align:right;">$10,000–15,000</td></tr>
+              <tr><td class="total"><strong>Total setup estimate</strong> <span class="vi">Tổng ước tính chi phí ban đầu</span></td><td class="total amount" style="text-align:right;"><strong>$43,500–68,500</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="sub-heading">Monthly Burn Rate · Chi tiêu hàng tháng</div>
+          <table>
+            <thead><tr><th>Item · Hạng mục</th><th style="text-align:right;">/ Month</th></tr></thead>
+            <tbody>
+              <tr><td>Rent — 3-bed, good school district <span class="vi">Thuê nhà 3 phòng ngủ</span></td><td class="amount" style="text-align:right;">$2,500–3,500</td></tr>
+              <tr><td>Utilities + internet <span class="vi">Điện, nước, gas, internet</span></td><td class="amount" style="text-align:right;">$300–400</td></tr>
+              <tr><td>Groceries <span class="vi">Thực phẩm & tạp hoá</span></td><td class="amount" style="text-align:right;">$800–1,000</td></tr>
+              <tr><td>Car payment + insurance + gas <span class="vi">Xe + bảo hiểm xe + xăng</span></td><td class="amount" style="text-align:right;">$800–1,200</td></tr>
+              <tr><td>Health insurance (marketplace) <span class="vi">Bảo hiểm y tế</span></td><td class="amount" style="text-align:right;">$800–1,200</td></tr>
+              <tr><td>Kids' activities / general <span class="vi">Hoạt động của các con / chi phí chung</span></td><td class="amount" style="text-align:right;">$300–500</td></tr>
+              <tr><td>Misc / dining <span class="vi">Chi phí khác / ăn ngoài</span></td><td class="amount" style="text-align:right;">$400–600</td></tr>
+              <tr><td class="total"><strong>Total monthly burn</strong> <span class="vi">Tổng chi tiêu hàng tháng</span></td><td class="total amount" style="text-align:right;"><strong>$5,900–8,400</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="runway-bar-wrap">
+        <div class="runway-label">Financial Runway Indicator · Chỉ số thời gian tự chủ tài chính</div>
+        <div class="runway-bar"><div class="runway-fill"></div></div>
+        <div class="runway-note">
+          At ~$7,000/month average burn + ~$55K setup costs, a <strong>$150K starting fund → ~13 months runway</strong> before funds depleted.
+          Green zone: <strong>Target husband employed by Month 4–5</strong> for comfortable buffer.
+          <span class="vi" style="display:block; margin-top:4px;">Với ~$7,000/tháng và ~$55K chi phí ban đầu, $150K khởi đầu cho ~13 tháng tự chủ tài chính. Mục tiêu: chồng có việc làm trước tháng thứ 5.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULES 4–5 GO HERE (Tasks 6–7) -->
+```
+
+- [ ] **Step 2: Verify in browser** — two tables side by side, runway bar below.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "feat: add Module 3 Budget and Runway"
+```
+
+---
+
+### Task 6: Module 4 — Opportunity & Risk
+
+**Files:**
+- Modify: `immigration-plan/us-immigration-plan.html` — replace `<!-- MODULES 4–5 GO HERE (Tasks 6–7) -->`
+
+- [ ] **Step 1: Insert Module 4 HTML** — replace `<!-- MODULES 4–5 GO HERE (Tasks 6–7) -->` with:
+
+```html
+    <!-- ── MODULE 4: OPPORTUNITY & RISK ── -->
+    <div class="card module" id="opportunity-risk">
+      <div class="section-label">⚡ Module 4</div>
+      <div class="section-title">Opportunity & Risk Analysis</div>
+      <div class="section-title-vi">Phân Tích Cơ Hội & Rủi Ro</div>
+
+      <div class="opp-risk">
+        <div>
+          <div class="sub-heading" style="color:var(--success);">Opportunities ✅ · Cơ hội</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+
+            <div class="opp-item">
+              <div>
+                <strong>Data Analytics job market</strong>
+                <div class="body">50K+ open senior roles in US; median salary $115K–$145K for senior level. Husband is well-positioned with no degree gatekeeping for experienced hires. <span style="color:var(--text-vi); font-size:12px;">Thị trường việc làm phân tích dữ liệu rất sôi động — lương trung bình $115K–$145K.</span></div>
+              </div>
+            </div>
+
+            <div class="opp-item">
+              <div>
+                <strong>EB-5 → Full Green Card</strong>
+                <div class="body">File I-829 before 2-year mark → permanent residency, no more conditions, full rights. <span style="color:var(--text-vi); font-size:12px;">Nộp I-829 trước kỷ niệm 2 năm → thẻ xanh vĩnh viễn.</span></div>
+              </div>
+            </div>
+
+            <div class="opp-item">
+              <div>
+                <strong>World-class free public schools (2027)</strong>
+                <div class="body">Top districts in Austin, Seattle, Raleigh, Irvine rank among the best globally — free for permanent residents. <span style="color:var(--text-vi); font-size:12px;">Trường công lập đẳng cấp quốc tế, miễn phí cho thường trú nhân.</span></div>
+              </div>
+            </div>
+
+            <div class="opp-item">
+              <div>
+                <strong>Wife's career path</strong>
+                <div class="body">Community college re-skilling, ESL tutoring, or Vietnamese-language professional services — high demand in Vietnamese communities. <span style="color:var(--text-vi); font-size:12px;">Học lại tại community college, dạy ESL, hoặc dịch vụ bằng tiếng Việt.</span></div>
+              </div>
+            </div>
+
+            <div class="opp-item">
+              <div>
+                <strong>No state income tax (TX cities)</strong>
+                <div class="body">Austin or Dallas saves $8K–$14K/year vs. California at senior DA salary — equivalent to 1–2 months' expenses. <span style="color:var(--text-vi); font-size:12px;">Tiết kiệm $8K–$14K/năm so với California.</span></div>
+              </div>
+            </div>
+
+            <div class="opp-item">
+              <div>
+                <strong>Credit history from Day 1</strong>
+                <div class="body">Starting fresh = intentional, optimized credit history. Secured card + ITIN early → 700+ score within 12 months → better rates on future mortgage. <span style="color:var(--text-vi); font-size:12px;">Bắt đầu lịch sử tín dụng từ đầu — cơ hội xây điểm tốt một cách có chiến lược.</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div>
+          <div class="sub-heading" style="color:var(--danger);">Risks ⚠️ · Rủi ro cần theo dõi</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+
+            <div class="risk-item">
+              <div>
+                <strong>Zero US credit history</strong>
+                <div class="body">No credit = no credit card approvals, harder to rent without cosigner. Mitigate: secured card + ITIN immediately on arrival. <span style="color:#fca5a5; font-size:12px;">Không có lịch sử tín dụng → khó thuê nhà. Giải pháp: thẻ tín dụng có bảo đảm ngay khi đến.</span></div>
+              </div>
+            </div>
+
+            <div class="risk-item">
+              <div>
+                <strong>Health insurance gap</strong>
+                <div class="body">No employer = ACA Marketplace plan at $800–1,200/month until job offer with benefits. Budget this from Day 1. <span style="color:#fca5a5; font-size:12px;">Không có bảo hiểm từ chủ lao động — $800–1,200/tháng đến khi có việc làm.</span></div>
+              </div>
+            </div>
+
+            <div class="risk-item">
+              <div>
+                <strong>US tax complexity — Year 1</strong>
+                <div class="body">Global income reportable from Day 1 of residency. Vietnamese income, investments, and assets may trigger FBAR/FATCA reporting. Hire a US–Vietnam CPA. <span style="color:#fca5a5; font-size:12px;">Thu nhập toàn cầu phải khai thuế Mỹ từ ngày đầu. Cần CPA am hiểu luật Việt–Mỹ.</span></div>
+              </div>
+            </div>
+
+            <div class="risk-item">
+              <div>
+                <strong>Job search timeline</strong>
+                <div class="body">Senior DA roles average 2–4 months to close. Budget for 6 months without income to avoid financial pressure affecting negotiation. <span style="color:#fca5a5; font-size:12px;">Tìm việc cấp cao mất 2–4 tháng trung bình. Dự phòng 6 tháng không thu nhập.</span></div>
+              </div>
+            </div>
+
+            <div class="risk-item">
+              <div>
+                <strong>I-829 filing deadline</strong>
+                <div class="body">Must be filed within the 90-day window before the 2-year GC anniversary. Missing = loss of status. Set calendar alert at Month 18. <span style="color:#fca5a5; font-size:12px;">Nộp trong 90 ngày trước kỷ niệm 2 năm thẻ xanh. Đặt nhắc nhở tháng 18.</span></div>
+              </div>
+            </div>
+
+            <div class="risk-item">
+              <div>
+                <strong>Kids / parent in Vietnam 2026–2027</strong>
+                <div class="body">Any GC holder remaining in Vietnam must not exceed 6 continuous months abroad. Obtain I-131 Re-Entry Permit before departure. <span style="color:#fca5a5; font-size:12px;">GC holder ở VN không được quá 6 tháng liên tục. Nộp I-131 trước khi đi.</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5 GOES HERE (Task 7) -->
+```
+
+- [ ] **Step 2: Verify in browser** — two-column green/red layout, each item a glass card with strong label and muted body.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "feat: add Module 4 Opportunity and Risk Analysis"
+```
+
+---
+
+### Task 7: Module 5 — 60-Day Tactical Plan
+
+**Files:**
+- Modify: `immigration-plan/us-immigration-plan.html` — replace `<!-- MODULE 5 GOES HERE (Task 7) -->`
+
+- [ ] **Step 1: Insert Module 5 HTML** — replace `<!-- MODULE 5 GOES HERE (Task 7) -->` with:
+
+```html
+    <!-- ── MODULE 5: 60-DAY PLAN ── -->
+    <div class="card module" id="tactical-plan">
+      <div class="section-label">📅 Module 5</div>
+      <div class="section-title">60-Day Tactical Plan</div>
+      <div class="section-title-vi">Kế Hoạch Hành Động 60 Ngày</div>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-week">Week 1<span class="vi">Tuần 1</span><span style="font-size:11px;color:var(--text-muted);font-weight:400;display:block;margin-top:2px;">Land & Survive</span></div>
+          <div class="timeline-tasks">
+            <div class="timeline-task">Clear Port of Entry — preserve all stamps; print I-94 record at i94.cbp.dhs.gov immediately <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Nhập cảnh — lưu tất cả dấu, in I-94</span></div>
+            <div class="timeline-task">Purchase local SIM cards for all adults (T-Mobile or AT&T prepaid) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Mua SIM nội địa</span></div>
+            <div class="timeline-task">Open US bank account — Chase or Bank of America (passport + visa + address proof) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Mở tài khoản ngân hàng</span></div>
+            <div class="timeline-task">Book extended-stay housing or Airbnb (4–6 weeks) while searching for permanent rental <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Đặt chỗ ở tạm 4–6 tuần</span></div>
+            <div class="timeline-task">Apply for SSNs for all 4 family members at local SSA office (bring passport + GC + I-94) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Nộp đơn SSN cho cả 4 người</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-week">Week 2–3<span class="vi">Tuần 2–3</span><span style="font-size:11px;color:var(--text-muted);font-weight:400;display:block;margin-top:2px;">Stabilize</span></div>
+          <div class="timeline-tasks">
+            <div class="timeline-task">Find and sign permanent rental in target city — aim for 3-bed near good school district <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Ký hợp đồng thuê nhà dài hạn</span></div>
+            <div class="timeline-task">Purchase reliable used car — check Carfax, budget $15K–22K (Toyota/Honda recommended) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Mua xe ô tô đã qua sử dụng</span></div>
+            <div class="timeline-task">Apply for state ID / driver's license — bring international license + certified Vietnamese translation <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Đăng ký bằng lái xe tiểu bang</span></div>
+            <div class="timeline-task">Set up utilities, internet (Xfinity/AT&T), and renter's insurance <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Thiết lập điện, nước, internet, bảo hiểm nhà thuê</span></div>
+            <div class="timeline-task">Enroll in ACA Marketplace health insurance at healthcare.gov (Special Enrollment Period applies) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Đăng ký bảo hiểm y tế ACA</span></div>
+            <div class="timeline-task">Apply for ITIN for wife at IRS office (Form W-7) if not SSN-eligible <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Nộp đơn ITIN cho vợ tại IRS</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-week">Week 4–6<span class="vi">Tuần 4–6</span><span style="font-size:11px;color:var(--text-muted);font-weight:400;display:block;margin-top:2px;">Job Search Launch</span></div>
+          <div class="timeline-tasks">
+            <div class="timeline-task">Convert resume to US format — 1–2 pages, quantified achievements, no photo/DOB <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Chuyển đổi CV sang định dạng Mỹ</span></div>
+            <div class="timeline-task">Optimize LinkedIn — "Open to Work" badge, summary in English, target companies listed in Featured <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Tối ưu hồ sơ LinkedIn</span></div>
+            <div class="timeline-task">Apply to 5–10 high-fit Senior DA / Analytics roles per week on LinkedIn, Indeed, and company career pages <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Nộp 5–10 hồ sơ/tuần</span></div>
+            <div class="timeline-task">Attend local data + tech meetups (Meetup.com, local DataScience/Analytics groups) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Tham gia sự kiện networking địa phương</span></div>
+            <div class="timeline-task">Open secured credit card — Discover IT Secured or Capital One Platinum Secured ($200–500 deposit) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Mở thẻ tín dụng có bảo đảm để bắt đầu xây credit</span></div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-week">Week 7–8<span class="vi">Tuần 7–8</span><span style="font-size:11px;color:var(--text-muted);font-weight:400;display:block;margin-top:2px;">Foundation</span></div>
+          <div class="timeline-tasks">
+            <div class="timeline-task">Consult immigration attorney — I-829 timeline review, re-entry permit (I-131) for any extended Vietnam trips <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Gặp luật sư di trú — xem lại lịch trình I-829, I-131</span></div>
+            <div class="timeline-task">Open investment account — Fidelity or Vanguard (index funds: VTI + VXUS for diversification) <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Mở tài khoản đầu tư — quỹ chỉ số phân tán rủi ro</span></div>
+            <div class="timeline-task">Connect with local Vietnamese community associations and cultural organisations <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Kết nối cộng đồng người Việt tại địa phương</span></div>
+            <div class="timeline-task">If wife plans self-employment — register with state business authority and consult CPA on structure <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· Nếu vợ kinh doanh tự do — đăng ký với cơ quan tiểu bang</span></div>
+            <div class="timeline-task">Review Month 2 budget actuals vs. plan — adjust burn rate projections based on real costs <span class="vi" style="display:inline; font-size:12px; color:var(--text-vi);">· So sánh chi tiêu thực tế vs. kế hoạch và điều chỉnh</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="horizon" style="margin-top:20px;">
+        <div class="horizon-title">📆 2027 Horizon — Kế Hoạch Tiếp Theo</div>
+        <div class="horizon-item">Research school districts — Niche.com, GreatSchools.org — before children arrive</div>
+        <div class="horizon-item">Enroll Child 1 (Grade 10, high school) and Child 2 (Grade 5, elementary) — Fall 2027</div>
+        <div class="horizon-item">File US Year 1 tax return with CPA — includes global income disclosure + FBAR if applicable</div>
+        <div class="horizon-item">Begin I-829 preparation with immigration attorney — set hard calendar alert at Month 18 from GC stamp date</div>
+      </div>
+    </div>
+```
+
+- [ ] **Step 2: Verify in browser** — 4 timeline rows, each with week label + task list, horizon box at bottom. Scroll full page — all 5 modules visible.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "feat: add Module 5 60-Day Tactical Plan"
+```
+
+---
+
+### Task 8: Print CSS verification
+
+**Files:**
+- Read: `immigration-plan/us-immigration-plan.html` — verify `@media print` block is present (Task 1 includes it)
+
+- [ ] **Step 1: Test print preview in Chrome**
+
+Open `immigration-plan/us-immigration-plan.html` in Chrome, then:
+1. `Cmd+P` → Change destination to "Save as PDF"
+2. Check: white background, readable text, no cut-off cards
+3. Verify each module starts on a new page (due to `page-break-before: always` on `.module`)
+
+- [ ] **Step 2: Fix any print issues observed**
+
+Common issues to watch for:
+- Glass card backgrounds not clearing to white → already handled by `@media print` `.card { background: #f8faff !important }`
+- Text too dark to read on white → `color: #1a1a2e` set on body in print
+- Cards splitting mid-content → `break-inside: avoid` set on `.card`
+
+If a section is splitting awkwardly, add `break-inside: avoid` inline to that specific element.
+
+- [ ] **Step 3: Commit if any fixes made**
+
+```bash
+git add immigration-plan/us-immigration-plan.html
+git commit -m "fix: print CSS adjustments for clean PDF output"
+```
+
+---
+
+### Task 9: Markdown companion file
+
+**Files:**
+- Create: `immigration-plan/us-immigration-plan.md`
+
+- [ ] **Step 1: Create the Markdown file**
+
+Create `immigration-plan/us-immigration-plan.md` with the following content — this is the expandable source document:
+
+```markdown
+# U.S. Immigration Roadmap 2026
+## Lộ Trình Định Cư Hoa Kỳ 2026
+
+**Family:** 4 members · Vietnam → USA · EB-5 Conditional Green Card
+**Target landing:** June 2026 (tentative)
+**Children's US school enrollment:** Fall 2027
+
+> This document is the expandable source for the HTML infographic.
+> Future versions will add week-by-week breakdowns, extended watch-out lists, and DOCX/PDF export.
+
+---
+
+## Module 1 — Legal Must-Haves | Thủ Tục Pháp Lý
+
+### Immediate (Week 1–2)
+- [ ] Port of Entry — preserve all entry stamps + print I-94 at i94.cbp.dhs.gov
+- [ ] Apply for SSNs — all 4 family members at SSA office (passport + GC + I-94)
+- [ ] Open US bank account — Chase / Bank of America (passport + visa sufficient)
+- [ ] Get local SIM cards for all adults
+
+### Within 30 Days
+- [ ] State ID / driver's license — international license + certified Vietnamese translation
+- [ ] Health insurance via ACA Marketplace (healthcare.gov — Special Enrollment Period applies)
+- [ ] ITIN for wife if not SSN-eligible (IRS Form W-7)
+- [ ] Open secured credit card — Discover IT Secured or Capital One Platinum Secured
+
+### ⚠️ Conditional Green Card — Critical Obligations
+1. **Extended absence risk:** >6 months continuous absence outside US can trigger GC abandonment. Obtain **Form I-131 Re-Entry Permit** before any extended Vietnam stay. Critical for 2026–2027 if children or one parent remains in Vietnam for school year.
+2. **I-829 filing deadline:** Must file within 90-day window before 2-year GC anniversary. Set hard calendar alert at **Month 18**.
+3. **EB-5 investment conditions:** Must remain compliant through conditional period. Confirm with EB-5 attorney.
+
+### Ongoing
+- [ ] US taxes — hire US–Vietnam CPA for Year 1; global income reportable from Day 1; check FBAR/FATCA requirements for Vietnamese accounts
+- [ ] Credit building — secured card → all 3 bureaus → target 700+ score within 12 months
+
+### 2027 Horizon
+- [ ] Research school districts — Niche.com, GreatSchools.org
+- [ ] Enroll Child 1 (Grade 10, high school) — Fall 2027
+- [ ] Enroll Child 2 (Grade 5, elementary) — Fall 2027
+- [ ] File US Year 1 tax return with CPA
+- [ ] Begin I-829 preparation with immigration attorney (Month 18 alert)
+
+---
+
+## Module 2 — City Comparison | So Sánh Thành Phố
+
+### Top 3 Recommended
+
+| | Austin, TX | Seattle/Bellevue, WA | Raleigh-Durham, NC |
+|---|---|---|---|
+| Data Analytics jobs | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Cost of living | Medium | High | Low–Medium |
+| School quality | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| State income tax | None ✅ | None ✅ | 4.5% |
+| Vietnamese community | Medium | Large | Small |
+| Key employers | Dell, Oracle, Tesla, Apple | Amazon, Microsoft | Duke, Biogen, SAS |
+| Notes | No tax, fastest growing tech scene | Best schools; higher COL | Lowest COL; Research Triangle |
+
+### Honorable Mentions
+
+| | Dallas, TX | Atlanta, GA | Irvine / Orange County, CA |
+|---|---|---|---|
+| Data Analytics jobs | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Cost of living | Medium | Low–Medium | High |
+| School quality | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| State income tax | None ✅ | 5.75% | 9.3%+ |
+| Vietnamese community | Large | Medium | **Largest in US** (Little Saigon) |
+| Notes | Large Vietnamese community | Growing tech hub | Irvine Unified = top-ranked schools; cultural support |
+
+---
+
+## Module 3 — Budget & Runway | Ngân Sách & Dự Toán
+
+### Initial Setup Costs (Month 1–2)
+
+| Item | Low | High |
+|---|---|---|
+| Flights + baggage / shipping | $5,000 | $8,000 |
+| Rental deposit + first/last month | $6,000 | $12,000 |
+| Car purchase (used, reliable) | $15,000 | $22,000 |
+| Furniture & household setup | $5,000 | $8,000 |
+| Health insurance (first 3 months) | $2,500 | $3,500 |
+| Emergency reserve | $10,000 | $15,000 |
+| **Total** | **$43,500** | **$68,500** |
+
+### Monthly Burn Rate (Family of 4)
+
+| Item | Low | High |
+|---|---|---|
+| Rent (3-bed, good school district) | $2,500 | $3,500 |
+| Utilities + internet | $300 | $400 |
+| Groceries | $800 | $1,000 |
+| Car payment + insurance + gas | $800 | $1,200 |
+| Health insurance (marketplace) | $800 | $1,200 |
+| Kids' activities / general | $300 | $500 |
+| Misc / dining | $400 | $600 |
+| **Total** | **$5,900** | **$8,400** |
+
+### Runway
+- Average burn: ~$7,000/month
+- After ~$55K setup, $150K starting fund → **~13 months runway**
+- **Target: husband employed by Month 4–5**
+
+---
+
+## Module 4 — Opportunity & Risk | Cơ Hội & Rủi Ro
+
+### Opportunities
+1. **Data Analytics job market** — 50K+ open senior roles; $115K–$145K median salary; strong demand
+2. **EB-5 → full Green Card** — file I-829 before 2-year mark → permanent residency
+3. **Free world-class public schools (2027)** — top districts in Austin, Seattle, Raleigh, Irvine
+4. **Wife's career path** — community college re-skilling, ESL tutoring, Vietnamese-language services
+5. **No state income tax in TX** — saves $8K–$14K/year at senior DA salary
+6. **Credit history from Day 1** — clean slate → intentional, optimized credit → future mortgage
+
+### Risks & Mitigations
+1. **Zero US credit history** — Mitigate: secured card + ITIN on arrival
+2. **Health insurance gap** — Budget $800–1,200/month until employer coverage
+3. **US tax complexity Year 1** — Hire US–Vietnam CPA; check FBAR/FATCA for Vietnamese assets
+4. **Job search timeline** — Budget 6 months without income; target employment by Month 4–5
+5. **I-829 filing deadline** — Calendar alert at Month 18; file in 90-day window before 2-year anniversary
+6. **Kids / parent in Vietnam 2026–2027** — Obtain I-131 Re-Entry Permit; max 6 months continuous absence
+
+---
+
+## Module 5 — 60-Day Tactical Plan | Kế Hoạch 60 Ngày
+
+### Week 1 — Land & Survive
+- [ ] Clear Port of Entry; print I-94 at i94.cbp.dhs.gov
+- [ ] Buy SIM cards (T-Mobile / AT&T prepaid)
+- [ ] Open bank account (Chase / BofA)
+- [ ] Book extended-stay housing (4–6 weeks)
+- [ ] Apply for SSNs at SSA office
+
+### Week 2–3 — Stabilize
+- [ ] Find and sign permanent rental
+- [ ] Purchase used car (Toyota/Honda, $15K–22K, check Carfax)
+- [ ] Apply for state ID / driver's license
+- [ ] Set up utilities, internet, renter's insurance
+- [ ] Enroll in ACA health insurance (healthcare.gov)
+- [ ] Apply for wife's ITIN (IRS Form W-7)
+
+### Week 4–6 — Job Search Launch
+- [ ] Convert resume to US format (1–2 pages, no photo/DOB)
+- [ ] Optimize LinkedIn (Open to Work, US-style summary)
+- [ ] Apply 5–10 Senior DA roles/week (LinkedIn, Indeed, company sites)
+- [ ] Attend local data/tech meetups (Meetup.com)
+- [ ] Open secured credit card (Discover IT Secured or Capital One)
+
+### Week 7–8 — Foundation
+- [ ] Consult immigration attorney (I-829 review, I-131 if needed)
+- [ ] Open investment account (Fidelity / Vanguard — VTI + VXUS)
+- [ ] Connect with local Vietnamese community associations
+- [ ] Register wife's self-employment if applicable
+- [ ] Review Month 2 budget actuals vs. plan
+
+### 2027 Horizon
+- [ ] Research school districts (Niche.com, GreatSchools.org)
+- [ ] Enroll Child 1 (Grade 10) and Child 2 (Grade 5) — Fall 2027
+- [ ] File US Year 1 tax return with CPA (global income + FBAR)
+- [ ] I-829 preparation (Month 18 alert from GC stamp date)
+
+---
+
+## Notes for Future Expansion
+
+This document is intended to be expanded into:
+- **Week-by-week action plan** with specific phone numbers, addresses, and checklists per city
+- **Full watch-out list** per category (legal, financial, social, educational)
+- **City-specific appendices** with school district rankings, Vietnamese community resources, employer lists
+- **DOCX/PDF export** via Pandoc or similar tool
+
+To expand: share this file with Claude and request a detailed breakdown of any module.
+```
+
+- [ ] **Step 2: Verify the file is well-formed**
+
+```bash
+wc -l /Users/mac/dev/claude-code-et/immigration-plan/us-immigration-plan.md
+```
+
+Expected: 200+ lines.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add immigration-plan/us-immigration-plan.md
+git commit -m "feat: add Markdown companion for immigration plan"
+```
+
+---
+
+### Task 10: Final commit and open
+
+**Files:** None new.
+
+- [ ] **Step 1: Open final HTML in browser for full visual review**
+
+```bash
+open /Users/mac/dev/claude-code-et/immigration-plan/us-immigration-plan.html
+```
+
+Scroll through all 5 modules. Check:
+- Hero banner centered and readable
+- Module 1: two-column checklist + amber warning card
+- Module 2: 3 recommended city cards (accent border) + 3 honorable mentions
+- Module 3: two tables side by side + runway bar
+- Module 4: green/red two-column grid
+- Module 5: 4-row timeline + indigo horizon box
+
+- [ ] **Step 2: Print to PDF**
+
+`Cmd+P` in Chrome → Save as PDF → verify clean white output, page breaks between modules.
+
+- [ ] **Step 3: Final commit**
+
+```bash
+git add immigration-plan/
+git commit -m "feat: complete US immigration roadmap infographic and Markdown companion"
+git push origin main
+```
