@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US Immigration Roadmap 2026 | Lộ Trình Định Cư Hoa Kỳ 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── CSS Custom Properties ── */
+    :root {
+      --bg-from: #0a192f;
+      --bg-via: #112240;
+      --bg-to: #1d3461;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-bg-strong: rgba(255, 255, 255, 0.13);
+      --glass-border: rgba(100, 200, 255, 0.2);
+      --glass-blur: blur(16px);
+      --accent: #0ea5e9;
+      --accent-light: #38bdf8;
+      --accent-dim: rgba(14, 165, 233, 0.15);
+      --accent-border: rgba(56, 189, 248, 0.35);
+      --warning: #f59e0b;
+      --warning-dim: rgba(245, 158, 11, 0.12);
+      --warning-border: rgba(245, 158, 11, 0.4);
+      --success: #10b981;
+      --success-dim: rgba(16, 185, 129, 0.12);
+      --success-border: rgba(16, 185, 129, 0.35);
+      --danger: #ef4444;
+      --danger-dim: rgba(239, 68, 68, 0.12);
+      --danger-border: rgba(239, 68, 68, 0.35);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-accent: #67e8f9;
+      --text-vi: #a5b4fc;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --page-max: 900px;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Base ── */
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--bg-from), var(--bg-via), var(--bg-to));
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px 64px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── Glass card ── */
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+    }
+
+    .card--accent {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+    }
+
+    .card--warning {
+      background: var(--warning-dim);
+      border-color: var(--warning-border);
+    }
+
+    .card--success {
+      background: var(--success-dim);
+      border-color: var(--success-border);
+    }
+
+    .card--danger {
+      background: var(--danger-dim);
+      border-color: var(--danger-border);
+    }
+
+    /* ── Section header ── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .section-title-vi {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-vi);
+      margin-bottom: 20px;
+    }
+
+    /* ── Typography ── */
+    h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+    h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+
+    .vi { color: var(--text-vi); font-size: 0.85em; font-weight: 400; display: block; margin-top: 1px; }
+
+    /* ── Pills / badges ── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent-light);
+      white-space: nowrap;
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+    /* ── Two-column grid ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+    /* ── Checklist ── */
+    .checklist { display: flex; flex-direction: column; gap: 8px; }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .check-item::before {
+      content: '✓';
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent-light);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .check-item .vi { display: inline; font-size: 0.8em; color: var(--text-vi); margin-left: 4px; }
+
+    /* ── Sub-heading inside cards ── */
+    .sub-heading {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      margin-top: 18px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .sub-heading:first-child { margin-top: 0; }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 6px 10px 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    td {
+      padding: 9px 10px;
+      color: var(--text);
+      border-bottom: 1px solid rgba(100,200,255,0.07);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    td.amount {
+      font-weight: 600;
+      color: var(--accent-light);
+      white-space: nowrap;
+    }
+
+    td.total {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    td.total.amount { color: var(--accent); font-size: 15px; }
+
+    /* ── City comparison cards ── */
+    .city-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+    }
+
+    .city-card.recommended { border-color: var(--accent-border); background: var(--accent-dim); }
+
+    .city-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .city-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .city-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(100,200,255,0.08);
+      gap: 8px;
+    }
+
+    .city-row:last-child { border-bottom: none; }
+    .city-row-label { color: var(--text-muted); flex-shrink: 0; }
+    .city-row-value { color: var(--text); text-align: right; }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-week {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      padding-top: 2px;
+    }
+
+    .timeline-week .vi { color: var(--text-vi); font-size: 11px; }
+
+    .timeline-tasks { display: flex; flex-direction: column; gap: 6px; }
+
+    .timeline-task {
+      font-size: 14px;
+      color: var(--text);
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .timeline-task::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent-light);
+      font-size: 12px;
+    }
+
+    /* ── Opportunity / Risk columns ── */
+    .opp-risk { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .opp-item, .risk-item {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      line-height: 1.5;
+    }
+
+    .opp-item { background: var(--success-dim); border: 1px solid var(--success-border); }
+    .risk-item { background: var(--danger-dim); border: 1px solid var(--danger-border); }
+
+    .opp-item strong, .risk-item strong { color: var(--text); display: block; font-size: 13px; }
+    .opp-item .body, .risk-item .body { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+
+    /* ── Runway bar ── */
+    .runway-bar-wrap {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+    }
+
+    .runway-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .runway-bar {
+      height: 10px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .runway-fill {
+      height: 100%;
+      width: 38%;  /* ~5mo target / 13mo runway */
+      background: linear-gradient(90deg, var(--success), var(--accent));
+      border-radius: 999px;
+    }
+
+    .runway-note {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .runway-note strong { color: var(--accent-light); }
+
+    /* ── Horizon box ── */
+    .horizon {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: rgba(165,180,252,0.08);
+      border: 1px solid rgba(165,180,252,0.25);
+      border-radius: var(--radius-sm);
+    }
+
+    .horizon-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-vi);
+      margin-bottom: 8px;
+    }
+
+    .horizon-item {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 3px 0 3px 14px;
+      position: relative;
+    }
+
+    .horizon-item::before { content: '◦'; position: absolute; left: 0; color: var(--text-vi); }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+      margin: 4px 0;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding-top: 8px;
+    }
+
+    /* ──────────────────────────────────────────────
+       PRINT STYLES
+       ────────────────────────────────────────────── */
+    @media print {
+      @page { size: A4; margin: 18mm 15mm; }
+
+      body {
+        background: #ffffff !important;
+        color: #1a1a2e !important;
+        padding: 0;
+        font-size: 12px;
+      }
+
+      .page { gap: 16px; }
+
+      .card, .city-card, .opp-item, .risk-item,
+      .runway-bar-wrap, .horizon {
+        background: #f8faff !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1px solid #c7d8f0 !important;
+        break-inside: avoid;
+      }
+
+      .card--warning { background: #fffbeb !important; border-color: #f59e0b !important; }
+      .card--success { background: #f0fdf4 !important; border-color: #10b981 !important; }
+
+      .section-label, .section-title, .section-title-vi,
+      .sub-heading, .city-tag, .timeline-week { color: #1e3a5f !important; }
+
+      .vi, .text-vi, .city-row-label, .runway-note,
+      .horizon-item, .opp-item .body, .risk-item .body { color: #4b5563 !important; }
+
+      .pill {
+        background: #e8f4fd !important;
+        border-color: #0ea5e9 !important;
+        color: #0369a1 !important;
+      }
+
+      .check-item::before { background: #e8f4fd !important; border-color: #0ea5e9 !important; color: #0369a1 !important; }
+      .timeline-task::before { color: #0369a1 !important; }
+
+      .opp-item { background: #f0fdf4 !important; border-color: #10b981 !important; }
+      .risk-item { background: #fef2f2 !important; border-color: #ef4444 !important; }
+      .opp-item strong, .risk-item strong { color: #111827 !important; }
+
+      td.amount { color: #0369a1 !important; }
+      td.total.amount { color: #0ea5e9 !important; }
+
+      /* Page breaks before each module */
+      .module { page-break-before: always; }
+      .module:first-of-type { page-break-before: avoid; }
+      .hero { page-break-before: avoid; page-break-after: avoid; }
+
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- HERO + 5 MODULES GO HERE (Tasks 2–7) -->
+    <footer class="footer">
+      Prepared April 2026 · For personal use · Consult a licensed immigration attorney for legal decisions
+    </footer>
+  </div>
+</body>
+</html>
