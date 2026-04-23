@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>US Immigration Notebook 2026 | John Nguyen Family</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-from:#0a192f;--bg-via:#112240;--bg-to:#1d3461;
+      --glass:rgba(255,255,255,0.08);--glass-hi:rgba(255,255,255,0.13);
+      --border:rgba(100,200,255,0.18);
+      --accent:#0ea5e9;--accent-l:#38bdf8;--accent-dim:rgba(14,165,233,0.14);
+      --warn:#f59e0b;--warn-dim:rgba(245,158,11,0.13);--warn-b:rgba(245,158,11,0.4);
+      --ok:#10b981;--ok-dim:rgba(16,185,129,0.12);--ok-b:rgba(16,185,129,0.35);
+      --red:#ef4444;--red-dim:rgba(239,68,68,0.12);--red-b:rgba(239,68,68,0.35);
+      --txt:#e2e8f0;--muted:#94a3b8;--vi:#a5b4fc;--hi:#67e8f9;
+      --r:14px;--rs:8px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',system-ui,sans-serif;background:linear-gradient(135deg,var(--bg-from),var(--bg-via),var(--bg-to));background-attachment:fixed;color:var(--txt);min-height:100vh;font-size:15px;line-height:1.6}
+
+    /* ── Header ── */
+    .hdr{position:sticky;top:0;z-index:200;background:rgba(10,25,47,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .hdr-back{color:var(--accent-l);text-decoration:none;font-size:0.82rem;font-weight:600;white-space:nowrap;padding:5px 10px;border:1px solid var(--border);border-radius:20px;transition:background .15s}
+    .hdr-back:hover{background:var(--accent-dim)}
+    .hdr-title{flex:1;min-width:0}
+    .hdr-title h1{font-size:0.95rem;font-weight:700;color:var(--hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hdr-title p{font-size:0.72rem;color:var(--muted);margin-top:1px}
+    .hdr-prog{display:flex;align-items:center;gap:8px;white-space:nowrap}
+    .prog-label{font-size:0.75rem;color:var(--muted)}
+    .prog-bar{width:80px;height:5px;background:rgba(14,165,233,0.2);border-radius:3px;overflow:hidden}
+    .prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+    .reset-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:0.75rem;padding:3px 8px;cursor:pointer;transition:color .15s}
+    .reset-btn:hover{color:var(--txt)}
+
+    /* ── Layout ── */
+    .layout{display:grid;grid-template-columns:220px 1fr;max-width:1080px;margin:0 auto}
+    @media(max-width:768px){.layout{grid-template-columns:1fr}}
+
+    /* ── TOC ── */
+    .toc{position:sticky;top:53px;height:calc(100vh - 53px);overflow-y:auto;padding:20px 12px;border-right:1px solid var(--border)}
+    .toc::-webkit-scrollbar{width:4px}.toc::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    .toc-hd{font-size:0.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding:0 4px}
+    .toc a{display:block;padding:5px 8px;font-size:0.8rem;color:var(--muted);text-decoration:none;border-radius:6px;transition:background .12s,color .12s;margin-bottom:2px;line-height:1.3}
+    .toc a:hover{background:var(--glass);color:var(--txt)}
+    .toc a.urgent{color:var(--warn)}
+    .toc-mob{display:none;margin:12px 16px 0}
+    @media(max-width:768px){.toc{display:none}.toc-mob{display:block}}
+    .toc-mob summary{background:var(--glass);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;cursor:pointer;font-size:0.82rem;font-weight:600;color:var(--hi)}
+    .toc-mob-links{background:var(--glass);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--rs) var(--rs);padding:8px 14px 12px}
+    .toc-mob-links a{display:block;padding:4px 0;font-size:0.82rem;color:var(--muted);text-decoration:none}
+    .toc-mob-links a.urgent{color:var(--warn)}
+
+    /* ── Main ── */
+    .main{padding:20px 20px 60px;max-width:840px}
+    @media(max-width:768px){.main{padding:12px 12px 48px}}
+
+    /* ── Section ── */
+    .sec{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
+    .sec summary{padding:14px 18px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;font-weight:600;font-size:0.95rem;color:var(--hi)}
+    .sec summary::-webkit-details-marker{display:none}
+    .sec summary::after{content:'▸';margin-left:auto;color:var(--muted);font-size:0.8rem;transition:transform .2s}
+    .sec[open]>summary::after{transform:rotate(90deg)}
+    .sec[open]>summary{border-bottom:1px solid var(--border)}
+    .sec-body{padding:16px 18px}
+    .sec-body h3{font-size:0.88rem;font-weight:700;color:var(--accent-l);margin:18px 0 8px;text-transform:uppercase;letter-spacing:.04em}
+    .sec-body h3:first-child{margin-top:0}
+    .sec-body p{font-size:0.87rem;color:var(--txt);margin-bottom:8px}
+    .sec-body ul,.sec-body ol{padding-left:18px;font-size:0.87rem;margin-bottom:8px}
+    .sec-body li{margin-bottom:4px}
+    .sec-body strong{color:var(--accent-l)}
+
+    /* ── Boxes ── */
+    .warn-box{background:var(--warn-dim);border:1px solid var(--warn-b);border-radius:var(--rs);padding:11px 14px;margin:10px 0;font-size:0.84rem;line-height:1.5}
+    .warn-box strong{color:var(--warn)}
+    .info-box{background:var(--accent-dim);border:1px solid rgba(56,189,248,0.3);border-radius:var(--rs);padding:11px 14px;margin:10px 0;font-size:0.84rem;line-height:1.5}
+    .ok-box{background:var(--ok-dim);border:1px solid var(--ok-b);border-radius:var(--rs);padding:11px 14px;margin:10px 0;font-size:0.84rem;line-height:1.5}
+    .ok-box strong{color:var(--ok)}
+    .red-box{background:var(--red-dim);border:1px solid var(--red-b);border-radius:var(--rs);padding:11px 14px;margin:10px 0;font-size:0.84rem;line-height:1.5}
+    .red-box strong{color:var(--red)}
+
+    /* ── Tables ── */
+    .tbl{overflow-x:auto;margin:10px 0;-webkit-overflow-scrolling:touch}
+    table{width:100%;border-collapse:collapse;font-size:0.82rem;min-width:400px}
+    th{background:rgba(14,165,233,0.15);color:var(--accent-l);padding:8px 11px;text-align:left;font-weight:600;font-size:0.79rem;white-space:nowrap}
+    td{padding:7px 11px;border-bottom:1px solid rgba(100,200,255,0.07);vertical-align:top}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(255,255,255,0.03)}
+
+    /* ── Checklist ── */
+    .cl{list-style:none;padding:0;margin:8px 0}
+    .cl li{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .cl li:last-child{border-bottom:none}
+    .cl input[type=checkbox]{width:17px;height:17px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);cursor:pointer}
+    .cl label{font-size:0.85rem;line-height:1.5;cursor:pointer}
+    .cl input:checked+label{text-decoration:line-through;color:var(--muted)}
+    .cl-note{font-size:0.78rem;color:var(--muted);margin-left:27px;margin-top:2px}
+
+    /* ── Profile card ── */
+    .profile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0}
+    .profile-pill{background:var(--glass-hi);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px}
+    .profile-pill .pp-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+    .profile-pill .pp-val{font-size:0.85rem;color:var(--txt)}
+
+    /* ── Timeline overview ── */
+    .tl{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+    .tl-item{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .tl-item:last-child{border-bottom:none}
+    @media(max-width:480px){.tl-item{grid-template-columns:1fr}}
+    .tl-phase{font-size:0.78rem;font-weight:700;color:var(--accent-l)}
+    .tl-action{font-size:0.82rem;color:var(--muted)}
+
+    /* ── Bullet resume ── */
+    .resume-bullets{list-style:none;padding:0;margin:8px 0}
+    .resume-bullets li{background:rgba(14,165,233,0.06);border-left:3px solid var(--accent);border-radius:0 var(--rs) var(--rs) 0;padding:8px 12px;margin-bottom:6px;font-size:0.83rem;line-height:1.55;font-style:italic;color:var(--txt)}
+
+    /* ── Vi text ── */
+    .vi{color:var(--vi);font-size:0.8em}
+
+    /* ── Disclaimer ── */
+    .disclaimer{background:var(--warn-dim);border:1px solid var(--warn-b);border-radius:var(--r);padding:14px 18px;margin-bottom:14px;font-size:0.82rem;line-height:1.6;color:var(--muted)}
+    .disclaimer strong{color:var(--warn)}
+
+    /* ── Footer ── */
+    .nb-footer{text-align:center;padding:24px;font-size:0.72rem;color:var(--muted);border-top:1px solid var(--border);margin-top:8px}
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <a href="us-immigration-plan.html" class="hdr-back">← Summary</a>
+  <div class="hdr-title">
+    <h1>🗺️ US Immigration Notebook 2026</h1>
+    <p>Lộ Trình Định Cư Chi Tiết · Dung (John) Nguyen · Family of 4</p>
+  </div>
+  <div class="hdr-prog">
+    <span class="prog-label" id="prog-text">0 / 46 tasks</span>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <button class="reset-btn" onclick="resetAll()" title="Reset all checkboxes">↺ Reset</button>
+  </div>
+</header>
+
+<!-- MOBILE TOC -->
+<details class="toc-mob">
+  <summary>📋 Jump to section</summary>
+  <div class="toc-mob-links">
+    <a href="#profile">👨‍👩‍👧‍👦 Family Profile & Timeline</a>
+    <a href="#s2" class="urgent">⚠️ URGENT — I-131 Re-Entry Permits</a>
+    <a href="#s1">🛬 Part 1 — Day 0: Port of Entry</a>
+    <a href="#s3">📋 Part 3 — Week 1: Land & Survive</a>
+    <a href="#s4">🏠 Part 4 — Week 2–3: Stabilize</a>
+    <a href="#s5">💼 Part 5 — Week 4–6: Job Search</a>
+    <a href="#s5a">🎯 Part 5A — John's Career Positioning</a>
+    <a href="#s6">🏦 Part 6 — Week 7–8: Foundation</a>
+    <a href="#s7">📊 Part 7 — Month 2–12: Operations</a>
+    <a href="#s8">📄 Part 8 — I-829: Remove Conditions</a>
+    <a href="#s9">🏫 Part 9 — 2027: School Enrollment</a>
+    <a href="#s10">👩 Part 10 — Wife's Career Paths</a>
+    <a href="#s11">💰 Part 11 — Budget & Planning</a>
+    <a href="#s12">🔔 Part 12 — Calendar Alerts</a>
+    <a href="#s13">🏡 Part 13 — Maintaining Domicile</a>
+    <a href="#s14">📚 Parts 14–15 — Forms & Resources</a>
+  </div>
+</details>
+
+<div class="layout">
+
+  <!-- DESKTOP TOC -->
+  <nav class="toc" aria-label="Sections">
+    <div class="toc-hd">Contents</div>
+    <a href="#profile">👨‍👩‍👧‍👦 Family Profile</a>
+    <a href="#s2" class="urgent">⚠️ URGENT — I-131</a>
+    <a href="#s1">🛬 Part 1 — Port of Entry</a>
+    <a href="#s3">📋 Part 3 — Week 1</a>
+    <a href="#s4">🏠 Part 4 — Week 2–3</a>
+    <a href="#s5">💼 Part 5 — Job Search</a>
+    <a href="#s5a">🎯 Part 5A — John's Career</a>
+    <a href="#s6">🏦 Part 6 — Week 7–8</a>
+    <a href="#s7">📊 Part 7 — Month 2–12</a>
+    <a href="#s8">📄 Part 8 — I-829</a>
+    <a href="#s9">🏫 Part 9 — Schools 2027</a>
+    <a href="#s10">👩 Part 10 — Wife's Career</a>
+    <a href="#s11">💰 Part 11 — Budget</a>
+    <a href="#s12">🔔 Part 12 — Alerts</a>
+    <a href="#s13">🏡 Part 13 — Domicile</a>
+    <a href="#s14">📚 Parts 14–15 — Refs</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+      <strong>⚖️ Legal Disclaimer:</strong> This notebook is an informational reference compiled April 2026. It is <strong>NOT legal advice</strong>. Retain a licensed US immigration attorney before making any decisions. Fees, processing times, and regulations change — verify all figures at official sources before acting.
+    </div>
+
+    <!-- FAMILY PROFILE & TIMELINE -->
+    <details class="sec" id="profile" open>
+      <summary>👨‍👩‍👧‍👦 Family Profile &amp; Master Timeline</summary>
+      <div class="sec-body">
+        <div class="profile-grid">
+          <div class="profile-pill"><div class="pp-label">Status</div><div class="pp-val">EB-5 Conditional Green Card<br><span style="color:var(--muted);font-size:0.8em">CR5 (principal) · CR6 (derivatives)</span></div></div>
+          <div class="profile-pill"><div class="pp-label">Target Landing</div><div class="pp-val">June 2026</div></div>
+          <div class="profile-pill"><div class="pp-label">Husband</div><div class="pp-val">Dung (John) Nguyen<br><span style="color:var(--muted);font-size:0.8em">Sr. Manager, Data Analytics · Manulife + HSBC · 19 yrs</span></div></div>
+          <div class="profile-pill"><div class="pp-label">Wife</div><div class="pp-val">Career TBD<br><span style="color:var(--muted);font-size:0.8em">Interpreting / ESL path recommended</span></div></div>
+          <div class="profile-pill"><div class="pp-label">Children</div><div class="pp-val">Child 1 — age 15 at arrival<br>Child 2 — age 10 at arrival<br><span style="color:var(--muted);font-size:0.8em">US school: Fall 2027</span></div></div>
+          <div class="profile-pill"><div class="pp-label">City Options</div><div class="pp-val">Austin TX · Seattle/Bellevue WA · Raleigh-Durham NC</div></div>
+        </div>
+
+        <h3>Master Timeline</h3>
+        <div class="tl">
+          <div class="tl-item"><div class="tl-phase">Day 0</div><div class="tl-action">Clear POE · preserve I-94 · photograph all stamps</div></div>
+          <div class="tl-item"><div class="tl-phase">Week 1 (Days 1–7)</div><div class="tl-action">SSN applications · bank account · SIM cards · temp housing</div></div>
+          <div class="tl-item"><div class="tl-phase" style="color:var(--warn)">⚠️ URGENT Week 1–2</div><div class="tl-action" style="color:var(--warn)">File I-131 re-entry permits for wife + both children — do not delay</div></div>
+          <div class="tl-item"><div class="tl-phase">Week 2–3</div><div class="tl-action">Permanent rental · car purchase · state ID · ACA health insurance · ITIN</div></div>
+          <div class="tl-item"><div class="tl-phase">Week 4–6</div><div class="tl-action">Job search launch · resume · LinkedIn · secured credit card</div></div>
+          <div class="tl-item"><div class="tl-phase">Week 7–8</div><div class="tl-action">Immigration attorney · investment accounts · community</div></div>
+          <div class="tl-item"><div class="tl-phase">Month 2–12</div><div class="tl-action">Taxes · credit building · job search · I-829 evidence file</div></div>
+          <div class="tl-item"><div class="tl-phase">Fall 2027</div><div class="tl-action">Children enroll in US public school</div></div>
+          <div class="tl-item"><div class="tl-phase">Month 18 (~Dec 2027)</div><div class="tl-action" style="color:var(--warn)">⚠️ Begin I-829 preparation with attorney</div></div>
+          <div class="tl-item"><div class="tl-phase">Month 21–24 (~2028)</div><div class="tl-action" style="color:var(--red)">🔴 File I-829 within 90-day window before 2-year anniversary</div></div>
+          <div class="tl-item"><div class="tl-phase">June 2031</div><div class="tl-action">N-400 citizenship eligibility (5 years from entry)</div></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- PART 2 — I-131 URGENT (shown first, open) -->
+    <details class="sec" id="s2" open>
+      <summary>⚠️ URGENT — I-131 Re-Entry Permits (File Week 1–2)</summary>
+      <div class="sec-body">
+        <div class="warn-box"><strong>⚠️ This is the highest-priority legal task after arrival</strong> if the wife and children plan to return to Vietnam for the 2026–2027 school year. Without a re-entry permit, anyone absent 6+ continuous months faces near-certain green card abandonment.</div>
+
+        <h3>Who Needs I-131</h3>
+        <div class="tbl"><table>
+          <tr><th>Person</th><th>Situation</th><th>I-131 Needed?</th></tr>
+          <tr><td>Husband</td><td>Stays primarily in US</td><td>Recommended if any trip &gt;6 months</td></tr>
+          <tr><td>Wife</td><td>Returning to Vietnam ~9–10 months</td><td style="color:var(--warn);font-weight:700">YES — CRITICAL</td></tr>
+          <tr><td>Child 1</td><td>Returning to Vietnam ~9–10 months</td><td style="color:var(--warn);font-weight:700">YES — CRITICAL</td></tr>
+          <tr><td>Child 2</td><td>Returning to Vietnam ~9–10 months</td><td style="color:var(--warn);font-weight:700">YES — CRITICAL</td></tr>
+        </table></div>
+
+        <div class="warn-box"><strong>Non-negotiable rule:</strong> You must be physically in the US both when you <em>file</em> I-131 AND when you attend the <em>biometrics</em> appointment. You cannot do biometrics abroad. Do not leave for Vietnam before biometrics are complete.</div>
+
+        <h3>I-131 Process</h3>
+        <p><strong>Step 1 — File immediately after arrival (target: first week of July 2026)</strong></p>
+        <p>Each person files their own separate Form I-131. Documents per person:</p>
+        <ul class="cl" id="cl-i131">
+          <li><input type="checkbox" id="cb-1" data-persist onchange="saveAndUpdate()"><label for="cb-1">Completed Form I-131 (download from uscis.gov/i-131)</label></li>
+          <li><input type="checkbox" id="cb-2" data-persist onchange="saveAndUpdate()"><label for="cb-2">Copy of conditional green card — both sides</label></li>
+          <li><input type="checkbox" id="cb-3" data-persist onchange="saveAndUpdate()"><label for="cb-3">Copy of passport biographical page</label></li>
+          <li><input type="checkbox" id="cb-4" data-persist onchange="saveAndUpdate()"><label for="cb-4">Copy of I-94 record printout</label></li>
+          <li><input type="checkbox" id="cb-5" data-persist onchange="saveAndUpdate()"><label for="cb-5">Two passport-style photos (USCIS spec)</label></li>
+          <li><input type="checkbox" id="cb-6" data-persist onchange="saveAndUpdate()"><label for="cb-6">Form G-1450 (credit/debit) or G-1650 (ACH) for payment</label></li>
+          <li><input type="checkbox" id="cb-7" data-persist onchange="saveAndUpdate()"><label for="cb-7">Request delivery to US Embassy Hanoi — specify in application</label></li>
+        </ul>
+        <p><strong>Step 2 — Biometrics (ASC appointment)</strong><br>Scheduled 4–8 weeks after receipt. Must attend in person at a US Application Support Center. Do NOT leave US before biometrics.</p>
+        <p><strong>Step 3 — Permit sent to Hanoi Embassy</strong><br>After biometrics, you may leave for Vietnam. Permit arrives 1–4 months later at the US Embassy Hanoi. Embassy notifies you; pick up in person.</p>
+
+        <h3>Fees &amp; Timeline</h3>
+        <div class="tbl"><table>
+          <tr><th>Item</th><th>Detail</th></tr>
+          <tr><td>Fee per person</td><td><strong>$630</strong> (verify at uscis.gov/g-1055 before filing)</td></tr>
+          <tr><td>Payment method</td><td>Form G-1450 (card) or G-1650 (ACH) — checks no longer accepted since Oct 28, 2025</td></tr>
+          <tr><td>Family arrives in US</td><td>June 2026</td></tr>
+          <tr><td>File I-131 (wife + 2 children)</td><td><strong>First week of July 2026</strong></td></tr>
+          <tr><td>Biometrics appointments</td><td>August 2026 (4–8 weeks after filing)</td></tr>
+          <tr><td>Do NOT leave before biometrics</td><td>August/September 2026</td></tr>
+          <tr><td>Permit sent to Hanoi Embassy</td><td>September–November 2026</td></tr>
+          <tr><td>Wife + children depart for Vietnam</td><td>After biometrics — September 2026</td></tr>
+          <tr><td>Return from Vietnam</td><td>Summer 2027 — within 2 years of permit issuance</td></tr>
+        </table></div>
+
+        <h3>Abandonment Risk by Absence Duration</h3>
+        <div class="tbl"><table>
+          <tr><th>Absence</th><th>Risk Level</th><th>Action Required</th></tr>
+          <tr><td>Under 6 months</td><td style="color:var(--ok)">Low</td><td>No permit needed; routine entry</td></tr>
+          <tr><td>6–12 months</td><td style="color:var(--warn)">Medium-High</td><td>Re-entry permit required</td></tr>
+          <tr><td>12–24 months</td><td style="color:var(--red)">High</td><td>Re-entry permit + strong US ties documentation</td></tr>
+          <tr><td>Over 2 years</td><td style="color:var(--red)">Near-certain abandonment</td><td>No permit valid beyond 2 years; SB-1 Visa (last resort, often denied)</td></tr>
+        </table></div>
+      </div>
+    </details>
+
+    <!-- PART 1 — PORT OF ENTRY -->
+    <details class="sec" id="s1">
+      <summary>🛬 Part 1 — Day 0: Port of Entry</summary>
+      <div class="sec-body">
+        <div class="info-box">Each family member's passport contains an Immigrant Visa foil stamped by the US Embassy in Hanoi. Principal investor: <strong>CR5</strong>. Spouse and children: <strong>CR6</strong>. The principal investor holds a <strong>sealed NVC/Embassy packet — do NOT open it</strong>. Hand it directly to the CBP officer.</div>
+
+        <h3>Step-by-Step POE Procedure</h3>
+        <ol style="font-size:0.87rem;padding-left:18px">
+          <li style="margin-bottom:8px"><strong>Primary Inspection</strong> — Present passport + sealed embassy packet. CBP scans passport, verifies biometrics.</li>
+          <li style="margin-bottom:8px"><strong>Secondary Inspection</strong> (expected for first-time immigrant entry — normal) — CBP processes sealed packet, formally admits you as a Conditional Permanent Resident. Expect 30 min to 2+ hours.</li>
+          <li style="margin-bottom:8px"><strong>I-551 ADIT Stamp</strong> — Passport stamped with I-551 (valid 6–12 months). Functions as temporary green card for employment, banking, SSN, driver's license. Physical green card arrives by mail 45–90 days later.</li>
+          <li><strong>After customs</strong> — Your family is now officially Conditional Permanent Residents of the United States.</li>
+        </ol>
+
+        <h3>Documents Checklist</h3>
+        <p><strong>Essential (all family members):</strong></p>
+        <ul class="cl">
+          <li><input type="checkbox" id="cb-8" data-persist onchange="saveAndUpdate()"><label for="cb-8">Valid passport (valid 6+ months beyond entry date)</label></li>
+          <li><input type="checkbox" id="cb-9" data-persist onchange="saveAndUpdate()"><label for="cb-9">Immigrant Visa foil in passport (stamped by Embassy Hanoi)</label></li>
+          <li><input type="checkbox" id="cb-10" data-persist onchange="saveAndUpdate()"><label for="cb-10">Principal investor only: sealed NVC/Embassy packet (do NOT open)</label></li>
+          <li><input type="checkbox" id="cb-11" data-persist onchange="saveAndUpdate()"><label for="cb-11">I-526E or I-526 USCIS approval notices</label></li>
+          <li><input type="checkbox" id="cb-12" data-persist onchange="saveAndUpdate()"><label for="cb-12">DS-260 immigrant visa application confirmation</label></li>
+        </ul>
+        <p><strong>Supporting (have ready):</strong></p>
+        <ul class="cl">
+          <li><input type="checkbox" id="cb-13" data-persist onchange="saveAndUpdate()"><label for="cb-13">I-797 approval notices for all USCIS filings</label></li>
+          <li><input type="checkbox" id="cb-14" data-persist onchange="saveAndUpdate()"><label for="cb-14">Birth certificates — all family members (certified English translation)</label></li>
+          <li><input type="checkbox" id="cb-15" data-persist onchange="saveAndUpdate()"><label for="cb-15">Marriage certificate (certified English translation)</label></li>
+          <li><input type="checkbox" id="cb-16" data-persist onchange="saveAndUpdate()"><label for="cb-16">US address where green card will be mailed (written clearly on paper)</label></li>
+          <li><input type="checkbox" id="cb-17" data-persist onchange="saveAndUpdate()"><label for="cb-17">EB-5 attorney contact information (US number)</label></li>
+          <li><input type="checkbox" id="cb-18" data-persist onchange="saveAndUpdate()"><label for="cb-18">Medical examination records from Embassy physician</label></li>
+        </ul>
+
+        <h3>CBP Questions and How to Answer</h3>
+        <div class="tbl"><table>
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>"Purpose of entry?"</td><td>"I am entering as a conditional permanent resident under the EB-5 investor program."</td></tr>
+          <tr><td>"Where will you live?"</td><td>State your exact US address — have it written down.</td></tr>
+          <tr><td>"Do you intend to live permanently here?"</td><td>"Yes."</td></tr>
+          <tr><td>"What is your investment?"</td><td>"I invested in a USCIS-approved EB-5 Regional Center project." Keep it simple.</td></tr>
+          <tr><td>"Are you bringing currency over $10,000?"</td><td>Answer truthfully — amounts over $10,000 must be declared on FinCEN Form 105.</td></tr>
+          <tr><td>"Do you have a job?"</td><td>"Not yet. I am a conditional permanent resident searching for employment."</td></tr>
+        </table></div>
+        <div class="red-box"><strong>Never lie to a CBP officer.</strong> Misrepresentation is a federal crime and grounds for permanent inadmissibility.</div>
+
+        <h3>I-94 Check — Within 24 Hours of Arrival</h3>
+        <p>Go to <strong>i94.cbp.dhs.gov</strong> → "Get Most Recent I-94." Verify for every family member:</p>
+        <div class="tbl"><table>
+          <tr><th>Field</th><th>What It Should Show</th></tr>
+          <tr><td>Class of Admission</td><td><strong>CR5</strong> (investor) or <strong>CR6</strong> (spouse/children)</td></tr>
+          <tr><td>Admit Until Date</td><td><strong>"D/S"</strong> (Duration of Status) — NOT a specific date</td></tr>
+          <tr><td>Entry Date</td><td>Must match actual arrival date — this starts the 2-year I-829 clock</td></tr>
+          <tr><td>Port of Entry</td><td>Must match the airport you landed at</td></tr>
+        </table></div>
+        <div class="warn-box"><strong>If "Admit Until Date" shows a specific date (not D/S), contact your immigration attorney immediately.</strong><br><br>Print or screenshot the I-94 for every family member and save permanently. This date determines your I-829 filing window.</div>
+        <div class="warn-box"><strong>2025–2026 context:</strong> The current administration has significantly increased CBP scrutiny of LPRs at ports of entry, including more secondary inspections. Remain calm, answer honestly, do not volunteer information beyond what is asked.</div>
+      </div>
+    </details>
+
+    <!-- PART 3 — WEEK 1 -->
+    <details class="sec" id="s3">
+      <summary>📋 Part 3 — Week 1: Land &amp; Survive</summary>
+      <div class="sec-body">
+        <h3>SSN — Social Security Number</h3>
+        <p>Apply for all 4 family members immediately. SSN is required for employment, taxes, banking, and credit. Wait 2–3 business days after arrival before applying (so CBP entry record is in the system).</p>
+        <p><strong>What you need (originals — SSA does not accept photocopies for initial applications):</strong></p>
+        <ul class="cl">
+          <li><input type="checkbox" id="cb-19" data-persist onchange="saveAndUpdate()"><label for="cb-19">Completed Form SS-5 (from ssa.gov or SSA office)</label></li>
+          <li><input type="checkbox" id="cb-20" data-persist onchange="saveAndUpdate()"><label for="cb-20">Original green card or passport with I-551 ADIT stamp</label></li>
+          <li><input type="checkbox" id="cb-21" data-persist onchange="saveAndUpdate()"><label for="cb-21">Passport</label></li>
+          <li><input type="checkbox" id="cb-22" data-persist onchange="saveAndUpdate()"><label for="cb-22">I-94 record printout</label></li>
+        </ul>
+        <p>Find your local SSA office at <strong>ssa.gov/locator</strong>. Book an appointment online — faster than walk-in. Cards arrive by mail in approximately 10–14 business days.</p>
+
+        <h3>Banking</h3>
+        <div class="tbl"><table>
+          <tr><th>Bank</th><th>Account</th><th>Why Good for New Immigrants</th></tr>
+          <tr><td><strong>Wells Fargo</strong></td><td>Clear Access Banking</td><td>Most flexible; accepts ITIN (no SSN required initially)</td></tr>
+          <tr><td><strong>Chase</strong></td><td>Chase Secure Banking</td><td>$4.95/month; no overdraft; widely available</td></tr>
+          <tr><td><strong>Bank of America</strong></td><td>SafeBalance Banking</td><td>Easy to open with green card + I-94; no minimum balance</td></tr>
+          <tr><td><strong>Local Credit Union</strong></td><td>Checking + Savings</td><td>Often most flexible; may offer immigrant-specific programs</td></tr>
+        </table></div>
+        <div class="info-box">Open both checking AND savings. The savings account demonstrates financial stability for rental applications, car insurance, and mortgage pre-qualification. No SSN yet? Wells Fargo and some credit unions accept ITIN or just green card + passport.</div>
+
+        <h3>SIM Cards</h3>
+        <p><strong>Best for family of 4:</strong> Metro by T-Mobile — 4 lines for ~$100–$120/month. No credit check, no SSN required. Unlimited talk/text/data. Alternatives: T-Mobile, AT&amp;T Prepaid, Google Fi. Get SIM cards on Day 1 or 2.</p>
+
+        <h3>Temporary Housing</h3>
+        <p>Book before departing Vietnam. Target: 4–6 weeks while searching for a permanent rental.</p>
+        <div class="tbl"><table>
+          <tr><th>City</th><th>Extended-Stay Monthly Cost (Family Suite)</th></tr>
+          <tr><td>Austin, TX</td><td>$2,500–$3,500/month</td></tr>
+          <tr><td>Seattle/Bellevue, WA</td><td>$3,000–$4,500/month</td></tr>
+          <tr><td>Raleigh, NC</td><td>$2,000–$3,000/month</td></tr>
+        </table></div>
+        <p>Best options: Residence Inn by Marriott, Homewood Suites by Hilton, or Airbnb monthly (20–40% cheaper with full kitchen).</p>
+      </div>
+    </details>
+
+    <!-- PART 4 — WEEK 2-3 -->
+    <details class="sec" id="s4">
+      <summary>🏠 Part 4 — Week 2–3: Stabilize</summary>
+      <div class="sec-body">
+        <h3>Permanent Rental — No US Credit Strategies</h3>
+        <ul style="font-size:0.87rem">
+          <li><strong>Larger deposit</strong> — offer 2–3 months upfront instead of typical 1 month</li>
+          <li><strong>Prepay rent</strong> — offer 3–6 months in advance</li>
+          <li><strong>Proof of funds letter</strong> — bank statement showing sufficient liquid assets to cover the lease term</li>
+          <li><strong>Letter of explanation</strong> — explain EB-5 green card status and that US credit is being established from arrival</li>
+          <li><strong>Nova Credit</strong> — novacredit.com translates foreign credit histories (Vietnam supported)</li>
+          <li><strong>Smaller landlords</strong> — individual owners are more flexible than large property management companies</li>
+        </ul>
+        <div class="tbl"><table>
+          <tr><th>City</th><th>Monthly Rent (3-bed, good school district)</th></tr>
+          <tr><td>Austin, TX</td><td>$2,200–$3,200</td></tr>
+          <tr><td>Seattle/Bellevue, WA</td><td>$2,800–$4,000</td></tr>
+          <tr><td>Raleigh, NC</td><td>$1,800–$2,600</td></tr>
+        </table></div>
+        <div class="info-box">Check school district ratings on <strong>greatschools.org</strong> and <strong>niche.com</strong> before signing. Month-to-month or 12-month lease only for Year 1 — avoid 24-month leases until city is confirmed.</div>
+
+        <h3>Car Purchase</h3>
+        <p>Buy with cash (Week 2–3). No credit check, no high-interest loan. Target: 2018–2021 Toyota Camry or Honda Accord, under 80,000 miles, $14,000–$19,000.</p>
+        <p><strong>Safest purchase: CarMax</strong> — fixed prices, 30-day/1,500-mile return policy, all vehicles inspected. Check Carfax ($44.99 at carfax.com) and NHTSA recalls (nhtsa.gov/recalls) for any car.</p>
+
+        <h3>Driver's License — Grace Periods</h3>
+        <div class="tbl"><table>
+          <tr><th>State</th><th>Grace Period</th><th>Written Test</th><th>Road Test</th></tr>
+          <tr><td>Texas (TxDPS)</td><td>90 days</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>Washington (WA DOL)</td><td>30 days</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>North Carolina (NCDMV)</td><td>60 days</td><td>Yes</td><td>Yes</td></tr>
+        </table></div>
+        <div class="warn-box">Get an <strong>International Driving Permit (IDP)</strong> from Vietnam's VRA <em>before leaving Vietnam</em>. Vietnam is NOT on any US state's reciprocity list — you must take both the written and road tests regardless of experience.</div>
+        <p>Get <strong>REAL ID-compliant</strong> license (required for domestic air travel). Bring: passport or green card (identity) + SSN card (if available) + 2 documents showing state residency (lease, utility bill, bank statement).</p>
+
+        <h3>ACA Health Insurance</h3>
+        <p>EB-5 conditional green card holders are fully eligible for ACA Marketplace plans. You have a <strong>60-day Special Enrollment Period</strong> from your date of entry to enroll. Go to <strong>healthcare.gov</strong>.</p>
+        <div class="warn-box"><strong>5-year Medicaid bar:</strong> As new LPRs, you are barred from federally-funded Medicaid for 5 years from admission date. Do NOT apply for Medicaid. ACA Marketplace plans: you ARE eligible immediately.</div>
+        <div class="tbl"><table>
+          <tr><th>Plan Tier</th><th>Monthly Premium Estimate (Family of 4)</th></tr>
+          <tr><td>Bronze (high deductible)</td><td>$900–$1,400/month</td></tr>
+          <tr><td>Silver (moderate deductible)</td><td>$1,200–$1,800/month</td></tr>
+          <tr><td>Gold (low deductible)</td><td>$1,600–$2,400/month</td></tr>
+        </table></div>
+        <div class="info-box">With no US employment income initially, your projected income may be low — you may qualify for premium tax credits that significantly reduce these costs. Report projected annual income honestly on the application.</div>
+
+        <h3>ITIN for Wife</h3>
+        <p>As a green card holder, the wife is eligible for an SSN — apply for it at the same time as the rest of the family. ITIN (Form W-7) is a fallback only if the SSN application is delayed or denied.</p>
+      </div>
+    </details>
+
+    <!-- PART 5 — JOB SEARCH -->
+    <details class="sec" id="s5">
+      <summary>💼 Part 5 — Week 4–6: Job Search Launch</summary>
+      <div class="sec-body">
+        <div class="warn-box"><strong>Critical framing:</strong> John is a Senior Manager / VP-level analytics leader with 19 years at HSBC + Manulife. Do NOT apply for individual-contributor "Senior Data Analyst" roles ($90K–$130K). Target Director / Senior Manager / Head of Analytics roles. See Part 5A for full positioning.</div>
+
+        <h3>Resume — US Format Rules</h3>
+        <ul style="font-size:0.87rem">
+          <li>1–2 pages maximum (senior manager = 2 pages acceptable)</li>
+          <li><strong>No photo, no date of birth, no nationality, no gender</strong></li>
+          <li>Plain format — no tables, no graphics, no columns (ATS cannot parse them)</li>
+          <li>Bullet points only — no paragraph prose</li>
+          <li>Every bullet: <em>Action verb + what you did + tool/method + quantified result</em></li>
+        </ul>
+        <p><strong>List Manulife as:</strong> "Manulife (operating as John Hancock in the US) — Senior Manager, Data Analytics"</p>
+        <p><strong>Work authorization statement</strong> (add to resume and state in every application):</p>
+        <div class="info-box">"I am a US Permanent Resident (green card holder). I am authorized to work for any US employer without sponsorship, now and permanently. No H-1B transfer, no employer petition required." — On job applications, select: <strong>"Authorized to work in the US for any employer."</strong></div>
+
+        <h3>LinkedIn</h3>
+        <ul style="font-size:0.87rem">
+          <li>Set location to your target US city <em>before arriving</em> — recruiters search by location</li>
+          <li>Turn on "Open to Work" (visible to recruiters only)</li>
+          <li><strong>Headline:</strong> <code>Senior Analytics Manager | Life Insurance &amp; Banking | SQL · Python · SAS · Power BI · AI Tools | Manulife · HSBC | US Permanent Resident</code></li>
+          <li><strong>About section ending:</strong> "Relocating to [City] in June 2026. Open to Director / Senior Manager Analytics roles in insurance, financial services, and technology."</li>
+          <li><strong>Skills to add:</strong> SQL · Python · SAS · Power BI · DAX · GitHub Copilot · Claude Code · AI-Augmented Analytics · Life Insurance Analytics · CRM Analytics · Customer Segmentation · Distribution Analytics · Stakeholder Management</li>
+        </ul>
+
+        <h3>Salary Ranges — Director / Senior Manager Analytics</h3>
+        <div class="tbl"><table>
+          <tr><th>City</th><th>Base Salary</th><th>Total Comp (with bonus)</th><th>Notes</th></tr>
+          <tr><td>Austin, TX</td><td>$120,000–$155,000</td><td>$140,000–$185,000</td><td>No state income tax; +15–25% bonus</td></tr>
+          <tr><td>Seattle/Bellevue, WA</td><td>$140,000–$185,000</td><td>$170,000–$240,000</td><td>No state income tax; RSUs at Microsoft/Amazon</td></tr>
+          <tr><td>Raleigh, NC</td><td>$115,000–$150,000</td><td>$135,000–$175,000</td><td>4.5% state tax; lower COL; SAS/MetLife/BCBS cluster</td></tr>
+        </table></div>
+
+        <h3>Job Boards</h3>
+        <div class="tbl"><table>
+          <tr><th>Platform</th><th>Best For</th></tr>
+          <tr><td><strong>LinkedIn</strong></td><td>#1 overall — most recruiter activity; use Easy Apply + direct recruiter message</td></tr>
+          <tr><td><strong>Indeed</strong></td><td>High volume; set email alerts by keyword + location</td></tr>
+          <tr><td><strong>eFinancialCareers</strong> (efinancialcareers.com)</td><td>Banking + financial services analytics — #1 specialized board for John's profile</td></tr>
+          <tr><td><strong>LIMRA Career Center</strong> (limra.com)</td><td>Life insurance industry roles — direct match</td></tr>
+          <tr><td><strong>Built In</strong> (builtinaustin/seattle.com)</td><td>Tech + InsurTech startups</td></tr>
+          <tr><td><strong>Company career pages</strong></td><td>Apply directly — often faster than aggregators</td></tr>
+          <tr><td><strong>Glassdoor</strong></td><td>Company research + salary data</td></tr>
+        </table></div>
+
+        <h3>Realistic Job Search Timeline</h3>
+        <div class="tbl"><table>
+          <tr><th>Stage</th><th>Duration</th></tr>
+          <tr><td>Application submitted</td><td>Day 0</td></tr>
+          <tr><td>Recruiter phone screen</td><td>3–7 business days</td></tr>
+          <tr><td>Hiring manager interview</td><td>1–2 weeks later</td></tr>
+          <tr><td>Technical assessment</td><td>1–2 weeks</td></tr>
+          <tr><td>Final panel interviews</td><td>1–2 weeks</td></tr>
+          <tr><td>Offer</td><td>1–2 weeks</td></tr>
+          <tr><td><strong>Total from first application to offer</strong></td><td><strong>5–10 weeks</strong></td></tr>
+        </table></div>
+        <p>For a Senior DA Manager without US employment history, total active job search: 3–6 months. <strong>Budget 6 months without income.</strong></p>
+
+        <h3>Secured Credit Card — Open Week 4–6</h3>
+        <div class="tbl"><table>
+          <tr><th>Card</th><th>Min. Deposit</th><th>Notes</th></tr>
+          <tr><td>Discover IT Secured</td><td>$200</td><td>Best overall — cash back, no annual fee, graduates to unsecured ~8 months</td></tr>
+          <tr><td>Capital One Platinum Secured</td><td>$49–$200</td><td>Low minimum; widely accepted</td></tr>
+          <tr><td>OpenSky Secured Visa</td><td>$200</td><td>No SSN required initially; no credit check</td></tr>
+        </table></div>
+        <p>Both husband AND wife should open cards independently — separate credit histories matter for future joint mortgage.</p>
+        <div class="tbl"><table>
+          <tr><th>Timeline</th><th>Expected FICO Range</th></tr>
+          <tr><td>Month 0</td><td>No score (no US history)</td></tr>
+          <tr><td>Month 6</td><td>580–640</td></tr>
+          <tr><td>Month 12</td><td>650–720</td></tr>
+          <tr><td>Month 18–24</td><td>700–760+</td></tr>
+        </table></div>
+      </div>
+    </details>
+
+    <!-- PART 5A — JOHN'S CAREER POSITIONING -->
+    <details class="sec" id="s5a">
+      <summary>🎯 Part 5A — John's Specific Career Positioning</summary>
+      <div class="sec-body">
+        <h3>Target Roles (Director / Senior Manager Level)</h3>
+        <ul style="font-size:0.87rem">
+          <li>Director of Analytics / Head of Analytics</li>
+          <li>VP, Data &amp; Insights / VP Analytics</li>
+          <li>Senior Manager, Analytics Strategy</li>
+          <li>Senior Analytics Manager — Insurance / Financial Services</li>
+          <li>Principal Data Analyst (senior IC at tech companies — still strong comp)</li>
+        </ul>
+        <div class="ok-box"><strong>Green card advantage:</strong> "I am a US Permanent Resident. I am authorized to work for any US employer without sponsorship, now and permanently." Many employers actively prefer green card holders over H-1B candidates — zero cost, zero risk, no sponsorship complexity.</div>
+
+        <h3>Manulife = John Hancock (US Brand)</h3>
+        <p>Manulife is the parent company of <strong>John Hancock</strong>, headquartered in Boston, MA. On your resume and LinkedIn: <em>"Manulife (operating as John Hancock in the US)"</em></p>
+        <p>US recruiters at John Hancock in Boston will recognize you as a Manulife colleague. Your institutional knowledge of Manulife's global analytics practices is directly applicable to John Hancock's US operations.</p>
+        <div class="info-box"><strong>Action (Week 4):</strong> Reach out on LinkedIn to John Hancock Analytics / Data Science teams in Boston: "I'm a Senior Manager in Data Analytics at Manulife Vietnam, relocating to the US in June 2026. I've spent 8 years in Manulife's analytics ecosystem — distribution, inforce, agent activation — and would love to connect."</div>
+
+        <h3>Resume: Insurance Jargon → US English</h3>
+        <div class="tbl"><table>
+          <tr><th>Your Language</th><th>Write on US Resume</th></tr>
+          <tr><td>NBV (Net Business Value)</td><td>"incremental revenue" or "incremental premium revenue"</td></tr>
+          <tr><td>APE (Annualized Premium Equivalent)</td><td>"annualized premium revenue"</td></tr>
+          <tr><td>Inforce Management</td><td>"retention analytics for existing policyholders"</td></tr>
+          <tr><td>tNPS</td><td>"transactional customer satisfaction score (tNPS)"</td></tr>
+          <tr><td>Distribution analytics</td><td>"insurance advisor / agent performance analytics"</td></tr>
+          <tr><td>Agent Activation Model</td><td>"predictive model for dormant advisor re-engagement"</td></tr>
+          <tr><td>Up/X-sell campaigns</td><td>"cross-sell and upsell campaign analytics"</td></tr>
+        </table></div>
+
+        <h3>Rewritten Resume Bullets (US Format)</h3>
+        <ul class="resume-bullets">
+          <li>"Designed up/cross-sell campaign analytics for Manulife's retail life insurance portfolio, delivering $1.2M incremental revenue despite adverse market conditions."</li>
+          <li>"Built performance analytics reporting suite reducing insight delivery from weekly to daily for a 200+ advisor distribution network, enabling $6M incremental revenue."</li>
+          <li>"Developed ML-based Agent Activation Model (Python + SQL) predicting dormant advisor re-engagement likelihood — generated $1.8M incremental revenue."</li>
+          <li>"Led Inforce Management analytics program delivering 5.4% policyholder retention uplift, preserving $7.4M in annualized premium revenue."</li>
+          <li>"Led team of 6 analysts at HSBC (VP CRM) delivering customer segmentation, behavioral analytics, and campaign performance insights across retail and commercial banking portfolios."</li>
+        </ul>
+
+        <h3>AI Tools — Your 2026 Differentiator</h3>
+        <div class="ok-box"><strong>GitHub Copilot + Claude Code</strong> proficiency places you in the top ~5% of analytics managers in the US market in 2026. Companies are actively building AI-augmented analytics operating models.</div>
+        <p><strong>Add to resume Professional Summary:</strong></p>
+        <ul class="resume-bullets">
+          <li>"Leverages AI-augmented development workflows (GitHub Copilot, Claude Code) to accelerate SQL and Python analysis delivery — enabling faster iteration from data to insight."</li>
+        </ul>
+        <p><strong>Interview talking point:</strong> "I integrate AI coding tools into my daily workflow — GitHub Copilot for SQL and Python development, Claude Code for complex multi-step analysis tasks. This allows me to deliver higher-quality insights faster and sets a model for how I'd build an AI-augmented analytics team."</p>
+
+        <h3>Skills — Keep, Add, Skip</h3>
+        <div class="tbl"><table>
+          <tr><th>Skill</th><th>Action</th><th>Why</th></tr>
+          <tr><td>SQL (advanced)</td><td style="color:var(--ok)">Keep — prominently</td><td>Universal requirement at all levels</td></tr>
+          <tr><td>Python</td><td style="color:var(--ok)">Keep</td><td>Strong signal at analytics manager level</td></tr>
+          <tr><td><strong>SAS</strong></td><td style="color:var(--ok)">Keep — do NOT downplay</td><td>Dominant platform at US life insurers (Prudential, MetLife, Principal, Sun Life). Major differentiator in insurance vertical.</td></tr>
+          <tr><td>Power BI + DAX</td><td style="color:var(--ok)">Keep</td><td>High demand in Microsoft-stack companies; DAX expertise is relatively rare</td></tr>
+          <tr><td>GitHub Copilot + Claude Code</td><td style="color:var(--ok)">Keep — add explicitly</td><td>Top-5% differentiator in 2026 analytics market</td></tr>
+          <tr><td><strong>Snowflake SnowPro Core</strong></td><td style="color:var(--accent-l)">Add — Priority 1</td><td>Now standard at insurance companies; $175 exam, 4–6 weeks</td></tr>
+          <tr><td><strong>Azure Fundamentals (AZ-900)</strong></td><td style="color:var(--accent-l)">Add — Priority 2</td><td>Natural extension of Power BI/DAX Microsoft ecosystem; $165 exam, 2–3 weeks</td></tr>
+          <tr><td>Microsoft Fabric basics</td><td style="color:var(--accent-l)">Add — Priority 3</td><td>Microsoft's newest unified data platform; free on Microsoft Learn; first-mover advantage</td></tr>
+          <tr><td>dbt</td><td style="color:var(--muted)">Skip for now</td><td>Primarily data engineering tool; lower ROI than Snowflake+Azure for John's director-level profile</td></tr>
+          <tr><td>Tableau</td><td style="color:var(--muted)">Skip</td><td>Power BI is your strength; employers want depth in one, not width across both</td></tr>
+        </table></div>
+
+        <h3>Target Employers by City</h3>
+        <p><strong>Austin, TX:</strong></p>
+        <div class="tbl"><table>
+          <tr><th>Employer</th><th>Why It's a Fit</th></tr>
+          <tr><td>National Western Life</td><td>Life insurance; SAS analytics environment</td></tr>
+          <tr><td>Indeed / Hirect</td><td>CRM + campaign analytics — direct match to HSBC VP CRM background</td></tr>
+          <tr><td>Dell Technologies</td><td>Large analytics team; Power BI environment</td></tr>
+          <tr><td>Homeward / EarnIn</td><td>InsurTech / FinTech; analytics-heavy growth roles</td></tr>
+        </table></div>
+        <p><strong>Seattle/Bellevue, WA:</strong></p>
+        <div class="tbl"><table>
+          <tr><th>Employer</th><th>Why It's a Fit</th></tr>
+          <tr><td><strong>Microsoft</strong></td><td>Power BI home turf; DAX expertise direct match; many analytics manager openings</td></tr>
+          <tr><td>Symetra Financial</td><td>Life insurance + annuities; SAS analytics — exact domain match</td></tr>
+          <tr><td>T-Mobile</td><td>CRM analytics + campaign performance — direct match to HSBC VP CRM role</td></tr>
+          <tr><td>PEMCO Insurance</td><td>Pacific NW insurance; high-impact analytics leadership role</td></tr>
+          <tr><td>Amazon</td><td>World-class data platform; high total comp</td></tr>
+        </table></div>
+        <p><strong>Raleigh-Durham, NC:</strong></p>
+        <div class="tbl"><table>
+          <tr><th>Employer</th><th>Why It's a Fit</th></tr>
+          <tr><td><strong>SAS Institute</strong> (Cary, NC)</td><td>HQ of SAS — the tool John uses; direct skill match; strong employee culture</td></tr>
+          <tr><td><strong>MetLife</strong> (Cary, NC)</td><td>Life insurance analytics; SAS + actuarial environment</td></tr>
+          <tr><td><strong>Blue Cross NC</strong></td><td>Health/life insurance analytics; SAS environment</td></tr>
+          <tr><td>Fidelity Investments (Durham)</td><td>Financial services analytics; strong Python culture</td></tr>
+        </table></div>
+        <div class="ok-box"><strong>Raleigh-Durham is a particularly strong match:</strong> SAS Institute HQ (Cary) + MetLife + Blue Cross NC form a cluster of employers who would immediately recognize both John's SAS expertise and insurance domain background.</div>
+
+        <h3>Professional Associations — Join Month 1–2</h3>
+        <div class="tbl"><table>
+          <tr><th>Association</th><th>Why Join</th></tr>
+          <tr><td><strong>LIMRA</strong> (limra.com)</td><td>John's direct industry; job board; networking with US insurance analytics leaders</td></tr>
+          <tr><td><strong>IASA</strong> (iasahq.org)</td><td>Insurance Accounting &amp; Systems; technology + analytics networking</td></tr>
+          <tr><td><strong>PMI</strong> (pmi.org) — consider PMP</td><td>Leverages John's HSBC PMO background (2008–2009); PMP adds $15K–$20K to salary</td></tr>
+        </table></div>
+
+        <h3>Canadian Degree — No WES Evaluation Needed</h3>
+        <div class="ok-box"><strong>Mount Royal University (Canada)</strong> degree requires no WES credential evaluation. Canadian degrees are automatically recognized by US employers — treated the same as a US degree. List as: "Mount Royal University — Bachelor of Computer Science." No additional annotation needed.</div>
+
+        <h3>Pre-Departure Improvements (Priority Order)</h3>
+        <ul class="cl">
+          <li><input type="checkbox" id="cb-23" data-persist onchange="saveAndUpdate()"><label for="cb-23">Rewrite resume in US format with translated insurance terms + rewritten bullets</label></li>
+          <li><input type="checkbox" id="cb-24" data-persist onchange="saveAndUpdate()"><label for="cb-24">Update LinkedIn: US city, AI tools skills, Manulife → John Hancock framing</label></li>
+          <li><input type="checkbox" id="cb-25" data-persist onchange="saveAndUpdate()"><label for="cb-25">Snowflake SnowPro Core certification (4–6 weeks · $175 exam)</label></li>
+          <li><input type="checkbox" id="cb-26" data-persist onchange="saveAndUpdate()"><label for="cb-26">Microsoft Azure Fundamentals AZ-900 (2–3 weeks · $165 exam)</label></li>
+          <li><input type="checkbox" id="cb-27" data-persist onchange="saveAndUpdate()"><label for="cb-27">Microsoft Fabric basics on Microsoft Learn (2–3 weeks · free)</label></li>
+          <li><input type="checkbox" id="cb-28" data-persist onchange="saveAndUpdate()"><label for="cb-28">Week 4: Reach out to John Hancock Analytics team in Boston on LinkedIn</label></li>
+          <li><input type="checkbox" id="cb-29" data-persist onchange="saveAndUpdate()"><label for="cb-29">Register on eFinancialCareers + LIMRA job board</label></li>
+          <li><input type="checkbox" id="cb-30" data-persist onchange="saveAndUpdate()"><label for="cb-30">Consider PMP certification (leverages HSBC PMO 2008–2009 · $555 exam · 3–6 months)</label></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- PART 6 — WEEK 7-8 -->
+    <details class="sec" id="s6">
+      <summary>🏦 Part 6 — Week 7–8: Foundation</summary>
+      <div class="sec-body">
+        <h3>Immigration Attorney Consultation</h3>
+        <p>Within the first two months, consult a US immigration attorney experienced in EB-5. Cover:</p>
+        <ul style="font-size:0.87rem">
+          <li>Confirm I-829 filing window based on your exact entry date</li>
+          <li>Confirm I-131 status and re-entry permit delivery to Hanoi</li>
+          <li>Investment sustainment requirements (pre-RIA vs. post-RIA, based on when I-526/I-526E was filed)</li>
+          <li>Domicile maintenance strategy while family members are in Vietnam</li>
+          <li>Begin building the I-829 evidence file from Day 1</li>
+        </ul>
+
+        <h3>Investment Accounts</h3>
+        <div class="tbl"><table>
+          <tr><th>Brokerage</th><th>Min. to Open</th><th>Why Choose</th></tr>
+          <tr><td><strong>Fidelity</strong></td><td>$0</td><td>Best for beginners; excellent customer service; zero-expense-ratio index funds</td></tr>
+          <tr><td><strong>Vanguard</strong></td><td>$0</td><td>Invented index investing; excellent for long-term buy-and-hold</td></tr>
+          <tr><td><strong>Charles Schwab</strong></td><td>$0</td><td>Good alternative; excellent for international travelers</td></tr>
+        </table></div>
+        <p><strong>Recommended starter portfolio (three-fund):</strong></p>
+        <div class="tbl"><table>
+          <tr><th>Fund</th><th>Ticker</th><th>What It Is</th><th>Allocation</th></tr>
+          <tr><td>Vanguard Total Stock Market ETF</td><td>VTI</td><td>All US stocks</td><td>60–70%</td></tr>
+          <tr><td>Vanguard Total International Stock ETF</td><td>VXUS</td><td>All non-US stocks</td><td>20–30%</td></tr>
+          <tr><td>Vanguard Total Bond Market ETF</td><td>BND</td><td>US bonds</td><td>5–10%</td></tr>
+        </table></div>
+        <div class="warn-box"><strong>⚠️ PFIC Warning:</strong> Do NOT hold Vietnamese mutual funds or ETFs once you are a US tax resident. Vietnamese fund units typically qualify as Passive Foreign Investment Companies (PFICs) — taxed at punitive rates (up to top ordinary income rate + interest). Liquidate Vietnamese investment funds before or shortly after arriving. Consult your US-Vietnam CPA.</div>
+
+        <h3>Vietnamese Community by City</h3>
+        <p><strong>Austin, TX:</strong> Vietnamese American Community of Austin (VACA) · MT Supermarket (Lamar) · H-Mart on 183 · North Austin Vietnamese restaurants (Burnet Rd)</p>
+        <p><strong>Seattle/Bellevue, WA:</strong> Vietnamese Association of Washington (VAW) · White Center (South Seattle) · Uwajimaya Asian grocery (Bellevue) · Vietnamese temples in Renton and Shoreline</p>
+        <p><strong>Raleigh-Durham, NC:</strong> Vietnamese Association of Raleigh-Durham · 99 Ranch Market (Cary) · Grand Asia Market (Raleigh) · Vietnamese restaurants in Cary</p>
+        <p>Search Facebook for "[City] Vietnamese Community" groups. Viet professional networks on LinkedIn.</p>
+      </div>
+    </details>
+
+    <!-- PART 7 — MONTH 2-12 -->
+    <details class="sec" id="s7">
+      <summary>📊 Part 7 — Month 2–12: Ongoing Operations</summary>
+      <div class="sec-body">
+        <h3>US Taxes — Year 1 Critical Guidance</h3>
+        <div class="warn-box"><strong>Dual-status year (2026):</strong> January–May 2026 = Non-Resident Alien. June–December 2026 = Resident Alien. You file a <strong>dual-status tax return</strong> for 2026. This is complex — <strong>hire a US-Vietnam CPA for Year 1.</strong> Do not attempt this yourself. Expect $500–$2,000 for Year 1 dual-status return.</div>
+        <p>From Day 1 of US residency, all worldwide income is reportable: Vietnamese employment income, rental income from Vietnamese property, interest/dividends from Vietnamese bank accounts, capital gains from Vietnamese investments.</p>
+
+        <h3>FBAR — FinCEN Form 114 (Annual Foreign Bank Reporting)</h3>
+        <ul style="font-size:0.87rem">
+          <li>Required if combined maximum balance in all foreign accounts exceeds <strong>$10,000 at any point during the calendar year</strong></li>
+          <li>File at <strong>bsaefiling.fincen.treas.gov</strong> — NOT with your tax return</li>
+          <li>Deadline: April 15 (automatic extension to October 15)</li>
+          <li>Report ALL Vietnamese bank accounts (savings, checking, business)</li>
+          <li>Non-willful penalty: up to ~$15,000 per violation per year</li>
+          <li>Willful failure: up to $100,000 or 50% of account balance + criminal charges</li>
+        </ul>
+
+        <h3>FATCA — Form 8938 (Foreign Financial Assets)</h3>
+        <p>Filed WITH your Form 1040. Married Filing Jointly threshold (living in US): report if total foreign financial assets exceed <strong>$100,000 on last day of year</strong> OR <strong>$150,000 on any day during year</strong>.</p>
+        <div class="info-box"><strong>No US-Vietnam Tax Treaty.</strong> Vietnam and the US do not have a tax treaty. You cannot claim treaty exemptions. Claim the <strong>Foreign Tax Credit (Form 1116)</strong> to avoid double taxation — Vietnamese tax paid can be credited against US tax on the same income.</div>
+
+        <h3>Key Tax Dates</h3>
+        <div class="tbl"><table>
+          <tr><th>Deadline</th><th>Action</th></tr>
+          <tr><td>April 15, 2027</td><td>File 2026 US federal income tax return (or Form 4868 extension)</td></tr>
+          <tr><td>April 15, 2027</td><td>FBAR for 2026 (auto-extended to October 15)</td></tr>
+          <tr><td>April 15 / June 15 / Sept 15 / Jan 15</td><td>Quarterly estimated tax payments (if self-employed or significant non-wage income)</td></tr>
+        </table></div>
+
+        <h3>Credit Score Building — Month by Month</h3>
+        <div class="tbl"><table>
+          <tr><th>Month</th><th>Action</th></tr>
+          <tr><td>1–2</td><td>Open secured credit card (husband AND wife separately). Gas/groceries only. Pay full balance monthly.</td></tr>
+          <tr><td>3–4</td><td>Apply for a second card (Target Red Card or Amazon Store Card — easier approvals). Credit scores require at least 2 accounts for full scoring.</td></tr>
+          <tr><td>6</td><td>Credit score appears (~580–640). Check free at Credit Karma (creditkarma.com) or through your bank.</td></tr>
+          <tr><td>9–12</td><td>Score reaches 650–700 with consistent on-time payments and low utilization.</td></tr>
+          <tr><td>12–18</td><td>Apply for regular (unsecured) credit card — Capital One Quicksilver or Discover IT regular.</td></tr>
+          <tr><td>18–24</td><td>Score reaches 700–750+. Begin mortgage pre-qualification research.</td></tr>
+        </table></div>
+        <p><strong>Always:</strong> Never miss a payment · Keep utilization under 30% (ideally under 10%) · Do not apply for multiple products at once · Do not close old accounts</p>
+      </div>
+    </details>
+
+    <!-- PART 8 — I-829 -->
+    <details class="sec" id="s8">
+      <summary>📄 Part 8 — I-829: Removing Conditions on Permanent Residence</summary>
+      <div class="sec-body">
+        <div class="red-box"><strong>🔴 This is the second most critical legal deadline.</strong> The I-829 must be filed within the <strong>90-day period immediately preceding the 2nd anniversary of your date of admission</strong>. Missing this deadline means automatic status termination and immediate removability. No grace period.</div>
+
+        <h3>Calculating Your 90-Day Window</h3>
+        <p><strong>Anniversary date = your exact POE entry date + 2 years</strong></p>
+        <div class="tbl"><table>
+          <tr><th>Milestone</th><th>Example (Entry: June 15, 2026)</th></tr>
+          <tr><td>Entry date</td><td>June 15, 2026</td></tr>
+          <tr><td>2-year anniversary</td><td>June 15, 2028</td></tr>
+          <tr><td>90-day window opens</td><td><strong>March 17, 2028</strong></td></tr>
+          <tr><td>Last day to file</td><td><strong>June 15, 2028 (do not cut this close)</strong></td></tr>
+        </table></div>
+        <div class="warn-box"><strong>Set a hard calendar reminder for Month 18 (~December 2027)</strong> to begin I-829 preparation with your attorney. Also set an alert for the exact first day of the 90-day window.<br><br>The 2-year clock runs from your I-94 entry date — NOT the expiration date printed on your physical green card.<br><br>Use USCIS official calculator: uscis.gov/forms/when-to-file-your-petition-to-remove-conditions</div>
+
+        <h3>Current I-829 Fee (April 2026)</h3>
+        <p><strong>$3,750 per petition</strong> — covers all derivatives (entire family files together). Payment via Form G-1450 (card) or G-1650 (ACH). Checks no longer accepted since October 28, 2025.</p>
+        <div class="info-box">Fee history: USCIS raised I-829 to $9,525 in April 2024. A federal court ruled the increase unlawful in November 2025. Fee reverted to $3,750. A new proposed rule would set it at $7,860 — verify at uscis.gov/feecalculator at time of filing.</div>
+
+        <h3>I-829 Evidence Package</h3>
+        <div class="tbl"><table>
+          <tr><th>Category</th><th>Documents</th></tr>
+          <tr><td>Identity</td><td>Copies of passports + both sides of green cards</td></tr>
+          <tr><td>Investment made</td><td>Wire transfer records, escrow release docs, bank statements</td></tr>
+          <tr><td>Investment at risk</td><td>Subscription agreement, operating agreement, offering memorandum</td></tr>
+          <tr><td>Job creation (Regional Center)</td><td>Economist's report showing 10+ jobs via econometric model</td></tr>
+          <tr><td>Project status</td><td>Construction progress, certificate of occupancy, NCE/JCE financial statements</td></tr>
+          <tr><td>Sustainment</td><td>See pre-RIA vs. post-RIA below</td></tr>
+          <tr><td>Family documents</td><td>Birth certificates + translations, marriage certificate + translation, I-94 records for each</td></tr>
+        </table></div>
+
+        <h3>Pre-RIA vs. Post-RIA Sustainment</h3>
+        <div class="tbl"><table>
+          <tr><th>Filing Date</th><th>Requirement</th></tr>
+          <tr><td>I-526 filed before March 15, 2022 (pre-RIA)</td><td>Investment must be sustained throughout the entire 2-year conditional residency</td></tr>
+          <tr><td>I-526/I-526E on or after March 15, 2022 (post-RIA)</td><td>Investment must remain for 2 years from deployment date — no requirement to sustain through all conditional residency</td></tr>
+        </table></div>
+
+        <h3>Current Processing Times (April 2026)</h3>
+        <ul style="font-size:0.87rem">
+          <li>USCIS official estimate: ~30 months (80th percentile)</li>
+          <li>Actual median (IIUSA FY2025 Q2): <strong>8.2 months</strong></li>
+          <li>Approval rate: <strong>94%</strong> in FY2025</li>
+        </ul>
+        <div class="info-box">After filing I-829, USCIS issues a receipt notice (Form I-797). Your conditional status is automatically extended until USCIS decides. Carry the I-797 receipt + expired green card together as proof of status during adjudication.</div>
+      </div>
+    </details>
+
+    <!-- PART 9 — SCHOOLS 2027 -->
+    <details class="sec" id="s9">
+      <summary>🏫 Part 9 — 2027: School Enrollment</summary>
+      <div class="sec-body">
+        <div class="ok-box">Under federal law (Plyler v. Doe), <strong>all children residing in the US are entitled to a free public K-12 education</strong> regardless of immigration status. As green card holders, your children have full legal status and face no enrollment barriers. Schools are free — no tuition for public K-12.</div>
+
+        <h3>Target: Fall 2027</h3>
+        <p>Child 1 entering <strong>Grade 10</strong> (high school) · Child 2 entering <strong>Grade 5</strong> (elementary)</p>
+        <div class="tbl"><table>
+          <tr><th>Step</th><th>When</th></tr>
+          <tr><td>Research school districts</td><td>September–December 2026 (while kids are in Vietnam)</td></tr>
+          <tr><td>Choose target school district (determines rental location)</td><td>January–February 2027</td></tr>
+          <tr><td>Contact district enrollment office</td><td>February–March 2027</td></tr>
+          <tr><td>Submit enrollment application</td><td>March–May 2027</td></tr>
+          <tr><td>Attend school registration appointment</td><td>May–July 2027</td></tr>
+          <tr><td>First day of school</td><td>Late August/September 2027</td></tr>
+        </table></div>
+
+        <h3>Enrollment Documents</h3>
+        <ul class="cl">
+          <li><input type="checkbox" id="cb-31" data-persist onchange="saveAndUpdate()"><label for="cb-31">Proof of residence in the school district (lease, utility bill, or bank statement)</label></li>
+          <li><input type="checkbox" id="cb-32" data-persist onchange="saveAndUpdate()"><label for="cb-32">Child's birth certificate (certified English translation)</label></li>
+          <li><input type="checkbox" id="cb-33" data-persist onchange="saveAndUpdate()"><label for="cb-33">Child's passport</label></li>
+          <li><input type="checkbox" id="cb-34" data-persist onchange="saveAndUpdate()"><label for="cb-34">Child's immunization records (bring all Vietnamese records for pediatrician evaluation)</label></li>
+          <li><input type="checkbox" id="cb-35" data-persist onchange="saveAndUpdate()"><label for="cb-35">Previous school records/transcripts from Vietnamese school (certified translation)</label></li>
+        </ul>
+        <p><strong>Required vaccines</strong> (verify with your state — international school kids likely have most): DTaP · IPV · MMR · Varicella · Hepatitis A &amp; B · Tdap (high school) · Meningococcal (high school)</p>
+
+        <h3>Top School Districts by City</h3>
+        <p><strong>Austin, TX:</strong> Lake Travis ISD (Excellent) · Eanes ISD / Westlake (Excellent) · Round Rock ISD (Very Good)</p>
+        <p><strong>Seattle/Bellevue, WA:</strong> Bellevue School District (#1 in WA, consistently) · Lake Washington SD (Kirkland/Redmond) · Issaquah SD (strong STEM)</p>
+        <p><strong>Raleigh-Durham, NC:</strong> Chapel Hill-Carrboro City SD (Excellent, adjacent to UNC) · Wake County/Cary (Very Good) · Johnston County (growing)</p>
+        <p>Research: <strong>greatschools.org</strong> · <strong>niche.com</strong> — search by specific school or district, not just city.</p>
+        <div class="info-box"><strong>ESL/ELL:</strong> Your children likely have strong English from international school. They may still qualify for ELL assessment — routine for students from non-English-speaking countries. If their English is strong, they'll be placed in mainstream classes immediately.</div>
+      </div>
+    </details>
+
+    <!-- PART 10 — WIFE'S CAREER -->
+    <details class="sec" id="s10">
+      <summary>👩 Part 10 — Wife's Career Paths</summary>
+      <div class="sec-body">
+        <h3>Immediate Income (Month 1–2): Phone/Video Interpreting</h3>
+        <p>No certification required. Register with language services companies:</p>
+        <div class="tbl"><table>
+          <tr><th>Company</th><th>URL</th><th>Rate</th></tr>
+          <tr><td>LanguageLine Solutions</td><td>languageline.com</td><td>$15–$25/hour</td></tr>
+          <tr><td>TransPerfect</td><td>transperfect.com</td><td>$15–$25/hour</td></tr>
+          <tr><td>Lionbridge</td><td>lionbridge.com</td><td>$15–$25/hour</td></tr>
+          <tr><td>Voiance Language Services</td><td>voiance.com</td><td>$15–$25/hour</td></tr>
+        </table></div>
+        <p>Can start within 2–4 weeks of registration.</p>
+
+        <h3>Medium-Term (Month 3–6): In-Person Medical/Court Interpreting</h3>
+        <p><strong>Medical Interpreter Certification:</strong> 40-hour course + exam from CCHI (cchicertification.org) or NBCMI. Cost: $300–$600. Salary: $18–$35/hour; full-time hospital positions: $45,000–$65,000/year with benefits.</p>
+        <p><strong>Court Interpreting:</strong> Register with state court as a non-certified interpreter. Rate: $35–$65/hour for in-person appearances.</p>
+
+        <h3>ESL Teaching Path (Month 6–12)</h3>
+        <div class="tbl"><table>
+          <tr><th>Option</th><th>Path</th><th>Salary</th></tr>
+          <tr><td>A — Community college</td><td>TEFL/TESOL certificate online (100–120 hrs, $200–$500, 1–3 months)</td><td>$15–$22/hr part-time; $35K–$50K/yr full-time</td></tr>
+          <tr><td>B — K-12 public school</td><td>State teaching license + ESL endorsement; WES credential evaluation (~$200); state exam</td><td>$42,000–$65,000/yr + benefits</td></tr>
+          <tr><td>C — Bilingual Vietnamese-English (highest demand)</td><td>Vietnamese-English bilingual teachers scarce across US; TX, WA, CA actively recruit</td><td>Base + $2,000–$5,000/yr bilingual stipend</td></tr>
+        </table></div>
+
+        <h3>Self-Employment LLC Setup</h3>
+        <div class="tbl"><table>
+          <tr><th></th><th>Texas</th><th>Washington</th><th>North Carolina</th></tr>
+          <tr><td>Filing fee</td><td>$300</td><td>$200</td><td>$125</td></tr>
+          <tr><td>Annual report</td><td>None</td><td>$60/year</td><td>$200/year</td></tr>
+          <tr><td>Agency</td><td>sos.state.tx.us</td><td>sos.wa.gov</td><td>sosnc.gov</td></tr>
+        </table></div>
+        <p>Get an EIN (free at irs.gov — 15 minutes online). Set aside 25–30% of all self-employment earnings for taxes. Make quarterly estimated payments (Form 1040-ES).</p>
+      </div>
+    </details>
+
+    <!-- PART 11 — BUDGET -->
+    <details class="sec" id="s11">
+      <summary>💰 Part 11 — Budget &amp; Financial Planning</summary>
+      <div class="sec-body">
+        <h3>Initial Setup Costs (Month 1–2, One-Time)</h3>
+        <div class="tbl"><table>
+          <tr><th>Item</th><th>Low</th><th>High</th></tr>
+          <tr><td>Flights + baggage/shipping from Vietnam</td><td>$5,000</td><td>$8,000</td></tr>
+          <tr><td>Extended-stay housing (6 weeks)</td><td>$3,000</td><td>$6,000</td></tr>
+          <tr><td>Permanent rental deposit + first month</td><td>$6,000</td><td>$12,000</td></tr>
+          <tr><td>Car purchase (used, cash)</td><td>$14,000</td><td>$20,000</td></tr>
+          <tr><td>Car insurance (6 months prepaid)</td><td>$900</td><td>$1,800</td></tr>
+          <tr><td>Furniture &amp; household setup</td><td>$5,000</td><td>$8,000</td></tr>
+          <tr><td>Health insurance (first 3 months)</td><td>$2,500</td><td>$5,000</td></tr>
+          <tr><td>I-131 re-entry permits (3 people × $630)</td><td>$1,890</td><td>$1,890</td></tr>
+          <tr><td>Immigration attorney (initial + I-131 support)</td><td>$1,500</td><td>$3,000</td></tr>
+          <tr><td>Emergency reserve</td><td>$10,000</td><td>$15,000</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>~$50,000</strong></td><td><strong>~$81,000</strong></td></tr>
+        </table></div>
+
+        <h3>Monthly Burn Rate (Family of 4, Mid-Tier City)</h3>
+        <div class="tbl"><table>
+          <tr><th>Item</th><th>Low</th><th>High</th></tr>
+          <tr><td>Rent (3-bed, good school district)</td><td>$2,200</td><td>$3,500</td></tr>
+          <tr><td>Utilities + internet</td><td>$300</td><td>$450</td></tr>
+          <tr><td>Groceries</td><td>$800</td><td>$1,100</td></tr>
+          <tr><td>Car (insurance + gas + maintenance)</td><td>$500</td><td>$900</td></tr>
+          <tr><td>Health insurance (ACA Marketplace)</td><td>$900</td><td>$1,800</td></tr>
+          <tr><td>Kids' activities / subscriptions</td><td>$300</td><td>$500</td></tr>
+          <tr><td>Dining / entertainment</td><td>$300</td><td>$600</td></tr>
+          <tr><td>Miscellaneous</td><td>$200</td><td>$400</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>$5,500</strong></td><td><strong>$9,250</strong></td></tr>
+        </table></div>
+
+        <h3>Runway Calculator</h3>
+        <div class="tbl"><table>
+          <tr><th>Starting Fund</th><th>Setup Cost</th><th>Monthly Burn (avg)</th><th>Months of Runway</th></tr>
+          <tr><td>$150,000</td><td>$60,000</td><td>$7,000</td><td><strong>~13 months</strong></td></tr>
+          <tr><td>$200,000</td><td>$60,000</td><td>$7,000</td><td><strong>~20 months</strong></td></tr>
+          <tr><td>$250,000</td><td>$60,000</td><td>$7,000</td><td><strong>~27 months</strong></td></tr>
+        </table></div>
+        <div class="warn-box"><strong>Target: John employed and receiving first paycheck by Month 4–5.</strong></div>
+
+        <h3>Home Purchase Timeline</h3>
+        <div class="tbl"><table>
+          <tr><th>Milestone</th><th>Target Date</th></tr>
+          <tr><td>Arrive + open bank account</td><td>June 2026</td></tr>
+          <tr><td>Open secured credit card</td><td>August 2026</td></tr>
+          <tr><td>Credit score first appears</td><td>January 2027</td></tr>
+          <tr><td>12 months US employment history (W-2s)</td><td>~Late 2027</td></tr>
+          <tr><td><strong>Earliest realistic mortgage application</strong></td><td><strong>Mid-2028</strong></td></tr>
+          <tr><td><strong>Optimal home purchase window</strong></td><td><strong>Late 2028 – 2029</strong></td></tr>
+        </table></div>
+      </div>
+    </details>
+
+    <!-- PART 12 — CALENDAR ALERTS -->
+    <details class="sec" id="s12">
+      <summary>🔔 Part 12 — Critical Calendar Alerts</summary>
+      <div class="sec-body">
+        <div class="red-box"><strong>Set these reminders now. They are non-negotiable.</strong></div>
+        <ul class="cl">
+          <li><input type="checkbox" id="cb-36" data-persist onchange="saveAndUpdate()"><label for="cb-36"><strong>Day of arrival:</strong> I-94 check — verify at i94.cbp.dhs.gov for all family members</label></li>
+          <li><input type="checkbox" id="cb-37" data-persist onchange="saveAndUpdate()"><label for="cb-37"><strong>Week 1 (Day 3–7):</strong> File I-131 for wife + children — do not delay</label></li>
+          <li><input type="checkbox" id="cb-38" data-persist onchange="saveAndUpdate()"><label for="cb-38"><strong>Week 6–8:</strong> Attend I-131 biometrics (ASC) — do not leave US before this</label></li>
+          <li><input type="checkbox" id="cb-39" data-persist onchange="saveAndUpdate()"><label for="cb-39"><strong>Month 6:</strong> Review all Vietnamese account balances for 2026 FBAR</label></li>
+          <li><input type="checkbox" id="cb-40" data-persist onchange="saveAndUpdate()"><label for="cb-40"><strong>April 15, 2027:</strong> File 2026 US federal tax return (with CPA) + FBAR</label></li>
+          <li><input type="checkbox" id="cb-41" data-persist onchange="saveAndUpdate()"><label for="cb-41"><strong>Sept–Dec 2026:</strong> Research school districts while kids are in Vietnam</label></li>
+          <li><input type="checkbox" id="cb-42" data-persist onchange="saveAndUpdate()"><label for="cb-42"><strong>Month 18 (~Dec 2027):</strong> Contact immigration attorney to begin I-829 preparation</label></li>
+          <li><input type="checkbox" id="cb-43" data-persist onchange="saveAndUpdate()"><label for="cb-43"><strong>Month 21 (~Mar 2028):</strong> 90-day I-829 window opens — file in first 2 weeks</label></li>
+          <li><input type="checkbox" id="cb-44" data-persist onchange="saveAndUpdate()"><label for="cb-44"><strong>Month 24 (~Jun 2028):</strong> I-829 hard deadline — last day to file</label></li>
+          <li><input type="checkbox" id="cb-45" data-persist onchange="saveAndUpdate()"><label for="cb-45"><strong>June 2031:</strong> N-400 citizenship eligibility (5 years from entry)</label></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- PART 13 — MAINTAINING DOMICILE -->
+    <details class="sec" id="s13">
+      <summary>🏡 Part 13 — Maintaining US Domicile</summary>
+      <div class="sec-body">
+        <p>While wife and children are in Vietnam for the 2026–2027 school year, John must maintain a clear US domicile:</p>
+
+        <h3>Residential Ties (John's Must-Haves)</h3>
+        <ul style="font-size:0.87rem">
+          <li>Active US lease in John's name</li>
+          <li>Utility bills in John's name</li>
+          <li>Active US driver's license (renew before expiry)</li>
+        </ul>
+
+        <h3>Financial Ties</h3>
+        <ul style="font-size:0.87rem">
+          <li>Active US checking + savings accounts with regular transactions</li>
+          <li>File US federal taxes as a resident (Form 1040) — <strong>NEVER file Form 1040-NR</strong></li>
+          <li>Active US credit cards with regular use</li>
+          <li>US brokerage/investment account</li>
+        </ul>
+
+        <h3>Professional Ties</h3>
+        <ul style="font-size:0.87rem">
+          <li>Active employment (or documented active job search)</li>
+          <li>LinkedIn profile showing US location and active job seeking</li>
+          <li>US professional network memberships</li>
+        </ul>
+
+        <h3>For Wife + Children While in Vietnam</h3>
+        <ul style="font-size:0.87rem">
+          <li>Keep US bank accounts active (even with minimal transactions)</li>
+          <li>Keep I-131 re-entry permit active and accessible</li>
+          <li>Documentation of Vietnamese school enrollment as explicitly temporary</li>
+          <li>Return to the US during school breaks (Tet/summer) to demonstrate non-abandonment</li>
+          <li>Do not file Vietnamese tax returns as a permanent Vietnam resident</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- PARTS 14-15 — FORMS & RESOURCES -->
+    <details class="sec" id="s14">
+      <summary>📚 Parts 14–15 — Key Forms &amp; Official Resources</summary>
+      <div class="sec-body">
+        <h3>Key Forms</h3>
+        <div class="tbl"><table>
+          <tr><th>Form</th><th>Purpose</th><th>Where to Get</th></tr>
+          <tr><td>SS-5</td><td>SSN Application</td><td>ssa.gov</td></tr>
+          <tr><td>I-131</td><td>Re-Entry Permit</td><td>uscis.gov/i-131</td></tr>
+          <tr><td>I-829</td><td>Remove conditions on green card</td><td>uscis.gov/i-829</td></tr>
+          <tr><td>W-7</td><td>ITIN Application</td><td>irs.gov</td></tr>
+          <tr><td>1040-ES</td><td>Estimated quarterly taxes</td><td>irs.gov</td></tr>
+          <tr><td>FinCEN 114</td><td>FBAR foreign account report</td><td>bsaefiling.fincen.treas.gov</td></tr>
+          <tr><td>Form 8938</td><td>FATCA foreign asset report</td><td>Filed with Form 1040</td></tr>
+          <tr><td>G-1450</td><td>USCIS credit card payment</td><td>uscis.gov</td></tr>
+        </table></div>
+
+        <h3>Official Resources</h3>
+        <div class="tbl"><table>
+          <tr><th>Resource</th><th>URL</th></tr>
+          <tr><td>USCIS I-829</td><td>uscis.gov/i-829</td></tr>
+          <tr><td>USCIS I-131</td><td>uscis.gov/i-131</td></tr>
+          <tr><td>USCIS fee calculator</td><td>uscis.gov/feecalculator</td></tr>
+          <tr><td>USCIS fee schedule (G-1055)</td><td>uscis.gov/g-1055</td></tr>
+          <tr><td>USCIS processing times</td><td>egov.uscis.gov/processing-times</td></tr>
+          <tr><td>CBP I-94 retrieval</td><td>i94.cbp.dhs.gov</td></tr>
+          <tr><td>SSA office locator</td><td>ssa.gov/locator</td></tr>
+          <tr><td>ACA Marketplace</td><td>healthcare.gov</td></tr>
+          <tr><td>FBAR filing</td><td>bsaefiling.fincen.treas.gov</td></tr>
+          <tr><td>IRS ITIN (Form W-7)</td><td>irs.gov/individuals/itin</td></tr>
+          <tr><td>Nova Credit (foreign credit translation)</td><td>novacredit.com</td></tr>
+          <tr><td>Carfax (car history)</td><td>carfax.com</td></tr>
+          <tr><td>NHTSA vehicle recalls</td><td>nhtsa.gov/recalls</td></tr>
+          <tr><td>WES (credential evaluation)</td><td>wes.org</td></tr>
+          <tr><td>CCHI (medical interpreter cert)</td><td>cchicertification.org</td></tr>
+          <tr><td>LanguageLine</td><td>languageline.com</td></tr>
+          <tr><td>School district research</td><td>greatschools.org · niche.com</td></tr>
+          <tr><td>Free credit monitoring</td><td>creditkarma.com</td></tr>
+          <tr><td>ATS resume checker</td><td>jobscan.co</td></tr>
+          <tr><td>Salary research</td><td>levels.fyi · glassdoor.com</td></tr>
+          <tr><td>LIMRA career center</td><td>limra.com</td></tr>
+          <tr><td>eFinancialCareers</td><td>efinancialcareers.com</td></tr>
+          <tr><td>USCIS I-829 window calculator</td><td>uscis.gov/forms/when-to-file-your-petition-to-remove-conditions</td></tr>
+        </table></div>
+      </div>
+    </details>
+
+    <div class="nb-footer">
+      <p>Compiled April 2026 · For personal use only · Not legal advice</p>
+      <p style="margin-top:6px">Verify all fees, deadlines, and requirements at official sources immediately before acting · <a href="us-immigration-plan.html" style="color:var(--accent-l)">← Back to Summary</a></p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const STORE_KEY = 'imm-nb-v1';
+  const boxes = () => document.querySelectorAll('input[type="checkbox"][data-persist]');
+
+  function saveAndUpdate() {
+    const state = {};
+    boxes().forEach(cb => { state[cb.id] = cb.checked; });
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e) {}
+    updateProgress();
+  }
+
+  function loadChecks() {
+    let state = {};
+    try { state = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) {}
+    boxes().forEach(cb => { if (cb.id in state) cb.checked = state[cb.id]; });
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all = [...boxes()];
+    const done = all.filter(c => c.checked).length;
+    const pct = all.length ? Math.round(done / all.length * 100) : 0;
+    const label = document.getElementById('prog-text');
+    const fill = document.getElementById('prog-fill');
+    if (label) label.textContent = done + ' / ' + all.length + ' tasks';
+    if (fill) fill.style.width = pct + '%';
+  }
+
+  function resetAll() {
+    if (!confirm('Reset all checkboxes?')) return;
+    boxes().forEach(cb => { cb.checked = false; });
+    try { localStorage.removeItem(STORE_KEY); } catch(e) {}
+    updateProgress();
+  }
+
+  // Auto-open section if URL has a hash
+  function openFromHash() {
+    const id = location.hash.replace('#', '');
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el && el.tagName === 'DETAILS') el.open = true;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadChecks();
+    openFromHash();
+  });
+
+  window.addEventListener('hashchange', openFromHash);
+</script>
+</body>
+</html>
