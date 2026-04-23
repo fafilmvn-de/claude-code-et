@@ -12,7 +12,7 @@
 | Members | 4 — Husband, Wife, Child 1 (age 15 by arrival), Child 2 (age 10 by arrival) |
 | Status | EB-5 Conditional Green Card — CR5 (principal) / CR6 (derivatives) |
 | Target landing | June 2026 |
-| Husband | Senior Data Analytics professional |
+| Husband | **Dung (John) Nguyen** — Senior Manager, Data Analytics · 19+ years (Manulife Vietnam 2018–present; HSBC 2005–2018) · Insurance & Banking verticals · SQL · Python · SAS · Power BI · DAX · GitHub Copilot · Claude Code · B.Cs. Computer Science, Mount Royal University (Canada) |
 | Wife | Career TBD (interpreting/ESL/translation path recommended) |
 | Children's US school | Fall 2027 (one additional year in Vietnamese school 2026–2027) |
 | City | Not yet chosen — Austin TX / Seattle-Bellevue WA / Raleigh-Durham NC top options |
@@ -429,30 +429,32 @@ If the wife does not qualify for an SSN (e.g., if she has no US employment), she
 
 ## PART 5 — WEEK 4–6: JOB SEARCH LAUNCH
 
-### Resume Conversion (Husband — Senior Data Analytics)
+### Resume Conversion (John — Senior Manager, Data Analytics)
+
+> ⚠️ **Critical framing note:** John is a **Senior Manager / VP-level analytics leader** with 19 years at HSBC and Manulife. Do NOT apply for individual-contributor "Senior Data Analyst" roles ($90K–$130K) — they represent a step back in seniority. Target Director / Senior Manager / Head of Analytics roles. See Part 5A for full positioning.
 
 **US resume format — non-negotiable rules:**
-- 1–2 pages maximum (senior = 2 pages acceptable)
+- 1–2 pages maximum (senior manager = 2 pages acceptable)
 - **No photo** (never — discrimination law)
 - **No date of birth, nationality, gender, religion**
 - Plain format — no tables, no graphics, no columns (ATS cannot parse them)
 - Bullet points only — no paragraph prose
 - Every bullet: **Action verb + what you did + tool/method + quantified result**
 
-**Example bullet:**
-> "Designed automated sales performance dashboards in Tableau, reducing reporting time from 3 days to 4 hours for 25 analysts."
-
 **Sections in order:**
 1. Name + Contact (city/state only, phone, email, LinkedIn URL)
 2. Professional Summary (3–4 lines, tailored to role — include "US Permanent Resident — no sponsorship required")
-3. Skills (SQL, Python, Tableau, Snowflake, dbt, etc.)
+3. Skills (SQL, Python, SAS, Power BI, DAX, GitHub Copilot, etc.)
 4. Work Experience (reverse chronological)
 5. Education
 
-**Translating Vietnamese company names:**
-For companies unfamiliar to US employers, add one parenthetical:
-- "VNG Corporation (Vietnam's largest internet company, ~$1B revenue)"
-- "Techcombank (Vietnam's 2nd-largest private bank, 11M customers)"
+**Listing Manulife on your resume:**
+Manulife operates in the US as **John Hancock** — same parent company, same corporate family. List it as:
+- "Manulife (operating as John Hancock in the US) — Senior Manager, Data Analytics"
+
+US recruiters, especially at insurance companies, will immediately recognize this as the North American insurance giant. Do NOT list it as just "Manulife Vietnam" — that buries the brand recognition.
+
+**HSBC requires no translation** — universally recognized globally.
 
 **Use jobscan.co** to check ATS compatibility before submitting.
 
@@ -471,39 +473,44 @@ This is a genuine competitive advantage — many employers actively prefer green
 **Critical settings:**
 - Set location to your **target US city** (do this even before arriving — recruiters search by location)
 - Turn on **"Open to Work"** (visible to recruiters only, not public)
-- Headline: `Senior Data Analyst | SQL · Python · Tableau · Snowflake | Austin/Seattle/Raleigh Open`
+- Headline: `Senior Analytics Manager | Life Insurance & Banking | SQL · Python · SAS · Power BI · AI Tools | Manulife · HSBC | US Permanent Resident`
 
-**About section ending:** "Currently relocating to [City] in June 2026 and open to Senior Data Analyst opportunities."
+**About section ending:** "Relocating to [City] in June 2026. Open to Director / Senior Manager Analytics roles in insurance, financial services, and technology."
 
-**Skills section:** Add all technical skills — they affect search ranking in LinkedIn's recruiter tool.
+**Skills section — add these explicitly (they affect recruiter search ranking):**
+SQL · Python · SAS · Power BI · DAX · GitHub Copilot · Claude Code · AI-Augmented Analytics · Life Insurance Analytics · CRM Analytics · Campaign Analytics · Customer Segmentation · Predictive Modeling · Distribution Analytics · Stakeholder Management · Team Leadership
 
-### Skills in Highest Demand (2025–2026)
+### John's Skills — What to Keep, What to Add
 
-**Tier 1 — Must Have:**
-- SQL (advanced: window functions, CTEs, complex joins, query optimization)
-- Python (pandas, NumPy)
-- Tableau, Power BI, or Looker (at least one)
+**Keep — these are competitive strengths for John's target roles:**
+- **SQL** (advanced: window functions, CTEs, query optimization) — universal requirement
+- **Python** (pandas, NumPy) — strong signal at analytics manager level
+- **SAS** — do NOT drop or downplay this. SAS is the dominant analytics platform at US life insurance companies (Prudential, MetLife, Sun Life, Principal, Northwestern Mutual). In the insurance vertical, SAS is a genuine differentiator, not a legacy liability.
+- **Power BI + DAX** — strong demand at companies running Microsoft stack (most mid-market insurance companies use Azure + Power BI); DAX expertise is relatively rare and valued
+- **GitHub Copilot + Claude Code** — AI-augmented analytics workflow is rare among analytics managers in 2026. This is a top-5% differentiator. List explicitly in skills and mention in resume summary and interviews.
 
-**Tier 2 — Strong Differentiators:**
-- **dbt (data build tool)** — extremely in demand; free training at courses.getdbt.com (2–3 month self-study)
-- **Snowflake or BigQuery or Databricks**
-- Git / version control
-- A/B testing and statistical analysis
+**Add — highest ROI for John's profile (priority order):**
 
-**Tier 3 — Competitive Edge:**
-- dbt Cloud certification (free exam)
-- Snowflake SnowPro Core certification ($175)
-- Machine learning basics (scikit-learn)
+| Tool | Timeline | Cost | Why |
+|------|----------|------|-----|
+| **Snowflake SnowPro Core** certification | 4–6 weeks | $175 (exam) | Now standard data platform at insurance companies; completes the modern stack picture |
+| **Microsoft Azure Fundamentals (AZ-900)** | 2–3 weeks | $165 (exam) | Validates cloud fluency; natural extension of Power BI + DAX = Microsoft ecosystem |
+| **Microsoft Fabric** basics | 2–3 weeks | Free (Microsoft Learn) | Microsoft's newest unified data platform; very few practitioners; first-mover advantage |
+| **Git / GitHub basics** | 1 week | Free | You already use GitHub Copilot; round out the version control fundamentals |
 
-> If husband does not already know dbt + Snowflake, spend 2–3 months in the job search period on free tutorials. Adding these skills can increase salary band by $15,000–$25,000.
+**Skip for now:**
+- dbt — primarily a data engineering tool, not a senior analytics manager tool; lower ROI than Snowflake + Azure for John's profile
+- Tableau — Power BI is John's strength; employers want depth in one tool, not width across both
 
-### Salary Ranges (Senior Data Analyst, 2025–2026)
+### Salary Ranges for John's Target Level (Director / Senior Manager Analytics, 2025–2026)
 
-| City | Base Salary Range | Notes |
-|------|-------------------|-------|
-| Austin, TX | $90,000–$130,000 | No state income tax |
-| Seattle/Bellevue, WA | $110,000–$160,000 | No state income tax; + RSUs/bonus at tech companies |
-| Raleigh, NC | $85,000–$120,000 | 4.5% state income tax; lower COL |
+| City | Base Salary Range | Total Comp (with bonus) | Notes |
+|------|-------------------|------------------------|-------|
+| Austin, TX | $120,000–$155,000 | $140,000–$185,000 | No state income tax; +15–25% bonus typical in insurance/fintech |
+| Seattle/Bellevue, WA | $140,000–$185,000 | $170,000–$240,000 | No state income tax; RSUs at tech companies (Microsoft, Amazon) significantly increase total comp |
+| Raleigh, NC | $115,000–$150,000 | $135,000–$175,000 | 4.5% state income tax; lower COL; SAS Institute + MetLife + Blue Cross NC cluster |
+
+> Note: These are Director/Senior Manager Analytics ranges, reflecting John's 19-year leadership profile. Individual-contributor "Senior Data Analyst" roles pay $90K–$130K — do not accept those titles. John's quantified track record ($9M+ incremental revenue across campaigns) supports negotiating at the top of these bands.
 
 ### Top Job Boards
 
@@ -559,6 +566,152 @@ Open a secured credit card immediately — credit score building takes time and 
 | Month 18–24 | 700–760+ |
 
 Both husband AND wife should open credit cards independently — building separate credit histories is valuable for future joint mortgage application.
+
+---
+
+## PART 5A — JOHN'S SPECIFIC CAREER POSITIONING
+
+> This section is personalized to John Nguyen's actual profile. It supplements the generic job search guidance in Part 5 above.
+
+### Your Target Level in the US Market
+
+With 19 years at HSBC (VP CRM) + Manulife (Senior Manager, Data Analytics), you are positioned at **Director / Senior Manager level** in the US market — not individual-contributor. Apply only to:
+
+- Director of Analytics / Head of Analytics
+- VP, Data & Insights / VP Analytics
+- Senior Manager, Analytics Strategy
+- Senior Analytics Manager — Insurance / Financial Services
+- Principal Data Analyst (senior IC track at tech companies — still high comp)
+
+Individual-contributor "Senior Data Analyst" roles pay $90K–$130K and represent a seniority step back. Your market is $120K–$185K base + 15–25% bonus.
+
+### The Manulife / John Hancock Connection — Use This
+
+Manulife is the parent company of **John Hancock**, one of the largest US life insurance companies. John Hancock is headquartered in **Boston, MA**.
+
+On your resume and LinkedIn: **"Manulife (operating as John Hancock in the US)"**
+
+This means:
+- US recruiters at John Hancock in Boston will recognize you as a Manulife colleague — institutional knowledge is directly applicable
+- Your work on Manulife's global distribution analytics, inforce management, and agent activation is directly relevant to John Hancock's US operations
+- Consider adding **Boston, MA** as a target city — your Manulife background gives you a significant insider advantage there (though Boston has higher COL than Austin/Raleigh)
+
+**Action (Week 4):** Reach out directly on LinkedIn to John Hancock Analytics / Data Science teams in Boston. Message: "I'm a Senior Manager in Data Analytics at Manulife Vietnam, relocating to the US in June 2026. I've spent 8 years in Manulife's analytics ecosystem — distribution, inforce, agent activation — and would love to connect with your team."
+
+### Resume: Insurance Jargon → US English
+
+Your quantified achievements use insurance-specific terminology. US recruiters outside insurance may not know what NBV or APE means. Always include a plain-English translation:
+
+| Your Language | What to Write on US Resume |
+|---------------|---------------------------|
+| NBV (Net Business Value) | "incremental revenue" or "incremental premium revenue" |
+| APE (Annualized Premium Equivalent) | "annualized premium revenue" |
+| Inforce Management | "retention analytics for existing policyholders" |
+| tNPS (transactional Net Promoter Score) | "transactional customer satisfaction score (tNPS)" |
+| Distribution analytics | "insurance advisor / agent performance analytics" |
+| Agent Activation Model | "predictive model for dormant advisor re-engagement" |
+| Up/X-sell campaigns | "cross-sell and upsell campaign analytics" |
+| HCR | Define in context or drop — too internal |
+
+**Rewritten US-format resume bullets for John's key achievements:**
+
+> "Designed up/cross-sell campaign analytics for Manulife's retail life insurance portfolio, delivering $1.2M incremental revenue despite adverse market conditions — outperformed quarterly target."
+
+> "Built performance analytics reporting suite reducing insight delivery from weekly to daily for a 200+ advisor distribution network, enabling $6M incremental revenue."
+
+> "Developed ML-based Agent Activation Model using Python + SQL to predict dormant advisor re-engagement likelihood — generated $1.8M incremental revenue."
+
+> "Led Inforce Management analytics program delivering 5.4% policyholder retention uplift, preserving $7.4M in annualized premium revenue."
+
+> "Led team of 6 analysts at HSBC (VP CRM) delivering customer segmentation, behavioral analytics, and digital banking performance insights across retail and commercial banking portfolios."
+
+### AI Tooling — Your 2026 Differentiator
+
+GitHub Copilot and Claude Code proficiency places you in the top ~5% of analytics managers in the US market in 2026. Companies are actively building AI-augmented analytics operating models and paying a premium for practitioners who already live it.
+
+**Add to resume Professional Summary:**
+> "Leverages AI-augmented development workflows (GitHub Copilot, Claude Code) to accelerate SQL and Python analysis delivery — enables faster iteration from data to insight."
+
+**LinkedIn Skills to add:** GitHub Copilot · Claude Code · AI-Augmented Analytics · Prompt Engineering
+
+**Interview talking point:** "I integrate AI coding tools into my daily workflow. I use GitHub Copilot to accelerate SQL and Python development, and Claude Code for complex multi-step analysis tasks. This allows me to deliver higher-quality insights faster and sets a model for how I'd build an AI-augmented team."
+
+### Target Employers by City
+
+**Austin, TX:**
+
+| Employer | Why It's a Fit |
+|----------|----------------|
+| National Western Life | Life insurance; SAS analytics environment |
+| HomeAway / VRBO (Expedia Group) | Strong analytics culture; Python + SQL |
+| Indeed / Hirect | CRM + campaign analytics — direct match to your HSBC background |
+| Homeward / EarnIn | InsurTech / FinTech; analytics-heavy growth roles |
+| Dell Technologies | Large analytics team; Power BI environment |
+
+**Seattle/Bellevue, WA:**
+
+| Employer | Why It's a Fit |
+|----------|----------------|
+| **Microsoft** | Power BI home turf; DAX expertise is a direct match; multiple analytics manager roles |
+| Symetra Financial (Bellevue) | Life insurance + annuities; SAS analytics environment; exact domain match |
+| T-Mobile (Bellevue) | CRM analytics + campaign performance — direct match to your HSBC VP CRM role |
+| PEMCO Insurance | Pacific NW insurance; smaller company, high-impact analytics leadership role |
+| Amazon (AWS / Amazon Finance) | World-class data platform; high total comp |
+
+**Raleigh-Durham, NC:**
+
+| Employer | Why It's a Fit |
+|----------|----------------|
+| **SAS Institute** (Cary, NC) | HQ of SAS — the tool you use; direct match; strong employee culture |
+| **MetLife** (Cary, NC office) | Life insurance analytics; SAS + actuarial analytics environment |
+| **Blue Cross Blue Shield NC** | Health/life insurance analytics; SAS environment |
+| Fidelity Investments (Durham) | Financial services analytics; strong Python culture |
+| Allscripts / Veradigm | Healthcare analytics; SAS environment |
+
+> **Raleigh-Durham is a particularly strong match for John.** SAS Institute HQ (Cary), MetLife, and Blue Cross NC form a cluster of employers who would immediately recognize both John's SAS expertise and his insurance domain background. If SAS is a core tool, Raleigh-Durham may be the highest-fit job market of the three options.
+
+### Industry-Specific Job Boards (Add to Search)
+
+| Platform | Best For |
+|----------|----------|
+| **eFinancialCareers** (efinancialcareers.com) | Banking + financial services analytics — the #1 specialized board |
+| **LIMRA Career Center** (limra.com) | Life insurance industry roles; LIMRA is the industry's research body |
+| **Insurance Journal Jobs** (insurancejournal.com/jobs) | Insurance sector; Director+ roles |
+| **Built In** (builtinaustin.com / builtinseattle.com) | Tech + InsurTech startups; strong analytics culture |
+
+Use these alongside LinkedIn and Indeed for job search.
+
+### Professional Associations — Join in Month 1–2
+
+| Association | Why |
+|------------|-----|
+| **LIMRA** (Life Insurance and Market Research Association) | John's direct industry; annual conference; networking with US insurance analytics leaders |
+| **IASA** (Insurance Accounting & Systems Association) | Technology + analytics in insurance; strong networking for analytics managers |
+| **Data + AI Summit** (Databricks annual conference) | Signals modern data stack fluency; attend or follow online |
+| **PMI** (Project Management Institute) — consider **PMP certification** | John's PMO background at HSBC (2008–2009) qualifies him; PMP adds $15K–$20K to salary and differentiates in cross-functional leadership roles |
+
+### Your Canadian Degree — No WES Needed
+
+Your B.Cs. (Computer Science) from **Mount Royal University, Canada** requires **no WES credential evaluation**. Canadian degrees are automatically recognized by US employers — treated the same as a US degree.
+
+List on resume: `Mount Royal University — Bachelor of Computer Science` — no additional annotation needed.
+
+This is an advantage: many international candidates from non-Canadian universities must complete WES evaluation (2–4 months, $200+). You do not.
+
+### Pre-Departure Improvements (Priority Order)
+
+Complete as much as possible before or during the first 60 days of job search:
+
+| Priority | Action | Timeline | Cost |
+|----------|--------|----------|------|
+| 1 | Rewrite resume in US format with translated insurance terms | 1–2 weeks | Free |
+| 2 | Update LinkedIn: US city, AI tools skills, Manulife → John Hancock framing | Day 1 of arrival | Free |
+| 3 | **Snowflake SnowPro Core** certification | 4–6 weeks | $175 |
+| 4 | **Microsoft Azure Fundamentals (AZ-900)** | 2–3 weeks | $165 |
+| 5 | Microsoft Fabric basics (Microsoft Learn — free) | 2–3 weeks | Free |
+| 6 | Reach out to John Hancock Analytics team in Boston | Week 4 | Free |
+| 7 | Register on eFinancialCareers + LIMRA job board | Week 4 | Free |
+| 8 | **PMP certification** (leverages PMO background from HSBC 2008–2009) | 3–6 months | $555 |
 
 ---
 
