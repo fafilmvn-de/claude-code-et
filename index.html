@@ -3,189 +3,424 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#667eea">
-  <meta name="description" content="Johnny, Bobo &amp; Siusiu&#x2019;s Playground — fun projects built by a dad and his kids.">
+  <meta name="theme-color" content="#FFD93D">
+  <meta name="description" content="Johnny, Bobo &amp; Siusiu's Playground — fun projects built by a dad and his kids.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛝</text></svg>">
   <title>Johnny, Bobo & Siusiu's Playground</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── Playful / Sticker / Y2K variant ───────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:  #FFF6E0;
+      --ink:    #1B1B1B;
+      --pink:   #FF4D8D;
+      --mint:   #62D2A2;
+      --sun:    #FFD93D;
+      --sky:    #4DA8FF;
+      --purple: #A065E8;
+    }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f4f0ff;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+      background: var(--cream);
+      color: var(--ink);
       min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Background blobs */
+    .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.55;
+    }
+    .blob-1 { top: -80px; left: -80px; width: 360px; height: 360px; background: var(--pink); }
+    .blob-2 { top: 30%;   right: -120px; width: 420px; height: 420px; background: var(--sun); opacity:.45; }
+    .blob-3 { bottom: -100px; left: 30%; width: 360px; height: 360px; background: var(--mint); opacity:.5; }
+
+    /* Marquee strip */
+    .ticker {
+      position: relative;
+      z-index: 2;
+      background: var(--ink);
+      color: var(--sun);
+      border-bottom: 3px solid var(--ink);
+      padding: 10px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-track {
+      display: inline-flex;
+      gap: 36px;
+      animation: scroll 24s linear infinite;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .ticker-track span::after {
+      content: " ✦";
+      color: var(--pink);
+      margin-left: 28px;
+    }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 36px 24px 64px;
+    }
+
+    /* ── Header ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 8px 16px 8px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      transform: rotate(-2deg);
+      box-shadow: 4px 4px 0 var(--pink);
+    }
+    .brand-mark {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--sun);
+      display: grid; place-items: center;
+      font-size: 0.95rem;
+    }
+    .pill {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      padding: 8px 14px;
+      background: var(--cream);
+      border: 2.5px dashed var(--ink);
+      border-radius: 999px;
+      transform: rotate(2deg);
     }
 
     /* ── Hero ── */
     .hero {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 48px 24px 72px;
       text-align: center;
-      color: white;
+      padding: 36px 0 32px;
+      position: relative;
     }
 
-    .hero-photo {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      border: 4px solid rgba(255, 255, 255, 0.6);
-      background: rgba(255, 255, 255, 0.2);
-      margin: 0 auto 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.8rem;
+    .star {
+      position: absolute;
+      font-size: 2rem;
+      animation: spin 8s linear infinite;
+    }
+    .star-1 { top: 8px;  left: 8%;  color: var(--pink);   }
+    .star-2 { top: 60px; right: 6%; color: var(--purple); animation-direction: reverse; animation-duration: 10s; }
+    .star-3 { bottom: -20px; left: 20%; color: var(--sky); animation-duration: 12s; }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .photo-frame {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 22px;
+      background: var(--cream);
+      border: 3px solid var(--ink);
+      border-radius: 24px;
+      padding: 6px;
+      box-shadow: 5px 5px 0 var(--ink), 5px 5px 0 6px var(--pink);
+      transform: rotate(-4deg);
       overflow: hidden;
     }
-
-    .hero-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
+    .photo-frame .inner {
+      width: 100%; height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--mint);
+      display: grid; place-items: center;
+      font-size: 3rem;
+    }
+    .photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
     }
 
-    .hero h1 {
-      font-size: 1.65rem;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      line-height: 1.25;
+    h1 {
+      font-size: clamp(2.4rem, 8vw, 4.8rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.98;
+      margin-bottom: 18px;
     }
-
-    .hero .tagline {
-      font-size: 0.95rem;
-      opacity: 0.85;
-      margin-top: 10px;
-      font-weight: 300;
-    }
-
-    .lang-badge {
+    h1 .pink { color: var(--pink); }
+    h1 .wiggle {
       display: inline-block;
-      margin-top: 18px;
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 20px;
-      padding: 5px 16px;
-      font-size: 0.72rem;
-      letter-spacing: 0.5px;
-      cursor: default;
+      background: var(--sun);
+      padding: 0 14px;
+      border-radius: 12px;
+      transform: rotate(-2deg);
+      border: 3px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+    h1 .scribble {
+      position: relative;
+      display: inline-block;
+    }
+    h1 .scribble::after {
+      content: "";
+      position: absolute;
+      left: -2px; right: -2px; bottom: 4px;
+      height: 10px;
+      background: var(--mint);
+      z-index: -1;
+      border-radius: 6px;
+      transform: rotate(-1.5deg);
     }
 
-    /* ── Project Cards ── */
-    .projects {
-      max-width: 600px;
-      margin: -28px auto 0;
-      padding: 0 20px 48px;
+    .lede {
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      max-width: 48ch;
+      margin: 0 auto;
+      color: rgba(27,27,27,0.78);
+      font-weight: 500;
+    }
+
+    /* ── Sticker Cards ── */
+    .stickers {
+      margin-top: 48px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 28px 20px 24px;
+    .sticker {
+      position: relative;
+      background: var(--cream);
+      border: 3px solid var(--ink);
+      border-radius: 28px;
+      padding: 28px 22px 24px;
       text-align: center;
-      box-shadow: 0 4px 24px rgba(102, 126, 234, 0.13);
       text-decoration: none;
-      color: inherit;
-      display: block;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      color: var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      transition: transform .25s cubic-bezier(.2,.7,.3,1.4), box-shadow .25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.22);
+    .sticker-1 { transform: rotate(-2deg); background: #FFE7F1; }
+    .sticker-2 { transform: rotate(1.5deg); background: #E5FBF2; }
+    .sticker-3 { transform: rotate(-1deg); background: #FFF6CC; }
+
+    .sticker:hover {
+      transform: rotate(0) translateY(-6px) scale(1.02);
+      box-shadow: 10px 10px 0 var(--ink);
+    }
+    .sticker:focus-visible {
+      outline: 3px dashed var(--pink);
+      outline-offset: 6px;
     }
 
-    .card-icon { font-size: 2.8rem; margin-bottom: 12px; }
+    .sticker-tag {
+      position: absolute;
+      top: -14px; left: 50%;
+      transform: translateX(-50%) rotate(-3deg);
+      background: var(--ink);
+      color: var(--cream);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 5px 14px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .sticker-2 .sticker-tag { background: var(--mint); color: var(--ink); }
+    .sticker-3 .sticker-tag { background: var(--sun);  color: var(--ink); }
 
-    .card h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #3d3d80;
+    .sticker-emoji {
+      font-size: 3.8rem;
+      margin: 12px 0 8px;
+      filter: drop-shadow(3px 4px 0 rgba(0,0,0,.12));
+      transition: transform .3s ease;
+    }
+    .sticker:hover .sticker-emoji {
+      transform: rotate(-12deg) scale(1.1);
     }
 
-    .card .desc {
-      font-size: 0.78rem;
-      color: #888;
-      margin-top: 8px;
+    .sticker h2 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .sticker p {
+      font-size: 0.86rem;
       line-height: 1.5;
+      color: rgba(27,27,27,0.74);
+      margin-bottom: 18px;
     }
 
-    .cta {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 8px 22px;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: white;
+    .sticker-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      transition: background .2s ease;
     }
+    .sticker-1 .sticker-btn { background: var(--pink); }
+    .sticker-2 .sticker-btn { background: var(--ink); }
+    .sticker-3 .sticker-btn { background: var(--ink); }
+    .sticker:hover .sticker-btn { transform: translateY(-1px); }
+    .sticker-btn svg {
+      width: 14px; height: 14px;
+      transition: transform .2s ease;
+    }
+    .sticker:hover .sticker-btn svg { transform: translateX(3px); }
 
-    .cta-game  { background: linear-gradient(90deg, #667eea, #5a6fd6); }
-    .cta-learn { background: linear-gradient(90deg, #764ba2, #8e44ad); }
-    .cta-vi    { background: linear-gradient(90deg, #f97316, #ea580c); }
+    @media (max-width: 760px) {
+      .stickers { grid-template-columns: 1fr; gap: 32px; }
+      .sticker { transform: rotate(0) !important; }
+    }
 
     /* ── Footer ── */
     footer {
+      margin-top: 64px;
       text-align: center;
-      padding: 24px 20px;
-      font-size: 0.72rem;
-      color: #aaa;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(27,27,27,0.6);
     }
+    footer .heart { color: var(--pink); }
 
-    /* ── Responsive ── */
-    @media (max-width: 480px) {
-      .hero h1    { font-size: 1.3rem; }
-      .hero       { padding-bottom: 60px; }
-      .projects   { grid-template-columns: 1fr; margin-top: -20px; }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track, .star { animation: none; }
+      .sticker, .sticker-emoji, .sticker-btn svg { transition: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
-  <header class="hero">
-    <div class="hero-photo">
-      <img src="assets/kids.jpg" alt="Johnny, Bobo and Siusiu"
-           onerror="this.parentElement.innerHTML='&#128106;'">
+  <div class="blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>WELCOME TO THE PLAYGROUND</span>
+      <span>BUILT BY KIDS &amp; A DAD</span>
+      <span>NEW THINGS EVERY MONTH</span>
+      <span>CHÀO MỪNG BẠN</span>
+      <span>WELCOME TO THE PLAYGROUND</span>
+      <span>BUILT BY KIDS &amp; A DAD</span>
+      <span>NEW THINGS EVERY MONTH</span>
+      <span>CHÀO MỪNG BẠN</span>
     </div>
-    <h1>Johnny, Bobo &amp; Siusiu's<br>Playground</h1>
-    <p class="tagline">A dad and his kids — building things together, one project at a time 💜</p>
-    <div class="lang-badge" aria-hidden="true">🌐 EN &nbsp;|&nbsp; VI</div>
-  </header>
+  </div>
 
-  <!-- PROJECT CARDS -->
-  <main class="projects">
+  <div class="wrap">
 
-    <a class="card" href="running-game/index.html" aria-label="Cat Runner — Play now">
-      <div class="card-icon" aria-hidden="true">🐱</div>
-      <h2>Cat Runner</h2>
-      <p class="desc">An adventure game with 3 worlds — Forest, Desert &amp; Ice Mountain. Jump, dodge, collect coins!</p>
-      <span class="cta cta-game">Play now →</span>
-    </a>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">🛝</div>
+        <span>jbsplayground</span>
+      </div>
+      <div class="pill" aria-hidden="true">EN · VI 🌐</div>
+    </header>
 
-    <a class="card" href="stock-market-kids/index.html" aria-label="Stock Market Guide — Start learning">
-      <div class="card-icon" aria-hidden="true">📈</div>
-      <h2>Stock Market Guide</h2>
-      <p class="desc">A hands-on learning guide for young explorers who want to understand how money &amp; markets work.</p>
-      <span class="cta cta-learn">Start learning →</span>
-    </a>
+    <section class="hero">
+      <span class="star star-1" aria-hidden="true">✦</span>
+      <span class="star star-2" aria-hidden="true">✺</span>
+      <span class="star star-3" aria-hidden="true">✷</span>
 
-    <a class="card" href="cat-learner/dist/" aria-label="CatLearner — Learn Vietnamese">
-      <div class="card-icon" aria-hidden="true">🐾</div>
-      <h2>CatLearner</h2>
-      <p class="desc">Learn Vietnamese the fun way — type sight words, explore the alphabet, and get writing tips from Miu the cat! 🇻🇳</p>
-      <span class="cta cta-vi">Học tiếng Việt →</span>
-    </a>
+      <div class="photo-frame" aria-hidden="true">
+        <div class="inner">
+          <img src="assets/kids.jpg" alt=""
+               onerror="this.parentElement.innerHTML='👨‍👧‍👦';">
+        </div>
+      </div>
 
-  </main>
+      <h1>
+        Hi! We're <span class="pink">Johnny</span>,<br>
+        <span class="scribble">Bobo</span> &amp; <span class="wiggle">Siusiu</span>.
+      </h1>
 
-  <!-- FOOTER -->
-  <footer>
-    Made with ❤️ by Johnny, Bobo &amp; Siusiu &nbsp;·&nbsp; jbsplayground.com
-  </footer>
+      <p class="lede">A dad and his kids — building tiny games, guides, and learning tools together. Tap a sticker to play.</p>
+    </section>
+
+    <main class="stickers">
+
+      <a class="sticker sticker-1" href="running-game/index.html" aria-label="Cat Runner — Play now">
+        <span class="sticker-tag">Game</span>
+        <div class="sticker-emoji" aria-hidden="true">🐱</div>
+        <h2>Cat Runner</h2>
+        <p>Run through Forest, Desert &amp; Ice Mountain. Jump &amp; collect coins!</p>
+        <span class="sticker-btn">
+          Play now
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+
+      <a class="sticker sticker-2" href="stock-market-kids/index.html" aria-label="Stock Market Guide — Start learning">
+        <span class="sticker-tag">Learn</span>
+        <div class="sticker-emoji" aria-hidden="true">📈</div>
+        <h2>Stock Market</h2>
+        <p>How money &amp; markets work — for young explorers.</p>
+        <span class="sticker-btn">
+          Start
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+
+      <a class="sticker sticker-3" href="cat-learner/dist/" aria-label="CatLearner — Học tiếng Việt">
+        <span class="sticker-tag">Tiếng Việt</span>
+        <div class="sticker-emoji" aria-hidden="true">🐾</div>
+        <h2>CatLearner</h2>
+        <p>Learn Vietnamese with Miu the cat — sight words &amp; alphabet 🇻🇳</p>
+        <span class="sticker-btn">
+          Học!
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+
+    </main>
+
+    <footer>
+      Made with <span class="heart">♥</span> by Johnny, Bobo &amp; Siusiu &nbsp;·&nbsp; jbsplayground.com
+    </footer>
+
+  </div>
 
 </body>
 </html>
